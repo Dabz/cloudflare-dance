@@ -1,0 +1,126 @@
+.RoomMenuEntry {
+  --cf-orange: #f48120;
+  --cf-deep-orange: #f05a24;
+  --cf-gold: #faae40;
+  --menu-black: #080604;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 4px solid var(--menu-black);
+  border-radius: 0;
+  overflow: hidden;
+  text-align: left;
+  background: #fff6dd;
+  box-shadow: 10px 10px 0 var(--cf-orange);
+  clip-path: polygon(0 8%, 98% 0, 100% 90%, 2% 100%);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.RoomMenuEntry::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 11px;
+  background: linear-gradient(180deg, var(--cf-gold), var(--cf-orange), var(--cf-deep-orange));
+}
+
+.RoomMenuEntry:hover {
+  transform: translate(5px, -5px);
+  border-color: var(--cf-deep-orange);
+  box-shadow: 14px 14px 0 var(--menu-black);
+}
+
+.RoomMenuEntry h1 {
+  margin: 0 0 5px;
+  color: #251306;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(1.15rem, 2.4vw, 1.8rem);
+  font-weight: 950;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.RoomMenuEntry p {
+  margin: 0;
+  color: #9b3e12;
+  font-size: 0.86rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.RoomMeta {
+  min-width: 76px;
+  padding: 10px 12px;
+  border: 3px solid var(--menu-black);
+  border-radius: 0;
+  text-align: center;
+  background: #ffc447;
+  box-shadow: 5px 5px 0 var(--cf-deep-orange);
+  clip-path: polygon(0 8%, 96% 0, 100% 90%, 4% 100%);
+}
+
+.RoomMeta h2 {
+  margin: 0;
+  color: var(--menu-black);
+  font-size: 1.55rem;
+  font-weight: 950;
+  line-height: 0.95;
+}
+
+.RoomMeta span {
+  display: block;
+  margin-top: 4px;
+  color: rgba(8, 6, 4, 0.72);
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.RoomMenuEntry button {
+  border: 0;
+  border-radius: 0;
+  padding: 12px 20px;
+  color: #fffaf2;
+  background: var(--menu-black);
+  box-shadow: 6px 6px 0 var(--cf-orange);
+  clip-path: polygon(0 10%, 94% 0, 100% 86%, 8% 100%);
+  cursor: pointer;
+  font: 900 0.84rem/1 var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.RoomMenuEntry button:hover {
+  transform: translate(3px, -3px) scale(1.04);
+  box-shadow: 8px 8px 0 var(--cf-deep-orange);
+}
+
+.RoomMenuEntry button:focus-visible {
+  outline: 3px solid rgba(25, 19, 13, 0.8);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .RoomMenuEntry {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .RoomMeta {
+    width: fit-content;
+  }
+
+  .RoomMenuEntry button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1024" viewBox="0 0 2048 1024">
+  <defs>
+    <radialGradient id="horizon" cx="50%" cy="70%" r="75%">
+      <stop offset="0%" stop-color="#172a5c"/>
+      <stop offset="42%" stop-color="#071a3c"/>
+      <stop offset="100%" stop-color="#010414"/>
+    </radialGradient>
+    <radialGradient id="star" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="45%" stop-color="#dbe8ff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#dbe8ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="2048" height="1024" fill="url(#horizon)"/>
+  <g opacity="0.95">
+    <circle cx="142" cy="99" r="2.1" fill="url(#star)"/>
+    <circle cx="292" cy="186" r="1.4" fill="url(#star)"/>
+    <circle cx="448" cy="78" r="2.5" fill="url(#star)"/>
+    <circle cx="579" cy="242" r="1.6" fill="url(#star)"/>
+    <circle cx="706" cy="125" r="1.9" fill="url(#star)"/>
+    <circle cx="881" cy="205" r="1.3" fill="url(#star)"/>
+    <circle cx="1014" cy="73" r="2.2" fill="url(#star)"/>
+    <circle cx="1168" cy="168" r="1.5" fill="url(#star)"/>
+    <circle cx="1324" cy="91" r="2.7" fill="url(#star)"/>
+    <circle cx="1483" cy="231" r="1.2" fill="url(#star)"/>
+    <circle cx="1628" cy="138" r="2" fill="url(#star)"/>
+    <circle cx="1816" cy="82" r="1.5" fill="url(#star)"/>
+    <circle cx="1943" cy="214" r="2.3" fill="url(#star)"/>
+    <circle cx="89" cy="348" r="1.4" fill="url(#star)"/>
+    <circle cx="231" cy="428" r="2" fill="url(#star)"/>
+    <circle cx="385" cy="318" r="1.2" fill="url(#star)"/>
+    <circle cx="518" cy="472" r="1.7" fill="url(#star)"/>
+    <circle cx="672" cy="363" r="2.6" fill="url(#star)"/>
+    <circle cx="804" cy="512" r="1.3" fill="url(#star)"/>
+    <circle cx="976" cy="335" r="1.8" fill="url(#star)"/>
+    <circle cx="1127" cy="445" r="2.1" fill="url(#star)"/>
+    <circle cx="1279" cy="384" r="1.3" fill="url(#star)"/>
+    <circle cx="1415" cy="516" r="1.9" fill="url(#star)"/>
+    <circle cx="1574" cy="328" r="1.4" fill="url(#star)"/>
+    <circle cx="1719" cy="462" r="2.5" fill="url(#star)"/>
+    <circle cx="1882" cy="354" r="1.2" fill="url(#star)"/>
+    <circle cx="2022" cy="498" r="1.8" fill="url(#star)"/>
+    <circle cx="176" cy="648" r="1.6" fill="url(#star)"/>
+    <circle cx="332" cy="742" r="1.1" fill="url(#star)"/>
+    <circle cx="492" cy="604" r="2.2" fill="url(#star)"/>
+    <circle cx="628" cy="818" r="1.4" fill="url(#star)"/>
+    <circle cx="771" cy="676" r="1.9" fill="url(#star)"/>
+    <circle cx="939" cy="765" r="1.2" fill="url(#star)"/>
+    <circle cx="1078" cy="626" r="2.4" fill="url(#star)"/>
+    <circle cx="1231" cy="804" r="1.3" fill="url(#star)"/>
+    <circle cx="1398" cy="652" r="1.6" fill="url(#star)"/>
+    <circle cx="1551" cy="738" r="2.1" fill="url(#star)"/>
+    <circle cx="1686" cy="612" r="1.4" fill="url(#star)"/>
+    <circle cx="1846" cy="792" r="1.8" fill="url(#star)"/>
+    <circle cx="1988" cy="664" r="1.1" fill="url(#star)"/>
+  </g>
+  <g opacity="0.55" fill="#c9dbff">
+    <circle cx="54" cy="173" r="0.8"/>
+    <circle cx="355" cy="42" r="0.7"/>
+    <circle cx="617" cy="91" r="0.9"/>
+    <circle cx="746" cy="281" r="0.6"/>
+    <circle cx="932" cy="137" r="0.8"/>
+    <circle cx="1202" cy="58" r="0.7"/>
+    <circle cx="1365" cy="265" r="0.9"/>
+    <circle cx="1532" cy="116" r="0.6"/>
+    <circle cx="1768" cy="256" r="0.8"/>
+    <circle cx="2007" cy="126" r="0.7"/>
+    <circle cx="121" cy="523" r="0.8"/>
+    <circle cx="430" cy="393" r="0.6"/>
+    <circle cx="589" cy="562" r="0.9"/>
+    <circle cx="865" cy="421" r="0.7"/>
+    <circle cx="1034" cy="535" r="0.8"/>
+    <circle cx="1338" cy="468" r="0.6"/>
+    <circle cx="1652" cy="538" r="0.9"/>
+    <circle cx="1913" cy="432" r="0.7"/>
+    <circle cx="272" cy="887" r="0.8"/>
+    <circle cx="545" cy="712" r="0.6"/>
+    <circle cx="836" cy="931" r="0.7"/>
+    <circle cx="1186" cy="886" r="0.8"/>
+    <circle cx="1472" cy="914" r="0.6"/>
+    <circle cx="1789" cy="884" r="0.7"/>
+  </g>
+</svg>

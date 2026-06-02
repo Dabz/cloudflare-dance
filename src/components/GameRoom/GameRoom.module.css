@@ -1,0 +1,1361 @@
+#renderCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100svh;
+  touch-action: none;
+}
+
+.ControlsPanel {
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.94);
+
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  width: min(360px, calc(100vw - 36px));
+  color: var(--room-cream);
+  pointer-events: none;
+}
+
+.ControlsPanel::before {
+  content: "";
+  position: absolute;
+  inset: -6px -10px auto auto;
+  z-index: -1;
+  width: min(380px, 86vw);
+  height: 60px;
+  background:
+    linear-gradient(
+      112deg,
+      transparent 0 12%,
+      var(--room-black) 12.5% 78%,
+      transparent 78.5% 100%
+    ),
+    radial-gradient(circle, rgba(255, 196, 71, 0.9) 0 2px, transparent 2px) 0
+      0 / 22px 22px;
+  filter: drop-shadow(12px 14px 0 rgba(255, 122, 22, 0.72));
+  opacity: 0.9;
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.DisplayFrame {
+  position: fixed;
+  z-index: 1;
+  display: none;
+  border: 0;
+  border-radius: 2px;
+  background: #07111f;
+  pointer-events: none;
+}
+
+.LoadingScreen {
+  --loading-black: #070302;
+  --loading-orange: #ff6a00;
+  --loading-hot: #ff2f00;
+  --loading-gold: #ffd24a;
+  --loading-cream: #fff0c2;
+
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(255, 210, 74, 0.28),
+      transparent 24%
+    ),
+    linear-gradient(
+      132deg,
+      rgba(255, 47, 0, 0.94) 0 42%,
+      rgba(255, 106, 0, 0.96) 42.3% 67%,
+      var(--loading-black) 67.2% 100%
+    );
+  color: var(--loading-cream);
+}
+
+.LoadingScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      116deg,
+      transparent 0 18px,
+      rgba(7, 3, 2, 0.22) 18px 25px
+    ),
+    radial-gradient(circle, rgba(255, 240, 194, 0.22) 0 2px, transparent 2px) 0
+      0 / 28px 28px;
+  mix-blend-mode: multiply;
+}
+
+.LoadingCard {
+  position: relative;
+  z-index: 1;
+  width: min(560px, calc(100vw - 40px));
+  padding: 28px 30px 26px;
+  background: var(--loading-black);
+  box-shadow:
+    16px 16px 0 var(--loading-gold),
+    28px 28px 0 rgba(255, 47, 0, 0.9);
+  clip-path: polygon(0 10%, 94% 0, 100% 80%, 8% 100%);
+  transform: rotate(-2deg) skewX(-3deg);
+}
+
+.LoadingKicker {
+  display: block;
+  color: var(--loading-gold);
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.LoadingCard strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--loading-orange);
+  font-size: clamp(58px, 14vw, 116px);
+  font-weight: 1000;
+  line-height: 0.86;
+  text-shadow:
+    4px 4px 0 var(--loading-cream),
+    8px 8px 0 var(--loading-hot);
+}
+
+.LoadingBar {
+  height: 20px;
+  margin-top: 24px;
+  border: 4px solid var(--loading-cream);
+  background: #170604;
+  box-shadow: 7px 7px 0 var(--loading-hot);
+  transform: skewX(-18deg);
+  overflow: hidden;
+}
+
+.LoadingBar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--loading-gold),
+    var(--loading-orange),
+    var(--loading-hot)
+  );
+  transition: width 180ms ease-out;
+}
+
+.LoadingCard p {
+  margin: 20px 0 0;
+  color: var(--loading-cream);
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.MinigameNotice {
+  --room-black: #080604;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  z-index: 12;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: min(720px, calc(100vw - 36px));
+  padding: 14px 16px;
+  color: var(--room-cream);
+  background: linear-gradient(
+    112deg,
+    var(--room-black),
+    #5b1006 62%,
+    var(--room-hot)
+  );
+  box-shadow:
+    10px 10px 0 var(--room-gold),
+    18px 18px 0 rgba(255, 122, 22, 0.76);
+  clip-path: polygon(0 12%, 98% 0, 100% 86%, 4% 100%);
+  transform: translateX(-50%) rotate(-1deg);
+}
+
+.MinigameNotice span {
+  color: var(--room-gold);
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.MinigameNotice p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.BannerCountdown {
+  display: flex;
+  min-width: 44px;
+  min-height: 34px;
+  place-items: center;
+  color: var(--room-gold);
+  background: rgba(8, 6, 4, 0.46);
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 0.04em;
+}
+
+.MinigameNotice button {
+  border: 0;
+  color: var(--room-black);
+  background: var(--room-cream);
+  box-shadow: 4px 4px 0 var(--room-orange);
+  cursor: pointer;
+  font: 950 11px/1 var(--sans, system-ui, sans-serif);
+  padding: 9px 10px;
+  text-transform: uppercase;
+}
+
+.RoomAnnouncement {
+  top: 94px;
+  background: linear-gradient(
+    112deg,
+    var(--room-black),
+    #2b174f 62%,
+    var(--room-orange)
+  );
+}
+
+.ControlsPanel button,
+.KeyboardHelp button,
+.TvDisplayPopup button,
+.ChatPanel button {
+  border: 0;
+  border-radius: 0;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow:
+    6px 6px 0 var(--room-black),
+    10px 10px 0 rgba(255, 122, 22, 0.9);
+  clip-path: polygon(0 12%, 96% 0, 100% 84%, 6% 100%);
+  cursor: pointer;
+  font: 950 12px/1 var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.06em;
+  padding: 10px 13px;
+  text-transform: uppercase;
+  transition:
+    transform 150ms ease,
+    filter 150ms ease,
+    opacity 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.ControlsPanel button {
+  pointer-events: auto;
+}
+
+.ControlsToggle {
+  margin-left: 0;
+  color: var(--room-black);
+  background: linear-gradient(
+    102deg,
+    var(--room-gold),
+    var(--room-orange) 58%,
+    var(--room-hot)
+  );
+  transform: rotate(-3deg);
+}
+
+.ControlsPanel button:hover:not(:disabled),
+.KeyboardHelp button:hover:not(:disabled),
+.TvDisplayPopup button:hover:not(:disabled),
+.ChatPanel button:hover:not(:disabled),
+.ControlsPanel button:focus-visible,
+.KeyboardHelp button:focus-visible,
+.TvDisplayPopup button:focus-visible,
+.ChatPanel button:focus-visible {
+  transform: translate(4px, -4px);
+  filter: saturate(1.16) contrast(1.05);
+}
+
+.ControlsPanel button:focus-visible,
+.KeyboardHelp button:focus-visible,
+.TvDisplayPopup button:focus-visible,
+.ChatPanel button:focus-visible,
+.TvUrlRow input:focus-visible,
+.ChatForm input:focus-visible {
+  outline: 4px solid var(--room-cream);
+  outline-offset: 4px;
+}
+
+.ControlsPanel button:disabled,
+.KeyboardHelp button:disabled,
+.TvDisplayPopup button:disabled,
+.ChatPanel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+  filter: grayscale(0.45);
+}
+
+.PrimaryControls {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 9px;
+  transform: rotate(-2deg);
+}
+
+.PrimaryControls button:first-child {
+  color: var(--room-cream);
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
+}
+
+.CharacterOpenButton {
+  color: var(--room-cream);
+  background: linear-gradient(
+    102deg,
+    #171343,
+    var(--room-hot) 58%,
+    var(--room-orange)
+  );
+  transform: rotate(1deg);
+}
+
+.KeyboardHelp {
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.94);
+
+  position: relative;
+  display: grid;
+  gap: 12px;
+  position: fixed;
+  top: 84px;
+  right: 18px;
+  z-index: 5;
+  width: min(330px, calc(100vw - 36px));
+  padding: 16px;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow:
+    10px 10px 0 var(--room-black),
+    18px 18px 0 rgba(255, 122, 22, 0.86);
+  clip-path: polygon(0 6%, 97% 0, 100% 94%, 4% 100%);
+  pointer-events: auto;
+  transform: rotate(1.5deg);
+}
+
+.KeyboardHelp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+      circle,
+      rgba(8, 6, 4, 0.18) 0 2px,
+      transparent 2px
+    )
+    0 0 / 20px 20px;
+  opacity: 0.7;
+}
+
+.KeyboardHelpToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  box-shadow: none;
+  background: transparent;
+  clip-path: none;
+  padding: 0;
+  color: var(--room-black);
+  text-align: left;
+}
+
+.KeyboardHelpToggle span:last-child {
+  color: #9b2d07;
+  font-size: 11px;
+  font-weight: 950;
+}
+
+.ControlsPanel .KeyboardHelpToggle:hover:not(:disabled),
+.ControlsPanel .KeyboardHelpToggle:focus-visible {
+  transform: none;
+  filter: none;
+}
+
+.KeyboardHelp dl {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+}
+
+.KeyboardHelp div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.KeyboardHelp dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: rgba(22, 11, 4, 0.72);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.KeyboardHelp dd {
+  margin: 0;
+  color: var(--room-black);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.KeyboardHelp kbd {
+  border: 3px solid var(--room-black);
+  border-radius: 0;
+  background: var(--room-gold);
+  box-shadow: 3px 3px 0 var(--room-orange);
+  color: var(--room-black);
+  font: 950 11px/1 var(--sans, system-ui, sans-serif);
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+.PanelKicker,
+.TvPopupHeader span,
+.TvVideoPickerTitle,
+.VideoListTitle,
+.ChatPlayerId {
+  color: #9b2d07;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.TvPopupBackdrop {
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.96);
+
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background:
+    linear-gradient(
+      118deg,
+      rgba(8, 6, 4, 0.88) 0 44%,
+      rgba(255, 122, 22, 0.78) 44% 100%
+    ),
+    radial-gradient(
+      circle at 80% 14%,
+      rgba(255, 196, 71, 0.52),
+      transparent 22rem
+    );
+  backdrop-filter: blur(8px);
+}
+
+.TvPopupBackdrop::before,
+.TvPopupBackdrop::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.TvPopupBackdrop::before {
+  width: 86vw;
+  height: 22vh;
+  right: -24vw;
+  top: 11vh;
+  background: var(--room-black);
+  box-shadow:
+    0 28px 0 var(--room-cream),
+    0 50px 0 rgba(255, 196, 71, 0.86);
+  transform: rotate(-14deg) skewX(-18deg);
+}
+
+.TvPopupBackdrop::after {
+  inset: 0;
+  background: radial-gradient(
+      circle,
+      rgba(255, 242, 210, 0.28) 0 2px,
+      transparent 2px
+    )
+    0 0 / 24px 24px;
+  opacity: 0.46;
+}
+
+.TvDisplayPopup {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 20px;
+  width: min(720px, 100%);
+  max-height: min(760px, calc(100svh - 36px));
+  box-sizing: border-box;
+  overflow: auto;
+  color: var(--room-ink);
+  background: var(--room-paper);
+  box-shadow:
+    18px 18px 0 var(--room-black),
+    30px 30px 0 var(--room-orange),
+    0 34px 100px rgba(0, 0, 0, 0.55);
+  clip-path: polygon(0 4%, 98% 0, 100% 94%, 4% 100%);
+  padding: clamp(20px, 4vw, 34px);
+}
+
+.TvDisplayPopup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      154deg,
+      transparent 0 58%,
+      rgba(255, 122, 22, 0.18) 58.2% 100%
+    ),
+    radial-gradient(circle, rgba(8, 6, 4, 0.16) 0 2px, transparent 2px) 0 0 /
+      22px 22px;
+}
+
+.TvPopupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.TvPopupHeader button {
+  color: var(--room-cream);
+  background: var(--room-black);
+  box-shadow: 6px 6px 0 var(--room-orange);
+}
+
+.TvUrlForm {
+  display: grid;
+  gap: 12px;
+}
+
+.CharacterDisplayPopup {
+  width: min(780px, 100%);
+}
+
+.MenuDisplayPopup {
+  width: min(620px, 100%);
+}
+
+.FixPopDisplayPopup {
+  width: min(860px, 100%);
+}
+
+.FixPopIntro {
+  display: grid;
+  gap: 10px;
+}
+
+.FixPopIntro h2 {
+  margin: 0;
+  color: var(--room-black);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 1000;
+  line-height: 0.82;
+  letter-spacing: -0.09em;
+  text-transform: uppercase;
+  text-shadow:
+    4px 4px 0 rgba(255, 122, 22, 0.58),
+    8px 8px 0 rgba(255, 196, 71, 0.46);
+}
+
+.FixPopIntro p {
+  margin: 0;
+  color: rgba(22, 11, 4, 0.7);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.FixPopQuestions {
+  display: grid;
+  gap: 14px;
+}
+
+.FixPopQuestions fieldset {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  border: 4px solid var(--room-black);
+  padding: 14px;
+  background: #fff7df;
+  box-shadow: 6px 6px 0 var(--room-gold);
+}
+
+.FixPopQuestions legend {
+  padding: 0 8px;
+  color: var(--room-black);
+  font-size: 13px;
+  font-weight: 950;
+  line-height: 1.25;
+}
+
+.FixPopQuestions label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(22, 11, 4, 0.82);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.FixPopQuestions input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--room-hot);
+}
+
+.FixPopSubmit {
+  min-height: 62px;
+  color: var(--room-cream);
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
+  font-size: 15px;
+}
+
+.MenuPopupIntro {
+  display: grid;
+  gap: 10px;
+}
+
+.MenuPopupIntro h2 {
+  margin: 0;
+  color: var(--room-black);
+  font-size: clamp(2.2rem, 7vw, 4.6rem);
+  font-weight: 1000;
+  line-height: 0.84;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-shadow:
+    4px 4px 0 rgba(255, 122, 22, 0.58),
+    8px 8px 0 rgba(255, 196, 71, 0.36);
+}
+
+.MenuPopupIntro p {
+  margin: 0;
+  color: rgba(22, 11, 4, 0.7);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.MenuActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.MenuActions button {
+  min-height: 96px;
+  border: 4px solid var(--room-black);
+  color: var(--room-black);
+  background: linear-gradient(
+    145deg,
+    #fff7df,
+    var(--room-gold),
+    var(--room-orange)
+  );
+  box-shadow:
+    8px 8px 0 var(--room-black),
+    14px 14px 0 rgba(255, 122, 22, 0.84);
+  clip-path: polygon(0 10%, 96% 0, 100% 88%, 7% 100%);
+  font-size: 16px;
+}
+
+.MenuActions button:last-child {
+  color: var(--room-cream);
+  background: linear-gradient(
+    135deg,
+    var(--room-black),
+    #9b2d07 62%,
+    var(--room-hot)
+  );
+}
+
+.StartMinigameButton {
+  min-height: 76px;
+  border: 4px solid var(--room-black);
+  color: var(--room-cream);
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
+  box-shadow:
+    8px 8px 0 var(--room-black),
+    14px 14px 0 rgba(255, 122, 22, 0.84);
+  font-size: 15px;
+}
+
+.MinigameToggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 4px solid var(--room-black);
+  padding: 12px 14px;
+  color: var(--room-black);
+  background: #fff7df;
+  box-shadow: 7px 7px 0 var(--room-orange);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.MinigameToggle input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--room-hot);
+}
+
+.CharacterPickerIntro {
+  display: grid;
+  gap: 10px;
+}
+
+.CharacterPickerIntro h2 {
+  margin: 0;
+  color: var(--room-black);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 1000;
+  line-height: 0.82;
+  letter-spacing: -0.09em;
+  text-transform: uppercase;
+  text-shadow:
+    4px 4px 0 rgba(255, 122, 22, 0.58),
+    8px 8px 0 rgba(255, 196, 71, 0.46);
+}
+
+.CharacterPickerIntro p {
+  margin: 0;
+  max-width: 58ch;
+  color: rgba(22, 11, 4, 0.7);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.CharacterPickerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.CharacterPickerGrid button {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  min-height: 190px;
+  border: 4px solid var(--room-black);
+  background:
+    radial-gradient(
+      circle at 50% 34%,
+      rgba(255, 196, 71, 0.42),
+      transparent 34%
+    ),
+    linear-gradient(145deg, #fff7df, #ffd58a 56%, #ff7a16);
+  box-shadow:
+    8px 8px 0 var(--room-black),
+    14px 14px 0 rgba(255, 122, 22, 0.84);
+  clip-path: polygon(0 7%, 96% 0, 100% 92%, 6% 100%);
+  justify-items: start;
+  padding: 16px;
+  text-align: left;
+}
+
+.CharacterPickerGrid button strong {
+  align-self: end;
+  color: var(--room-black);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 1000;
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.CharacterPickerGrid button span:last-child {
+  color: rgba(22, 11, 4, 0.72);
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.CharacterCardAvatar {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  border: 4px solid var(--room-black);
+  border-radius: 50%;
+  place-items: center;
+  color: var(--room-cream);
+  background: linear-gradient(
+    135deg,
+    var(--room-black),
+    #9b2d07 62%,
+    var(--room-hot)
+  );
+  box-shadow: 5px 5px 0 rgba(255, 196, 71, 0.9);
+  font-size: 34px;
+  font-weight: 1000;
+}
+
+.CharacterCardSelected {
+  filter: saturate(1.2) contrast(1.08);
+  outline: 5px solid var(--room-hot);
+  outline-offset: 4px;
+}
+
+.TvUrlForm h2 {
+  margin: 0;
+  color: var(--room-black);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 950;
+  line-height: 0.84;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 rgba(255, 122, 22, 0.58);
+}
+
+.TvUrlForm p,
+.TvVideoPicker p,
+.DisplayUrlControls p {
+  margin: 0;
+  color: rgba(22, 11, 4, 0.7);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.TvUrlForm label,
+.DisplayUrlControls label {
+  color: var(--room-black);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.TvUrlRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.TvUrlRow input,
+.DisplayUrlControls input {
+  min-width: 0;
+  border: 4px solid var(--room-black);
+  border-radius: 0;
+  background: #fff9e9;
+  box-shadow: 7px 7px 0 var(--room-orange);
+  box-sizing: border-box;
+  color: var(--room-ink);
+  font: 900 13px/1 var(--sans, system-ui, sans-serif);
+  padding: 12px 14px;
+}
+
+.TvUrlRow input::placeholder,
+.DisplayUrlControls input::placeholder {
+  color: rgba(22, 11, 4, 0.42);
+}
+
+.TvUrlRow button,
+.PanelActions button[type="submit"] {
+  color: var(--room-cream);
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
+}
+
+.TvVideoPicker,
+.VideoList {
+  display: grid;
+  gap: 12px;
+}
+
+.TvVideoPicker {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.TvVideoPickerTitle,
+.TvVideoPicker p {
+  grid-column: 1 / -1;
+}
+
+.TvVideoPicker button,
+.VideoList button {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: 10px;
+  border: 4px solid var(--room-black);
+  background: #fff6dd;
+  box-shadow: 7px 7px 0 var(--room-gold);
+  padding: 8px;
+  text-align: left;
+}
+
+.TvVideoPicker img,
+.VideoList img {
+  width: 92px;
+  height: 52px;
+  border: 3px solid var(--room-black);
+  border-radius: 0;
+  box-sizing: border-box;
+  object-fit: cover;
+}
+
+.TvVideoPicker button span,
+.VideoList button span {
+  overflow: hidden;
+  color: var(--room-black);
+  font-weight: 950;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.PanelToggle {
+  display: block;
+  margin-left: auto;
+}
+
+.PanelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: calc(100vh - 58px);
+  margin-top: 8px;
+  overflow: auto;
+  padding: 14px;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow:
+    10px 10px 0 var(--room-black),
+    18px 18px 0 rgba(255, 122, 22, 0.86);
+  clip-path: polygon(0 5%, 98% 0, 100% 95%, 4% 100%);
+  pointer-events: auto;
+}
+
+.PanelHeader {
+  display: grid;
+  gap: 3px;
+}
+
+.PanelHeader h2 {
+  margin: 0;
+  color: var(--room-black);
+  font-size: 22px;
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.DisplayUrlControls {
+  display: grid;
+  gap: 10px;
+}
+
+.VideoList {
+  margin-top: 4px;
+  max-height: 190px;
+  overflow: auto;
+}
+
+.VideoList button {
+  grid-template-columns: 72px 1fr;
+}
+
+.VideoList img {
+  width: 72px;
+  height: 42px;
+}
+
+.PanelActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.ChatPanel {
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.96);
+
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 6;
+  width: min(420px, calc(100vw - 36px));
+  pointer-events: none;
+}
+
+.ChatPanel::before {
+  content: "";
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  z-index: -1;
+  width: 80%;
+  height: 54px;
+  background: var(--room-black);
+  box-shadow:
+    -18px -14px 0 rgba(255, 196, 71, 0.88),
+    -28px -22px 0 rgba(255, 122, 22, 0.78);
+  transform: rotate(-6deg) skewX(-18deg);
+}
+
+.ChatToggle {
+  display: block;
+  margin-left: auto;
+  min-width: 138px;
+  color: var(--room-black);
+  background: linear-gradient(
+    102deg,
+    var(--room-gold),
+    var(--room-orange) 58%,
+    var(--room-hot)
+  );
+  pointer-events: auto;
+  transform: rotate(-4deg);
+}
+
+.ChatPanelOpen .ChatToggle {
+  margin-bottom: 12px;
+}
+
+.ChatBody {
+  position: relative;
+  display: grid;
+  gap: 13px;
+  padding: 16px;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow:
+    12px 12px 0 var(--room-black),
+    22px 22px 0 rgba(255, 122, 22, 0.88);
+  clip-path: polygon(0 5%, 97% 0, 100% 93%, 5% 100%);
+  pointer-events: auto;
+}
+
+.ChatBody::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      154deg,
+      transparent 0 58%,
+      rgba(255, 122, 22, 0.18) 58.2% 100%
+    ),
+    radial-gradient(circle, rgba(8, 6, 4, 0.16) 0 2px, transparent 2px) 0 0 /
+      22px 22px;
+}
+
+.ChatMessages {
+  display: grid;
+  gap: 10px;
+  max-height: min(340px, 42svh);
+  overflow: auto;
+  padding: 4px 10px 8px 4px;
+}
+
+.ChatEmpty {
+  margin: 0;
+  color: rgba(22, 11, 4, 0.58);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ChatMessage {
+  display: grid;
+  gap: 5px;
+  justify-self: start;
+  max-width: 92%;
+  padding: 10px 12px;
+  color: var(--room-black);
+  background: #fff6dd;
+  box-shadow: 5px 5px 0 var(--room-gold);
+  clip-path: polygon(0 8%, 97% 0, 100% 90%, 4% 100%);
+}
+
+.ChatMessage p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.ChatMessageInternal {
+  justify-self: center;
+  color: var(--room-cream);
+  background: var(--room-black);
+  box-shadow: 5px 5px 0 var(--room-hot);
+}
+
+.ChatMessageInternal p {
+  color: var(--room-cream);
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ChatInternalPlayerName {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.ChatPlayerId {
+  max-width: 100%;
+  overflow: hidden;
+  color: #9b2d07;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ChatForm {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.ChatForm input {
+  min-width: 0;
+  border: 4px solid var(--room-black);
+  border-radius: 0;
+  background: #fff9e9;
+  box-shadow: 7px 7px 0 var(--room-orange);
+  box-sizing: border-box;
+  color: var(--room-ink);
+  font: 900 13px/1 var(--sans, system-ui, sans-serif);
+  padding: 12px 14px;
+}
+
+.ChatForm input::placeholder {
+  color: rgba(22, 11, 4, 0.42);
+}
+
+.ChatForm button {
+  color: var(--room-cream);
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
+}
+
+.MobileJoystickShell {
+  display: none;
+}
+
+.MobileJoystick {
+  --joystick-size: 132px;
+  --joystick-thumb: 56px;
+
+  position: relative;
+  width: var(--joystick-size);
+  height: var(--joystick-size);
+  border: 4px solid #080604;
+  border-radius: 999px;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 196, 71, 0.46) 0 18%,
+      transparent 19%
+    ),
+    radial-gradient(circle, rgba(255, 242, 210, 0.86), rgba(255, 122, 22, 0.7));
+  box-shadow:
+    8px 8px 0 rgba(8, 6, 4, 0.88),
+    14px 14px 0 rgba(255, 196, 71, 0.72);
+  touch-action: none;
+  user-select: none;
+}
+
+.MobileJoystick::before,
+.MobileJoystick::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 74%;
+  height: 4px;
+  background: rgba(8, 6, 4, 0.28);
+  transform: translate(-50%, -50%);
+}
+
+.MobileJoystick::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.MobileJoystickThumb {
+  position: absolute;
+  top: calc(50% - var(--joystick-thumb) / 2);
+  left: calc(50% - var(--joystick-thumb) / 2);
+  z-index: 1;
+  width: var(--joystick-thumb);
+  height: var(--joystick-thumb);
+  border: 4px solid #080604;
+  border-radius: 999px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ff2f00, #ff7a16 58%, #ffd24a);
+  box-shadow:
+    4px 4px 0 rgba(8, 6, 4, 0.72),
+    inset 0 0 0 7px rgba(255, 242, 210, 0.3);
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .MobileJoystickShell {
+    position: fixed;
+    left: max(18px, env(safe-area-inset-left));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 7;
+    display: block;
+    padding: 8px;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .ControlsPanel {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+
+  .KeyboardHelp {
+    top: 74px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+
+  .ControlsPanel::before {
+    width: 94vw;
+  }
+
+  .PrimaryControls {
+    gap: 7px;
+  }
+
+  .ControlsToggle {
+    margin-left: 0;
+    min-width: 132px;
+  }
+
+  .ControlsPanel button,
+  .TvDisplayPopup button,
+  .ChatPanel button {
+    box-shadow:
+      4px 4px 0 var(--room-black),
+      7px 7px 0 rgba(255, 122, 22, 0.9);
+  }
+
+  .TvDisplayPopup {
+    max-height: calc(100svh - 24px);
+    clip-path: polygon(0 2%, 98% 0, 100% 98%, 2% 100%);
+    box-shadow:
+      10px 10px 0 var(--room-black),
+      18px 18px 0 var(--room-orange),
+      0 24px 70px rgba(0, 0, 0, 0.55);
+    padding: 16px;
+  }
+
+  .TvUrlRow,
+  .TvVideoPicker,
+  .CharacterPickerGrid,
+  .MenuActions,
+  .TvVideoPicker button,
+  .VideoList button,
+  .ChatForm {
+    grid-template-columns: 1fr;
+  }
+
+  .CharacterPickerGrid button {
+    min-height: 132px;
+  }
+
+  .ChatPanel {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+  }
+
+  .ChatMessages {
+    max-height: 34svh;
+  }
+
+  .TvVideoPicker img,
+  .VideoList img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}

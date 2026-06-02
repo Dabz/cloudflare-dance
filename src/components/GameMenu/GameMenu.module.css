@@ -1,0 +1,369 @@
+.GameMenu {
+  --menu-black: #080604;
+  --menu-ink: #160b04;
+  --menu-orange: #ff7a16;
+  --menu-hot: #ff3f0a;
+  --menu-gold: #ffc447;
+  --menu-cream: #fff2d2;
+  --menu-paper: rgba(255, 238, 204, 0.94);
+  --menu-shadow: rgba(0, 0, 0, 0.42);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  box-sizing: border-box;
+  overflow: hidden;
+  display: grid;
+  place-items: center start;
+  padding: clamp(28px, 7vw, 94px);
+  color: var(--menu-cream);
+  background:
+    radial-gradient(circle at 82% 14%, rgba(255, 196, 71, 0.5), transparent 18rem),
+    radial-gradient(circle at 12% 82%, rgba(255, 63, 10, 0.38), transparent 28rem),
+    linear-gradient(124deg, #120802 0 42%, #c63a09 42% 55%, #f36a11 55% 100%);
+}
+
+.GameMenu::before,
+.GameMenu::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.GameMenu::before {
+  background:
+    linear-gradient(108deg, transparent 0 19%, rgba(255, 242, 210, 0.92) 19.2% 20.5%, transparent 20.7% 100%),
+    linear-gradient(158deg, transparent 0 58%, rgba(8, 6, 4, 0.92) 58.2% 67%, transparent 67.2% 100%),
+    repeating-linear-gradient(168deg, rgba(255, 255, 255, 0.1) 0 2px, transparent 2px 22px);
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+.GameMenu::after {
+  background:
+    radial-gradient(circle, rgba(8, 6, 4, 0.78) 0 2px, transparent 2px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(8, 6, 4, 0.38), transparent 42%);
+  opacity: 0.42;
+}
+
+.MenuBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.MenuBackdrop span {
+  position: absolute;
+  display: block;
+}
+
+.SlashOne {
+  width: 74vw;
+  height: 26vh;
+  right: -18vw;
+  top: 14vh;
+  transform: rotate(-16deg) skewX(-22deg);
+  background: var(--menu-black);
+  box-shadow: 0 32px 0 rgba(255, 242, 210, 0.9), 0 58px 0 rgba(255, 122, 22, 0.55);
+}
+
+.SlashTwo {
+  width: 58vw;
+  height: 18vh;
+  left: -18vw;
+  bottom: 10vh;
+  transform: rotate(-13deg) skewX(-18deg);
+  background: var(--menu-cream);
+  box-shadow: 0 -26px 0 var(--menu-black), 0 -44px 0 rgba(255, 196, 71, 0.86);
+}
+
+.DotGrid {
+  width: 34vw;
+  aspect-ratio: 1;
+  right: 4vw;
+  bottom: 4vh;
+  background: radial-gradient(circle, rgba(8, 6, 4, 0.78) 0 3px, transparent 3px) 0 0 / 24px 24px;
+  transform: rotate(-10deg);
+  opacity: 0.58;
+}
+
+.MenuPanel {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 92vw);
+  display: grid;
+  gap: clamp(10px, 2vw, 18px);
+  transform: rotate(-5deg);
+}
+
+.MenuEntry,
+.GameMenu button {
+  cursor: pointer;
+  font: 950 clamp(1.2rem, 4.8vw, 3.9rem)/0.88 var(--sans, system-ui, sans-serif);
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.MenuEntry {
+  position: relative;
+  width: fit-content;
+  min-width: min(620px, 88vw);
+  border: 0;
+  padding: clamp(16px, 2.7vw, 28px) clamp(26px, 5vw, 56px);
+  color: var(--menu-black);
+  background: var(--menu-paper);
+  clip-path: polygon(0 14%, 94% 0, 100% 82%, 6% 100%);
+  box-shadow: 18px 18px 0 var(--menu-black), 26px 26px 0 rgba(255, 196, 71, 0.92);
+  text-align: left;
+  text-shadow: 2px 2px 0 rgba(255, 122, 22, 0.42);
+}
+
+.MenuEntry:nth-child(2) {
+  margin-left: clamp(22px, 6vw, 82px);
+  color: var(--menu-cream);
+  background: var(--menu-black);
+  box-shadow: 18px 18px 0 var(--menu-hot), 26px 26px 0 rgba(255, 242, 210, 0.8);
+  text-shadow: 3px 3px 0 rgba(255, 122, 22, 0.62);
+}
+
+.MenuEntry:nth-child(3) {
+  margin-left: clamp(4px, 2vw, 34px);
+  background: linear-gradient(100deg, var(--menu-gold), var(--menu-orange) 54%, var(--menu-hot));
+  box-shadow: 18px 18px 0 var(--menu-black), 26px 26px 0 rgba(255, 242, 210, 0.78);
+}
+
+.MenuEntry:hover:not(:disabled),
+.MenuEntry:focus-visible:not(:disabled) {
+  transform: translate(10px, -8px) scale(1.03);
+  filter: saturate(1.18) contrast(1.05);
+}
+
+.MenuEntry[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 18px 12px 18px;
+  height: 7px;
+  background: repeating-linear-gradient(90deg, var(--menu-black) 0 14px, transparent 14px 24px);
+  animation: menuBusy 560ms linear infinite;
+}
+
+.GameMenu button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: grayscale(0.45);
+}
+
+.GameMenu button:focus-visible,
+.DisplayNameField input:focus {
+  outline: 4px solid var(--menu-cream);
+  outline-offset: 5px;
+}
+
+.PrimaryButton,
+.IconButton,
+.CreateRoomButton {
+  border: 0;
+  border-radius: 0;
+  padding: 13px 20px;
+  color: var(--menu-cream);
+  background: var(--menu-black);
+  box-shadow: 8px 8px 0 var(--menu-orange);
+  clip-path: polygon(0 10%, 96% 0, 100% 88%, 5% 100%);
+  font-size: 0.88rem;
+  letter-spacing: 0.05em;
+}
+
+.PrimaryButton:hover:not(:disabled),
+.IconButton:hover:not(:disabled),
+.CreateRoomButton:hover:not(:disabled) {
+  transform: translate(4px, -4px);
+  filter: saturate(1.12);
+}
+
+.ModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background:
+    linear-gradient(118deg, rgba(8, 6, 4, 0.88) 0 46%, rgba(255, 122, 22, 0.8) 46% 100%),
+    rgba(8, 6, 4, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.ModalCard {
+  width: min(580px, 100%);
+  max-height: min(86svh, 840px);
+  box-sizing: border-box;
+  overflow: auto;
+  padding: clamp(22px, 4vw, 34px);
+  color: var(--menu-ink);
+  background: var(--menu-paper);
+  clip-path: polygon(0 4%, 97% 0, 100% 94%, 4% 100%);
+  box-shadow: 18px 18px 0 var(--menu-black), 30px 30px 0 var(--menu-orange), 0 34px 80px var(--menu-shadow);
+}
+
+.RoomModal {
+  width: min(1040px, 100%);
+}
+
+.ModalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.ModalHeader h2 {
+  margin: 0;
+  color: var(--menu-black);
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  font-weight: 950;
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 rgba(255, 122, 22, 0.55);
+}
+
+.ModalCopy,
+.LoadingText,
+.ErrorText {
+  color: rgba(22, 11, 4, 0.72);
+  font-size: 1.04rem;
+  line-height: 1.4;
+}
+
+.ErrorText {
+  color: #b51f00;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.DisplayNameForm {
+  display: grid;
+  gap: 18px;
+}
+
+.DisplayNameField {
+  display: grid;
+  gap: 9px;
+  color: var(--menu-ink);
+  font: 950 0.78rem/1 var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.DisplayNameField input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 4px solid var(--menu-black);
+  border-radius: 0;
+  padding: 16px 18px;
+  color: var(--menu-ink);
+  background: #fff9e9;
+  box-shadow: 8px 8px 0 var(--menu-orange);
+  font: 900 1.08rem/1 var(--sans, system-ui, sans-serif);
+}
+
+.RoomSections {
+  display: grid;
+  gap: 16px;
+}
+
+.RoomSectionHeader {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  color: var(--menu-black);
+}
+
+.RoomSectionHeader h3 {
+  margin: 0;
+  color: var(--menu-black);
+  font-size: clamp(1.4rem, 3vw, 2.35rem);
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.RoomSectionHeader span {
+  color: #8f2607;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.RoomList {
+  display: grid;
+  gap: 14px;
+}
+
+.CreateRoomButton {
+  justify-self: center;
+  margin: 4px 0 14px;
+}
+
+@keyframes menuBusy {
+  to {
+    background-position: 24px 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .GameMenu {
+    place-items: center;
+    padding: 20px;
+  }
+
+  .MenuPanel {
+    width: 100%;
+    transform: rotate(-3deg);
+  }
+
+  .MenuEntry {
+    min-width: 0;
+    width: 100%;
+    box-shadow: 10px 10px 0 var(--menu-black), 16px 16px 0 rgba(255, 196, 71, 0.9);
+  }
+
+  .MenuEntry:nth-child(2),
+  .MenuEntry:nth-child(3) {
+    margin-left: 0;
+  }
+
+  .SlashOne {
+    width: 118vw;
+    right: -50vw;
+  }
+
+  .SlashTwo {
+    width: 100vw;
+  }
+
+  .ModalBackdrop {
+    padding: 12px;
+  }
+
+  .ModalCard {
+    max-height: 90svh;
+    clip-path: polygon(0 2%, 98% 0, 100% 98%, 2% 100%);
+    box-shadow: 10px 10px 0 var(--menu-black), 18px 18px 0 var(--menu-orange), 0 24px 60px var(--menu-shadow);
+  }
+
+  .ModalHeader {
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,8 @@
+import * as BABYLON from "@babylonjs/core";
+
+export const MeshCache = {} as {
+    characterY: BABYLON.AssetContainer;
+    josh: BABYLON.AssetContainer;
+    megan: BABYLON.AssetContainer;
+  };
+
