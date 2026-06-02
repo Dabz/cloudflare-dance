@@ -1,1 +1,122 @@
-.RoomMenuEntry {}
+.RoomMenuEntry {
+  --cf-orange: #f48120;
+  --cf-deep-orange: #f05a24;
+  --cf-gold: #faae40;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid rgba(244, 129, 32, 0.24);
+  border-radius: 24px;
+  overflow: hidden;
+  text-align: left;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 244, 220, 0.76)),
+    radial-gradient(circle at 0 0, rgba(250, 174, 64, 0.28), transparent 18rem);
+  box-shadow:
+    0 14px 30px rgba(120, 64, 12, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.RoomMenuEntry::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 7px;
+  background: linear-gradient(180deg, var(--cf-gold), var(--cf-orange), var(--cf-deep-orange));
+}
+
+.RoomMenuEntry:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 90, 36, 0.46);
+  box-shadow:
+    0 22px 46px rgba(120, 64, 12, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.RoomMenuEntry h1 {
+  margin: 0 0 5px;
+  color: #251306;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.RoomMenuEntry p {
+  margin: 0;
+  color: rgba(57, 36, 17, 0.62);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.RoomMeta {
+  min-width: 78px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  text-align: center;
+  background: rgba(255, 232, 189, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(244, 129, 32, 0.18);
+}
+
+.RoomMeta h2 {
+  margin: 0;
+  color: #8d350f;
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 0.95;
+}
+
+.RoomMeta span {
+  display: block;
+  margin-top: 4px;
+  color: rgba(57, 36, 17, 0.66);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.RoomMenuEntry button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 20px;
+  color: #fffaf2;
+  background: linear-gradient(135deg, var(--cf-deep-orange), var(--cf-orange) 58%, var(--cf-gold));
+  box-shadow: 0 12px 24px rgba(240, 90, 36, 0.24);
+  cursor: pointer;
+  font: 900 0.84rem/1 var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.RoomMenuEntry button:hover {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 16px 30px rgba(240, 90, 36, 0.32);
+}
+
+.RoomMenuEntry button:focus-visible {
+  outline: 3px solid rgba(25, 19, 13, 0.8);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .RoomMenuEntry {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .RoomMeta {
+    width: fit-content;
+  }
+
+  .RoomMenuEntry button {
+    width: 100%;
+  }
+}

@@ -1,36 +1,53 @@
 import { useEffect, useRef, type FC } from "react";
 import styles from "./GameRoom.module.css";
 import * as BABYLON from "@babylonjs/core";
-import mainScene from "../../scenes/main";
+import { MainScene } from "../../scenes/main";
 import {useParams} from "react-router";
-import type {Player} from "../../../worker/model/player";
+import {getUsername} from "../../security/auth";
+import type {Player, PlayerUpdatesPayload} from "../../../worker/model/player";
 
 interface GameRoomProps {}
 
 const GameRoom: FC<GameRoomProps> = () => {
+  const mainScene = new MainScene();
   const reactCanvas = useRef(null);
-  const { id } = useParams()
+  const { id: roomId } = useParams()
 
   function joinGame() {
-    const ws = new WebSocket(`/ws/room/${id}`);
+    const ws = new WebSocket(`/ws/room/${roomId}`);
     ws.onopen = () => console.log('WebSocket connected');
     ws.onclose = () => console.log('WebSocket disconnected');
-    ws.addEventListener("message", (event) => {
-      console.log("Message from server ", event.data);
-    });
-    setInterval(() => {
-      if (ws.readyState !== ws.OPEN) {
-        return
-      }
 
-      const player: Player = {
-        ID: "",
-        X: mainScene.characterPosition.x,
-        Y: mainScene.characterPosition.y,
-        Z: mainScene.characterPosition.z,
-      }
-      ws.send(JSON.stringify(player))
-    }, 100);
+    getUsername().then((username) => {
+
+      ws.addEventListener("message", (event) => {
+        const payload = JSON.parse(event.data) as PlayerUpdatesPayload
+        const otherPlayers = [] as Player[];
+        const playerNames = Object.keys(payload.players);
+        for (const playerName of playerNames) {
+          if (playerName == username) {
+            continue;
+          }
+          otherPlayers.push(payload.players[playerName])
+        }
+        mainScene.otherPlayers = otherPlayers;
+      });
+
+
+      setInterval(() => {
+        if (ws.readyState !== ws.OPEN || !mainScene || !mainScene.characterPosition) {
+          return
+        }
+
+        const player: Player = {
+          ID: username,
+          X: mainScene.characterPosition.x,
+          Y: mainScene.characterPosition.y,
+          Z: mainScene.characterPosition.z,
+        }
+        ws.send(JSON.stringify(player))
+      }, 100);
+    });
   }
 
   function initBabylon() : () => void {
@@ -40,14 +57,9 @@ const GameRoom: FC<GameRoomProps> = () => {
 
     const engine = new BABYLON.Engine(canvas, true);
     const scene = mainScene.createScene(engine); //Call the createScene function
-    let lastServerSync = new Date(0).getTime();
 
     engine.runRenderLoop(() => {
-      const now = new Date().getTime();
-      if ((now - lastServerSync) > 100) {
-        console.log(mainScene.characterPosition.x);
-        lastServerSync = now;
-      }
+      mainScene.tick();
       scene.render();
     });
 
@@ -61,7 +73,7 @@ const GameRoom: FC<GameRoomProps> = () => {
     }
 
     return () => {
-      scene.getEngine().dispose();
+      mainScene.dispose();
 
       if (window) {
         window.removeEventListener("resize", resizeListener);
@@ -77,7 +89,7 @@ const GameRoom: FC<GameRoomProps> = () => {
 
   return (
     <>
-      <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
+    <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
     </>
   );
 };

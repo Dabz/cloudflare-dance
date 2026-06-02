@@ -1,19 +1,11 @@
 import { DurableObject } from "cloudflare:workers";
-import type { Player } from "../model/player";
+import type { Player, PlayerUpdates, PlayerUpdatesPayload } from "../model/player";
 import {getUser} from "../auth";
 
 interface SessionData {
   id: string;
 }
 
-interface PlayerUpdatesPayload {
-  players: PlayerUpdates;
-  time: number;
-}
-
-interface PlayerUpdates {
-  [key: string]: Player;
-}
 
 export class GameRoom extends DurableObject<Env> {
   playerUpdates: PlayerUpdates = {};
@@ -103,6 +95,7 @@ export class GameRoom extends DurableObject<Env> {
     const session = ws.deserializeAttachment() as SessionData;
     try {
       const playerData = JSON.parse(message.toString()) as Player;
+      playerData.ID = session.id;
       this.playerUpdates[session.id] = playerData;
       this.update_user(session.id);
       this.ensureBroadcastLoop();

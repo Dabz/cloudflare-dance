@@ -37,7 +37,8 @@ const GameMenu: FC<GameMenuProps> = () => {
     <>
       <div className={styles.GameMenu} data-testid="GameMenu">
         <h1>Cloudflare, Please</h1>
-        <div id="main-menu">
+        <p className={styles.Tagline}>Find the closest edge room and jump in.</p>
+        <div className={styles.MainMenu}>
           <button onClick={ClickedStartGame}>Join game</button>
         </div>
 
@@ -51,25 +52,27 @@ const GameMenu: FC<GameMenuProps> = () => {
               )}
               {!loading && (
                 <>
-                  <div>
+                    <div className={styles.RoomSections}>
                     {rooms.roomsInLocation.length > 0 && (
-                      <h1>Rooms close to you!</h1>
+                      <h1 className={styles.SectionTitle}>Rooms close to you!</h1>
                     )}
-                    {rooms.roomsInLocation.sort((l, r) => l.PLAYER_COUNT - r.PLAYER_COUNT).map((room) => (
-                      <RoomMenuEntry key={room.ID} room={room} />
-                    ))}
+                    <div className={styles.RoomList}>
+                      {rooms.roomsInLocation.sort((l, r) => l.PLAYER_COUNT - r.PLAYER_COUNT).map((room) => (
+                        <RoomMenuEntry key={room.ID} room={room} />
+                      ))}
+                    </div>
                     { rooms.roomsInLocation.length == 0 && 
-                      <button onClick={() => createRoom(rooms.location)}>Create a new room in your location?</button>
+                      <button className={styles.CreateRoomButton} onClick={() => createRoom(rooms.location)}>Create a new room in your location?</button>
                     }
 
                     {rooms.roomsOutsideLocation.length > 0 && (
-                      <h1>Rooms a little bit far but still ok!</h1>
+                      <h1 className={styles.SectionTitle}>Rooms a little bit far but still ok!</h1>
                     )}
-                    {rooms.roomsOutsideLocation.sort((l, r) => l.PLAYER_COUNT - r.PLAYER_COUNT).map((room) => (
-                      <>
-                      <RoomMenuEntry key={room.ID} room={room} />
-                      </>
-                    ))}
+                    <div className={styles.RoomList}>
+                      {rooms.roomsOutsideLocation.sort((l, r) => l.PLAYER_COUNT - r.PLAYER_COUNT).map((room) => (
+                        <RoomMenuEntry key={room.ID} room={room} />
+                      ))}
+                    </div>
                   </div>
                 </>
               )}

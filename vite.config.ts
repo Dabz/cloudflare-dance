@@ -1,8 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 import { cloudflare } from "@cloudflare/vite-plugin";
-import { reactRouter } from "@react-router/dev/vite";
+import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 import path from 'node:path';
@@ -14,7 +13,7 @@ const isStorybook = process.argv[1]?.includes("storybook");
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [isStorybook && react(), !isStorybook && reactRouter(), cloudflare({viteEnvironment: {name: "vite"}})],
+  plugins: [!isStorybook && cloudflare(), react()],
   resolve: {
     tsconfigPaths: true,
   },

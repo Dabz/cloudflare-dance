@@ -1,16 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as BABYLON from "@babylonjs/core";
 import HavokPhysics from '@babylonjs/havok';
+import havokWasmUrl from '../../node_modules/@babylonjs/havok/lib/esm/HavokPhysics.wasm?url';
+import earcut from 'earcut';
+
 import "@babylonjs/loaders/glTF";
+import type { Player } from "../../worker/model/player";
+const fontData = await (await fetch("/font.json")).json();
 
 
-export default {
-  characterPosition: BABYLON.Vector3.Zero(),
+export class MainScene {
+  characterPosition: BABYLON.Vector3;
+  otherPlayers: Player[] = [];
 
-  createScene(engine: BABYLON.Engine): BABYLON.Scene {
-    const scene = new BABYLON.Scene(engine);
+  _scene: BABYLON.Scene;
+  _otherPlayersMesh: {[key: string]: BABYLON.Mesh} = {};
+  
+  public createScene(engine: BABYLON.Engine): BABYLON.Scene {
+    if (this._scene) this._scene.dispose();
+    this._scene = new BABYLON.Scene(engine);
     const camera = new BABYLON.FollowCamera("camera1", new BABYLON.Vector3(0, 10, -10), );
-    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), this._scene);
 
     camera.radius = 15;
     camera.heightOffset = 4;
@@ -19,14 +29,14 @@ export default {
     camera.maxCameraSpeed = 20;
 
     light.intensity = 0.7;
-    HavokPhysics().then((havokInterface) => {
+    HavokPhysics({ locateFile: () => havokWasmUrl }).then((havokInterface) => {
       const hk = new BABYLON.HavokPlugin(undefined, havokInterface);
-      scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
-      BABYLON.ImportMeshAsync("/public/level.glb", scene).then(() => {
-        const lightmap = new BABYLON.Texture("/public/lightmap.jpg");
+      this._scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
+      BABYLON.ImportMeshAsync("/level.glb", this._scene).then(() => {
+        const lightmap = new BABYLON.Texture("/lightmap.jpg");
         const lightmapped = ["level_primitive0", "level_primitive1", "level_primitive2"];
         lightmapped.forEach((meshName)=>{
-          const mesh = scene.getMeshByName(meshName);
+          const mesh = this._scene.getMeshByName(meshName);
           new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
           mesh.isPickable = false
           mesh.material.lightmapTexture = lightmap;
@@ -39,11 +49,11 @@ export default {
         });
         const cubes = ["Cube", "Cube.001", "Cube.002", "Cube.003", "Cube.004", "Cube.005"];
         cubes.forEach((meshName)=>{
-          new BABYLON.PhysicsAggregate(scene.getMeshByName(meshName), BABYLON.PhysicsShapeType.BOX, {mass:0.1});
+          new BABYLON.PhysicsAggregate(this._scene.getMeshByName(meshName), BABYLON.PhysicsShapeType.BOX, {mass:0.1});
         });
-        const planeMesh = scene.getMeshByName("Cube.006");
+        const planeMesh = this._scene.getMeshByName("Cube.006");
         planeMesh.scaling.set(0.03,3,1);
-        const fixedMass = new BABYLON.PhysicsAggregate(scene.getMeshByName("Cube.007"), BABYLON.PhysicsShapeType.BOX, {mass:0});
+        const fixedMass = new BABYLON.PhysicsAggregate(this._scene.getMeshByName("Cube.007"), BABYLON.PhysicsShapeType.BOX, {mass:0});
         const plane = new BABYLON.PhysicsAggregate(planeMesh, BABYLON.PhysicsShapeType.BOX, {mass:0.1});
 
         const joint = new BABYLON.HingeConstraint(
@@ -51,7 +61,7 @@ export default {
           new BABYLON.Vector3(-0.25, 0, 0),
           new BABYLON.Vector3(0, 0, -1),
           new BABYLON.Vector3(0, 0, 1),
-          scene);
+          this._scene);
           fixedMass.body.addConstraint(plane.body, joint);
 
           let state = "IN_AIR";
@@ -66,12 +76,12 @@ export default {
 
           const h = 1.8;
           const r = 0.6;
-          const displayCapsule = BABYLON.MeshBuilder.CreateCapsule("CharacterDisplay", {height: h, radius: r}, scene);
-          displayCapsule.material = new BABYLON.StandardMaterial("capsule", scene);
+          const displayCapsule = BABYLON.MeshBuilder.CreateCapsule("CharacterDisplay", {height: h, radius: r}, this._scene);
+          displayCapsule.material = new BABYLON.StandardMaterial("capsule", this._scene);
           displayCapsule.material.diffuseColor = new BABYLON.Color3(0.2,0.9,0.8);
-          const characterPosition = new BABYLON.Vector3(3., 0.3, -8.);
-          const characterController = new BABYLON.PhysicsCharacterController(characterPosition, {capsuleHeight: h, capsuleRadius: r}, scene);
-          camera.setTarget(characterPosition);
+          this.characterPosition = new BABYLON.Vector3(3., 0.3, -8.);
+          const characterController = new BABYLON.PhysicsCharacterController(this.characterPosition, {capsuleHeight: h, capsuleRadius: r}, this._scene);
+          camera.setTarget(this.characterPosition);
 
           const getNextState = function(supportInfo) {
             if (state == "IN_AIR") {
@@ -142,7 +152,7 @@ export default {
           }
 
           // Display tick update: compute new camera position/target, update the capsule for the character display
-          scene.onBeforeRenderObservable.add((_: BABYLON.Scene) => {
+          this._scene.onBeforeRenderObservable.add((_: BABYLON.Scene) => {
             displayCapsule.position.copyFrom(characterController.getPosition());
             this.characterPosition = characterController.getPosition();
 
@@ -158,9 +168,9 @@ export default {
           });
 
           // After physics update, compute and set new velocity, update the character controller state
-          scene.onAfterPhysicsObservable.add((_) => {
-            if (scene.deltaTime == undefined) return;
-            const dt = scene.deltaTime / 1000.0;
+          this._scene.onAfterPhysicsObservable.add((_) => {
+            if (this._scene.deltaTime == undefined) return;
+            const dt = this._scene.deltaTime / 1000.0;
             if (dt == 0) return;
 
             const down = new BABYLON.Vector3(0, -1, 0);
@@ -179,7 +189,7 @@ export default {
           // Add a slide vector to rotate arount the character
           let isMouseDown = false;
           let mouseDownY = 0;
-          scene.onPointerObservable.add((pointerInfo) => {
+          this._scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
               case BABYLON.PointerEventTypes.POINTERDOWN:
                 isMouseDown = true;
@@ -216,7 +226,7 @@ export default {
           });
           // Input to direction
           // from keys down/up, update the Vector3 inputDirection to match the intended direction. Jump with space
-          scene.onKeyboardObservable.add((kbInfo) => {
+          this._scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {
               case BABYLON.KeyboardEventTypes.KEYDOWN:
                 isKeyDown = true;
@@ -248,9 +258,37 @@ export default {
       });
     });
 
-    return scene;
-  },
+    return this._scene;
+  }
 
-  tick() {
+  public dispose() {
+    this._scene.dispose();
+    this._scene.getEngine().dispose();
+    this._scene = null;
+  }
+
+  public tick() {
+    const otherPlayersMeshName = Object.keys(this._otherPlayersMesh)
+    const nOtherPlayerName = []
+    for (const otherPlayer of this.otherPlayers) {
+      nOtherPlayerName.push(otherPlayer.ID);
+      if (otherPlayersMeshName.indexOf(otherPlayer.ID) == -1) {
+        const h = 1.8;
+        const r = 0.6;
+        const displayCapsule = BABYLON.MeshBuilder.CreateText(otherPlayer.ID, otherPlayer.ID, fontData, {  size: 1,  resolution: 1, depth: 1}, this._scene, earcut);
+        this._otherPlayersMesh[otherPlayer.ID] = displayCapsule
+        continue
+      } 
+      const capsule = this._otherPlayersMesh[otherPlayer.ID]
+      capsule.position = new BABYLON.Vector3(otherPlayer.X, otherPlayer.Y, otherPlayer.Z);
+    }
+
+    for (const otherMeshPlayer of otherPlayersMeshName) {
+      if (nOtherPlayerName.indexOf(otherMeshPlayer) == -1) {
+        const mesh = this._otherPlayersMesh[otherMeshPlayer]
+        mesh.dispose()
+        delete this._otherPlayersMesh[otherMeshPlayer]
+      }
+    }
   }
 }

@@ -14,12 +14,17 @@ const RoomMenuEntry: FC<RoomMenuEntryProps> = ({ room } ) => {
 
   return (
     <div className={styles.RoomMenuEntry} data-testid="RoomMenuEntry">
-    <h1>{room.LOCATION} (id: {room.ID})</h1>
-    <h2>Player count: {room.PLAYER_COUNT}</h2>
-    <button onClick={() => joinGameRoom(room)}>Join?</button>
+      <div>
+        <h1>{room.LOCATION}</h1>
+        <p>Room {room.ID}</p>
+      </div>
+      <div className={styles.RoomMeta}>
+        <h2>{room.PLAYER_COUNT}</h2>
+        <span>players</span>
+      </div>
+      <button onClick={() => joinGameRoom(room)}>Join</button>
     </div>
   );
 }
 
 export default RoomMenuEntry;
-

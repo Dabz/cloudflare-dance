@@ -19,6 +19,11 @@ export type RoomUpsertResponse = {
   created: boolean;
 };
 
+export type MeResponse = {
+  location: string;
+  user: string;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const route = app
   .get("/me", (c) => {
@@ -29,7 +34,7 @@ const route = app
     return c.json({
       location: colo,
       user: user,
-    });
+    } as MeResponse);
   })
   .get("/room/:id", async (c) => {
     const { id } = c.req.param();
