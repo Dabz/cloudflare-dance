@@ -1,8 +1,15 @@
+export interface PlayerIdentity {
+  id: string;
+  displayName: string;
+}
+
 export interface Player {
-  ID: string,
-  X: number,
-  Y: number,
-  Z: number,
+  id: string,
+  displayName: string,
+  x: number,
+  y: number,
+  z: number,
+  lastSeenSync: number,
 }
 
 export interface PlayerUpdatesPayload {

@@ -3,51 +3,68 @@ import styles from "./GameRoom.module.css";
 import * as BABYLON from "@babylonjs/core";
 import { MainScene } from "../../scenes/main";
 import {useParams} from "react-router";
-import {getUsername} from "../../security/auth";
+import {getPlayerIdentity} from "../../security/auth";
 import type {Player, PlayerUpdatesPayload} from "../../../worker/model/player";
+import Const from "../../../worker/const"
+import {useNavigate} from 'react-router';
 
 interface GameRoomProps {}
 
 const GameRoom: FC<GameRoomProps> = () => {
-  const mainScene = new MainScene();
+  const mainScene: MainScene = new MainScene();
   const reactCanvas = useRef(null);
   const { id: roomId } = useParams()
+  const navigate = useNavigate()
 
   function joinGame() {
     const ws = new WebSocket(`/ws/room/${roomId}`);
     ws.onopen = () => console.log('WebSocket connected');
-    ws.onclose = () => console.log('WebSocket disconnected');
+    ws.onclose = (ev) => {
+      console.log('WebSocket disconnected');
+      if (ev.reason === Const.WS_REASON_RECONNECT) {
+        console.warn("Disconnecting as a connection with similar ID have been detected")
+        navigate('/')
+      }
+    }
 
-    getUsername().then((username) => {
+    getPlayerIdentity().then(identity => {
 
       ws.addEventListener("message", (event) => {
         const payload = JSON.parse(event.data) as PlayerUpdatesPayload
         const otherPlayers = [] as Player[];
-        const playerNames = Object.keys(payload.players);
-        for (const playerName of playerNames) {
-          if (playerName == username) {
+        const playerIds = Object.keys(payload.players);
+        for (const playerId of playerIds) {
+          if (playerId == identity.id) {
             continue;
           }
-          otherPlayers.push(payload.players[playerName])
+          otherPlayers.push(payload.players[playerId])
         }
-        mainScene.otherPlayers = otherPlayers;
+        if (mainScene) {
+          mainScene.updatePlayerPosition(otherPlayers);
+        }
       });
 
 
       setInterval(() => {
-        if (ws.readyState !== ws.OPEN || !mainScene || !mainScene.characterPosition) {
+        if (ws.readyState !== ws.OPEN || !mainScene || !mainScene.mainPlayer) {
           return
         }
 
         const player: Player = {
-          ID: username,
-          X: mainScene.characterPosition.x,
-          Y: mainScene.characterPosition.y,
-          Z: mainScene.characterPosition.z,
+          id: identity.id,
+          displayName: identity.displayName,
+          x: mainScene.mainPlayer.characterPosition.x,
+          y: mainScene.mainPlayer.characterPosition.y,
+          z: mainScene.mainPlayer.characterPosition.z,
+          lastSeenSync: new Date().getTime(),
         }
         ws.send(JSON.stringify(player))
       }, 100);
     });
+
+    return () => {
+      ws.close();
+    }
   }
 
   function initBabylon() : () => void {
@@ -56,16 +73,15 @@ const GameRoom: FC<GameRoomProps> = () => {
     if (!canvas) return;
 
     const engine = new BABYLON.Engine(canvas, true);
-    const scene = mainScene.createScene(engine); //Call the createScene function
+    mainScene.createScene(engine); 
 
     engine.runRenderLoop(() => {
-      mainScene.tick();
-      scene.render();
+      mainScene.render();
     });
 
     // Watch for browser/canvas resize events
     const resizeListener = function () {
-      engine.resize();
+      mainScene.resize();
     };
 
     if (window) {
@@ -83,8 +99,11 @@ const GameRoom: FC<GameRoomProps> = () => {
   }
 
   useEffect(() => {
-    joinGame()
     return initBabylon();
+  });
+
+  useEffect(() => {
+    return joinGame();
   });
 
   return (

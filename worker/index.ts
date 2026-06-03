@@ -1,6 +1,6 @@
-import { Hono } from "hono";
+import { Hono } from "hono"
 import { env } from "cloudflare:workers";
-import { getUser, getColo } from "./auth";
+import { createPlayerIdCookie, getColo, getPlayerId, getPlayerIdentity } from "./auth";
 import mds from "./mds";
 import type { Room } from "./model/room";
 
@@ -21,7 +21,12 @@ export type RoomUpsertResponse = {
 
 export type MeResponse = {
   location: string;
-  user: string;
+  id: string;
+  displayName: string;
+}
+
+export type PlayerCountResponse = {
+  playerCount: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,24 +34,36 @@ const route = app
   .get("/me", (c) => {
     const cf = c.req.raw.cf;
     const colo = getColo(cf);
-    const user = getUser(c);
+    const existingPlayerId = getPlayerId(c.req.raw.headers);
+    const identity = getPlayerIdentity(c.req.raw.headers);
+
+    if (!existingPlayerId) {
+      c.header("Set-Cookie", createPlayerIdCookie(identity.id));
+    }
 
     return c.json({
       location: colo,
-      user: user,
+      id: identity.id,
+      displayName: identity.displayName,
     } as MeResponse);
   })
   .get("/room/:id", async (c) => {
     const { id } = c.req.param();
     const gameroomStub = c.env.GAME_ROOM.getByName(id);
-    const count = await gameroomStub.get_active_users_count();
+    const count = await gameroomStub.getActiveUsersCount();
     return c.json({
       room: id,
       user_count: count,
     });
   })
+  .get("/room/:id/player_count", async (c) => {
+    const { id } = c.req.param();
+    const gameroomStub = c.env.GAME_ROOM.getByName(id);
+    const count = await gameroomStub.getActiveUsersCount();
+    return c.json({playerCount: count} as PlayerCountResponse)
+  })
   .get("/room", async (c) => {
-    const rooms = await mds.list_rooms();
+    const rooms = await mds.listRooms();
     const colo = getColo(c.req.raw.cf);
     const roomsColo = rooms.filter((r) => r.LOCATION == colo);
     const roomsNotInColo = rooms.filter((r) => r.LOCATION !== colo);
@@ -62,7 +79,7 @@ const route = app
   })
   .post("/room/:loc", async (c) => {
     const { loc } = c.req.param();
-    const existingRooms = await mds.get_rooms_in_loc(loc);
+    const existingRooms = await mds.getRoomsInLoc(loc);
     let room: Room;
     let created = false;
 
@@ -74,7 +91,7 @@ const route = app
     }
 
     if (!room) {
-      room = await mds.upsert_room(loc, loc);
+      room = await mds.upsertRoom(loc, loc);
       created = true;
     }
 
@@ -97,13 +114,8 @@ export default {
     
     if (url.pathname.startsWith('/ws')) {
       if (url.pathname.startsWith('/ws/room/')) {
-        if (r.headers.get("upgrade") !== "websocket") {
-          return new Response("Expected Upgrade: websocket", { status: 426 });
-        }
-        const roomId = url.pathname.split('/').at(-1);
-        const stub = e.GAME_ROOM.getByName(roomId)
-        return await stub.fetch(r);
-      }
+        return playerJoinRoom(r, e)
+     }
     }
 
     return app.fetch(r, e);
@@ -121,14 +133,26 @@ export default {
   },
 };
 
+async function playerJoinRoom(r: Request, e: Env) {
+  const url = new URL(r.url);
+
+  if (r.headers.get("upgrade") !== "websocket") {
+    return new Response("Expected Upgrade: websocket", { status: 426 });
+  }
+
+  const roomId = url.pathname.split('/').at(-1);
+  const stub = e.GAME_ROOM.getByName(roomId)
+  return stub.fetch(r);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function scheduled_clean_rooms(env: Env, ctx: ExecutionContext) {
-  const rooms = await mds.list_rooms();
+  const rooms = await mds.listRooms();
   for (const room of rooms) {
     const gameRoom = env.GAME_ROOM.getByName(room.ID);
-    await gameRoom.delete_old_sessions();
+    await gameRoom.deleteOldSessions();
   }
-  mds.delete_old_empty_rooms();
+  mds.deleteOldEmptyRooms();
 }
 
 export { GameRoom } from "./durable/gameroom";

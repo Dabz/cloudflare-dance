@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 import type {Room} from "./model/room";
 
 export default {
-  async upsert_room(id: string, colo: string): Promise<Room> {
+  async upsertRoom(id: string, colo: string): Promise<Room> {
     const now = Date.now();
     const res = await env.CLOUDFLARE_PLEASE_METADATA.prepare(
       `INSERT INTO ROOMS (ID, LOCATION, PLAYER_COUNT, CREATED_AT, LAST_UPDATED_AT) VALUES (?, ?, ?, ?, ?)
@@ -15,7 +15,7 @@ export default {
     return res.results.at(0)
   },
 
-  async list_rooms(): Promise<Room[]> {
+  async listRooms(): Promise<Room[]> {
     const res = await env.CLOUDFLARE_PLEASE_METADATA.prepare(
       `SELECT ID, LOCATION, PLAYER_COUNT, CREATED_AT, LAST_UPDATED_AT
       FROM ROOMS`,
@@ -23,7 +23,7 @@ export default {
     return res.results
   },
 
-  async get_rooms_in_loc(loc: string): Promise<Room[]> {
+  async getRoomsInLoc(loc: string): Promise<Room[]> {
     const res = await env.CLOUDFLARE_PLEASE_METADATA.prepare(
       `SELECT ID, LOCATION, PLAYER_COUNT, CREATED_AT, LAST_UPDATED_AT
       FROM ROOMS
@@ -32,7 +32,7 @@ export default {
       return res.results;
   },
 
-  async delete_old_empty_rooms(): Promise<number> {
+  async deleteOldEmptyRooms(): Promise<number> {
     const threshold = Date.now() - (1000 * 60);
     const res = await env.CLOUDFLARE_PLEASE_METADATA.prepare(
       `DELETE FROM ROOMS WHERE PLAYER_COUNT = 0 AND LAST_UPDATED_AT < ?`
