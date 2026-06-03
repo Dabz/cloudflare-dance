@@ -1,6 +1,6 @@
 import {hc} from "hono/client";
 import type {AppType} from "../../worker";
-import type { PlayerIdentity } from "../../worker/model/player";
+import type { Player, PlayerIdentity } from "../../worker/model/player";
 
 let cachedIdentity: PlayerIdentity;
 export async function getPlayerIdentity() {
@@ -17,4 +17,14 @@ export async function getPlayerIdentity() {
     displayName: meResJson.displayName,
   };
   return cachedIdentity;
+}
+
+export async function getPlayerInformationInRoom(roomId: string): Promise<Player> {
+  const client = hc<AppType>('/')
+  const meRes = await client.api.room[":id"].me.$get({param: {id: roomId}});
+  if (!meRes.ok) {
+    throw new Error("Server failed to return credentials");
+  }
+  const player = await meRes.json();
+  return player;
 }

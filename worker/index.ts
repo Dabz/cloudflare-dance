@@ -3,6 +3,7 @@ import { env } from "cloudflare:workers";
 import { createPlayerIdCookie, getColo, getPlayerId, getPlayerIdentity } from "./auth";
 import mds from "./mds";
 import type { Room } from "./model/room";
+import type {Player} from "./model/player";
 
 
 const app = new Hono<{ Bindings: typeof env }>().basePath("/api");
@@ -46,6 +47,18 @@ const route = app
       id: identity.id,
       displayName: identity.displayName,
     } as MeResponse);
+  })
+  .get("/room/:id/me", async (c) => {
+    const { id } = c.req.param();
+    const existingPlayerId = getPlayerId(c.req.raw.headers);
+    const identity = getPlayerIdentity(c.req.raw.headers);
+
+    if (!existingPlayerId) {
+      c.header("Set-Cookie", createPlayerIdCookie(identity.id));
+    }
+    const gameroomStub = c.env.GAME_ROOM.getByName(id);
+    const me = await gameroomStub.getSession(identity.id) as Player;
+    return c.json(me);
   })
   .get("/room/:id", async (c) => {
     const { id } = c.req.param();

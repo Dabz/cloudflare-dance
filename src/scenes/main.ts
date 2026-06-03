@@ -4,7 +4,7 @@ import HavokPhysics from "@babylonjs/havok";
 import havokWasmUrl from "../../node_modules/@babylonjs/havok/lib/esm/HavokPhysics.wasm?url";
 
 import "@babylonjs/loaders/glTF";
-import type { Player, PlayerIdentity } from "../../worker/model/player";
+import type { Player } from "../../worker/model/player";
 import { PlayerCharacter } from "./player";
 
 export class MainScene {
@@ -15,17 +15,19 @@ export class MainScene {
   _scene: BABYLON.Scene;
   _camera: BABYLON.FollowCamera;
 
-  public createScene(engine: BABYLON.Engine, identity?: PlayerIdentity ): BABYLON.Scene {
+  public async createScene(engine: BABYLON.Engine, mainPlayer?: Player ): Promise<BABYLON.Scene> {
     if (this._scene) this.dispose();
-    this._scene = new BABYLON.Scene(engine);
+    const scene = new BABYLON.Scene(engine);
+    this._scene = scene;
     this._camera = new BABYLON.FollowCamera(
       "camera1",
       new BABYLON.Vector3(0, 10, -10),
+      scene,
     );
     const light = new BABYLON.HemisphericLight(
       "light",
       new BABYLON.Vector3(0, 1, 0),
-      this._scene,
+      scene,
     );
 
     this._camera.radius = 15;
@@ -35,78 +37,81 @@ export class MainScene {
     this._camera.maxCameraSpeed = 20;
 
     light.intensity = 0.7;
-    HavokPhysics({ locateFile: () => havokWasmUrl }).then((havokInterface) => {
-      if (!this._scene) return;
-      const hk = new BABYLON.HavokPlugin(undefined, havokInterface);
-      this._scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
-      BABYLON.ImportMeshAsync("/level.glb", this._scene).then(() => {
-        if (!this._scene) return;
-        const lightmap = new BABYLON.Texture("/lightmap.jpg");
-        const lightmapped = [
-          "level_primitive0",
-          "level_primitive1",
-          "level_primitive2",
-        ];
-        lightmapped.forEach((meshName) => {
-          const mesh = this._scene.getMeshByName(meshName);
-          new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
-          mesh.isPickable = false;
-          mesh.material.lightmapTexture = lightmap;
-          mesh.material.useLightmapAsShadowmap = true;
-          mesh.material.lightmapTexture.uAng = Math.PI;
-          mesh.material.lightmapTexture.level = 1.6;
-          mesh.material.lightmapTexture.coordinatesIndex = 1;
-          mesh.freezeWorldMatrix();
-          mesh.doNotSyncBoundingInfo = true;
-        });
-        const cubes = [
-          "Cube",
-          "Cube.001",
-          "Cube.002",
-          "Cube.003",
-          "Cube.004",
-          "Cube.005",
-        ];
-        cubes.forEach((meshName) => {
-          new BABYLON.PhysicsAggregate(
-            this._scene.getMeshByName(meshName),
-            BABYLON.PhysicsShapeType.BOX,
-            { mass: 0.1 },
-          );
-        });
-        const planeMesh = this._scene.getMeshByName("Cube.006");
-        planeMesh.scaling.set(0.03, 3, 1);
-        const fixedMass = new BABYLON.PhysicsAggregate(
-          this._scene.getMeshByName("Cube.007"),
-          BABYLON.PhysicsShapeType.BOX,
-          { mass: 0 },
-        );
-        const plane = new BABYLON.PhysicsAggregate(
-          planeMesh,
-          BABYLON.PhysicsShapeType.BOX,
-          { mass: 0.1 },
-        );
+    const havokInterface = await HavokPhysics({ locateFile: () => havokWasmUrl });
+    if (this._scene !== scene) return scene;
 
-        const joint = new BABYLON.HingeConstraint(
-          new BABYLON.Vector3(0.75, 0, 0),
-          new BABYLON.Vector3(-0.25, 0, 0),
-          new BABYLON.Vector3(0, 0, -1),
-          new BABYLON.Vector3(0, 0, 1),
-          this._scene,
-        );
-        fixedMass.body.addConstraint(plane.body, joint);
+    const hk = new BABYLON.HavokPlugin(undefined, havokInterface);
+    scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
+    await BABYLON.ImportMeshAsync("/level.glb", scene);
+    if (this._scene !== scene) return scene;
 
-        if (identity) {
-          this.addMainPlayer(identity.id);
-        }
-      });
+    const lightmap = new BABYLON.Texture("/lightmap.jpg");
+    const lightmapped = [
+      "level_primitive0",
+      "level_primitive1",
+      "level_primitive2",
+    ];
+    lightmapped.forEach((meshName) => {
+      const mesh = scene.getMeshByName(meshName);
+      new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
+      mesh.isPickable = false;
+      mesh.material.lightmapTexture = lightmap;
+      mesh.material.useLightmapAsShadowmap = true;
+      mesh.material.lightmapTexture.uAng = Math.PI;
+      mesh.material.lightmapTexture.level = 1.6;
+      mesh.material.lightmapTexture.coordinatesIndex = 1;
+      mesh.freezeWorldMatrix();
+      mesh.doNotSyncBoundingInfo = true;
     });
+    const cubes = [
+      "Cube",
+      "Cube.001",
+      "Cube.002",
+      "Cube.003",
+      "Cube.004",
+      "Cube.005",
+    ];
+    cubes.forEach((meshName) => {
+      new BABYLON.PhysicsAggregate(
+        scene.getMeshByName(meshName),
+        BABYLON.PhysicsShapeType.BOX,
+        { mass: 0.1 },
+      );
+    });
+    const planeMesh = scene.getMeshByName("Cube.006");
+    planeMesh.scaling.set(0.03, 3, 1);
+    const fixedMass = new BABYLON.PhysicsAggregate(
+      scene.getMeshByName("Cube.007"),
+      BABYLON.PhysicsShapeType.BOX,
+      { mass: 0 },
+    );
+    const plane = new BABYLON.PhysicsAggregate(
+      planeMesh,
+      BABYLON.PhysicsShapeType.BOX,
+      { mass: 0.1 },
+    );
 
-    return this._scene;
+    const joint = new BABYLON.HingeConstraint(
+      new BABYLON.Vector3(0.75, 0, 0),
+      new BABYLON.Vector3(-0.25, 0, 0),
+      new BABYLON.Vector3(0, 0, -1),
+      new BABYLON.Vector3(0, 0, 1),
+      scene,
+    );
+    fixedMass.body.addConstraint(plane.body, joint);
+
+    if (mainPlayer) {
+      this.addMainPlayer(mainPlayer);
+    }
+
+    return scene;
   }
 
-  public addMainPlayer(id: string) {
-    this.mainPlayer = PlayerCharacter.createPlayer(true, id, this._scene);
+  public addMainPlayer(player: Player) {
+    this.mainPlayer = PlayerCharacter.createPlayer(true, player.id, this._scene);
+    if (player.x && player.y && player.z) {
+      this.mainPlayer.updatePosition(new BABYLON.Vector3(player.x, player.y, player.z))
+    }
     this._camera.setTarget(this.mainPlayer.characterPosition);
     this.mainPlayer.addListenersToKeyboardAndMouse(this._scene, this._camera);
 
@@ -129,7 +134,7 @@ export class MainScene {
   }
 
   public resize() {
-    this._scene.getEngine().resize();
+    this._scene?.getEngine().resize();
   }
 
   public updatePlayerPosition(nextPlayers: Player[]) {
@@ -174,6 +179,6 @@ export class MainScene {
   }
 
   public render() {
-    this._scene.render();
+    this._scene?.render();
   }
 }

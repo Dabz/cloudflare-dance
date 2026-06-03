@@ -3,106 +3,130 @@ import styles from "./GameRoom.module.css";
 import * as BABYLON from "@babylonjs/core";
 import { MainScene } from "../../scenes/main";
 import {useParams} from "react-router";
-import {getPlayerIdentity} from "../../security/auth";
-import type {Player, PlayerIdentity, PlayerUpdatesPayload} from "../../../worker/model/player";
+import {getPlayerIdentity, getPlayerInformationInRoom} from "../../security/auth";
+import type {Player, PlayerUpdatesPayload} from "../../../worker/model/player";
 import Const from "../../../worker/const"
 import {useNavigate} from 'react-router';
 
-interface GameRoomProps {}
-
-const GameRoom: FC<GameRoomProps> = () => {
-  const mainScene: MainScene = new MainScene();
-  const reactCanvas = useRef(null);
+const GameRoom: FC = () => {
+  const reactCanvas = useRef<HTMLCanvasElement | null>(null);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
-  let identity: PlayerIdentity | undefined;
-  getPlayerIdentity().then((i) => {
-    identity = i;
-    if (mainScene && !mainScene.mainPlayer) {
-      mainScene.addMainPlayer(i.id);
-    }
-  })
-
-  function joinGame() {
-    const ws = new WebSocket(`/ws/room/${roomId}`);
-    ws.onopen = () => console.log('WebSocket connected');
-    ws.onclose = (ev) => {
-      console.log('WebSocket disconnected');
-      if (ev.reason === Const.WS_REASON_RECONNECT) {
-        console.warn("Disconnecting as a connection with similar ID have been detected")
-        navigate('/')
-      }
-    }
-    const resizeListener = function () {
-      mainScene.resize();
-    };
-
-    const wsInterval = setInterval(() => {
-      if (ws.readyState !== ws.OPEN || !mainScene || !mainScene.mainPlayer) {
-        return
-      }
-
-      const player: Player = {
-        id: identity.id,
-        displayName: identity.displayName,
-        x: mainScene.mainPlayer.characterPosition.x,
-        y: mainScene.mainPlayer.characterPosition.y,
-        z: mainScene.mainPlayer.characterPosition.z,
-        lastSeenSync: new Date().getTime(),
-      }
-      ws.send(JSON.stringify(player))
-    }, 100);
-
-    console.log("Initiating main scene")
-    const { current: canvas } = reactCanvas;
-    if (!canvas) return;
-
-    const engine = new BABYLON.Engine(canvas, true);
-    mainScene.createScene(engine, identity); 
-
-    engine.runRenderLoop(() => {
-      mainScene.render();
-    });
-
-    // Watch for browser/canvas resize events
-
-    if (window) {
-      window.addEventListener("resize", resizeListener);
-    }
-
-    ws.addEventListener("message", (event) => {
-      const payload = JSON.parse(event.data) as PlayerUpdatesPayload
-      const otherPlayers = [] as Player[];
-      const playerIds = Object.keys(payload.players);
-      for (const playerId of playerIds) {
-        if (playerId == identity.id) {
-          continue;
-        }
-        otherPlayers.push(payload.players[playerId])
-      }
-      if (mainScene) {
-        mainScene.updatePlayerPosition(otherPlayers);
-      }
-    });
-
-    return () => {
-      console.log("Closing websocket")
-      clearInterval(wsInterval);
-      ws.close();
-
-      console.log("Destroying main scene")
-      if (mainScene) {
-        mainScene.dispose();
-      }
-      if (window) {
-        window.removeEventListener("resize", resizeListener);
-      }
-    }
-  }
 
   useEffect(() => {
-    return joinGame();
-  });
+    if (!roomId) return;
+
+    let disposed = false;
+    let mainScene: MainScene | undefined;
+    let engine: BABYLON.Engine | undefined;
+    let ws: WebSocket | undefined;
+    let wsInterval: ReturnType<typeof setInterval> | undefined;
+
+    const resizeListener = function () {
+      mainScene?.resize();
+    };
+
+    async function joinGame() {
+      try {
+        const mainPlayer = await getPlayerInformationInRoom(roomId);
+        if (!mainPlayer || !mainPlayer.id) {
+          console.error("Can't fetch identity information");
+          return;
+        }
+        if (disposed) return;
+
+        const { current: canvas } = reactCanvas;
+        if (!canvas) return;
+
+        console.log("Initiating main scene")
+        mainScene = new MainScene();
+        engine = new BABYLON.Engine(canvas, true);
+        await mainScene.createScene(engine, mainPlayer);
+
+        if (disposed) {
+          mainScene.dispose();
+          engine.dispose();
+          return;
+        }
+
+        ws = new WebSocket(`/ws/room/${roomId}`);
+        ws.onopen = () => console.log('WebSocket connected');
+        ws.onclose = (ev) => {
+          console.log('WebSocket disconnected');
+          if (!disposed && ev.reason === Const.WS_REASON_RECONNECT) {
+            console.warn("Disconnecting as a connection with similar ID have been detected")
+            navigate('/')
+          }
+        }
+
+        wsInterval = setInterval(() => {
+          if (!ws || ws.readyState !== ws.OPEN || !mainScene?.mainPlayer) {
+            return
+          }
+
+          const player: Player = {
+            id: mainPlayer.id,
+            displayName: mainPlayer.displayName,
+            x: mainScene.mainPlayer.characterPosition.x,
+            y: mainScene.mainPlayer.characterPosition.y,
+            z: mainScene.mainPlayer.characterPosition.z,
+            lastSeenSync: new Date().getTime(),
+          }
+          ws.send(JSON.stringify(player))
+        }, 100);
+
+        engine.runRenderLoop(() => {
+          if (!disposed) {
+            mainScene?.render();
+          }
+        });
+
+        window.addEventListener("resize", resizeListener);
+
+        ws.addEventListener("message", (event) => {
+          if (disposed || !mainScene?.mainPlayer) return;
+
+          const payload = JSON.parse(event.data) as PlayerUpdatesPayload
+          const otherPlayers = [] as Player[];
+          const playerIds = Object.keys(payload.players);
+          for (const playerId of playerIds) {
+            if (playerId == mainPlayer.id) {
+              continue;
+            }
+            otherPlayers.push(payload.players[playerId])
+          }
+          mainScene.updatePlayerPosition(otherPlayers);
+        });
+      } catch (error) {
+        if (disposed) {
+          return;
+        }
+
+        console.error("Failed to join game", error);
+        ws?.close();
+        engine?.stopRenderLoop();
+        mainScene?.dispose();
+        engine?.dispose();
+        return;
+      }
+    }
+
+    void joinGame();
+
+    return () => {
+      disposed = true;
+
+      console.log("Closing websocket")
+      if (wsInterval) clearInterval(wsInterval);
+      ws?.close();
+      window.removeEventListener("resize", resizeListener);
+
+      console.log("Destroying main scene")
+      engine?.stopRenderLoop();
+      mainScene?.dispose();
+      engine?.dispose();
+    }
+  }, [roomId, navigate]);
 
   return (
     <>

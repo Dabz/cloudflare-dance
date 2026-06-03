@@ -25,12 +25,20 @@ export class GameRoom extends DurableObject<Env> {
                               CREATE TABLE IF NOT EXISTS SESSIONS (
                                 ID TEXT PRIMARY KEY,
                                 CREATED_AT INTEGER,
-                                LAST_SEEN INTEGER
+                                LAST_SEEN INTEGER,
+                                ACTIVE INTEGER,
+                                X INTEGER,
+                                Y INTEGER,
+                                Z INTEGER
                               );
                               `);
     this.ctx.storage.sql.exec(`
                               CREATE INDEX IF NOT EXISTS SESSION_LAST_SEEN_IDX
                               ON SESSIONS (LAST_SEEN);
+                              `);
+    this.ctx.storage.sql.exec(`
+                              CREATE INDEX IF NOT EXISTS SESSION_ACTIVE_IDX
+                              ON SESSIONS (ACTIVE);
                               `);
   }
 
@@ -51,13 +59,12 @@ export class GameRoom extends DurableObject<Env> {
     for (const ws of wsList) {
       ws.close(1000, Const.WS_REASON_RECONNECT);
     }
-    this.deleteSession(id);
   }
 
   async getActiveUsersCount() {
     this.deleteOldSessions();
     const count = this.ctx.storage.sql
-      .exec(`SELECT COUNT(ID) AS COUNT FROM SESSIONS`)
+      .exec(`SELECT COUNT(ID) AS COUNT FROM SESSIONS WHERE ACTIVE > 0`)
       .one();
     return count["COUNT"];
   }
@@ -75,8 +82,8 @@ export class GameRoom extends DurableObject<Env> {
     const now = Date.now();
     this.ctx.storage.sql.exec(
       `
-                                            INSERT INTO SESSIONS VALUES (?, ?, ?)
-                                             ON CONFLICT (ID) DO UPDATE SET LAST_SEEN = excluded.LAST_SEEN
+                                            INSERT INTO SESSIONS (ID, CREATED_AT, LAST_SEEN, ACTIVE) VALUES (?, ?, ?, 1)
+                                             ON CONFLICT (ID) DO UPDATE SET LAST_SEEN = excluded.LAST_SEEN, ACTIVE = excluded.ACTIVE
                                              `,
       identity.id,
       now,
@@ -101,18 +108,44 @@ export class GameRoom extends DurableObject<Env> {
     });
   }
 
+  public getSession(id: string): Player {
+    const res = this.ctx.storage.sql.exec(`SELECT ID, CREATED_AT, LAST_SEEN, X, Y, Z FROM SESSIONS WHERE ID = ?`, id);
+    const next = res .next();
+
+    if (next.done) {
+      return {
+        "id": id,
+        "displayName": id,
+        "lastSeenSync": 0,
+        "x": undefined,
+        "y": undefined,
+        "z": undefined,
+      } as Player
+    }
+
+    return {
+      "id": id,
+      "displayName": next.value["ID"],
+      "lastSeenSync": next.value["LAST_SEEN"],
+      "x": next.value["X"],
+      "y": next.value["Y"],
+      "z": next.value["Z"]
+    } as Player
+  }
+
   deleteSession(id: string): number {
-    return this.ctx.storage.sql.exec(`DELETE FROM SESSIONS WHERE ID = ?`, id)
-      .rowsWritten;
+    return this.ctx.storage.sql.exec(`UPDATE SESSIONS SET ACTIVE = 0 WHERE ID = ?`, id)
+    .rowsWritten;
   }
 
   async updateUser(player: Player) {
     const now = new Date().getTime();
     const res = this.ctx.storage.sql.exec(
       `
-                                            INSERT INTO SESSIONS VALUES (?, ?, ?)
-                                             ON CONFLICT (ID) DO UPDATE SET LAST_SEEN = excluded.LAST_SEEN
-                                             `, player.id, now, now
+      INSERT INTO SESSIONS (ID, CREATED_AT, LAST_SEEN, X, Y, Z) VALUES (?, ?, ?, ?, ?, ?)
+      ON CONFLICT (ID) DO 
+      UPDATE SET LAST_SEEN = excluded.LAST_SEEN, X = excluded.X, Y = excluded.Y, Z = excluded.Z
+      `, player.id, now, now, player.x, player.y, player.z
     );
     return res.rowsWritten;
   }
