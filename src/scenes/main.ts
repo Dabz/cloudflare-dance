@@ -4,7 +4,7 @@ import HavokPhysics from "@babylonjs/havok";
 import havokWasmUrl from "../../node_modules/@babylonjs/havok/lib/esm/HavokPhysics.wasm?url";
 
 import "@babylonjs/loaders/glTF";
-import type { Player } from "../../worker/model/player";
+import type { Player, PlayerIdentity } from "../../worker/model/player";
 import { PlayerCharacter } from "./player";
 
 export class MainScene {
@@ -13,11 +13,12 @@ export class MainScene {
   otherPlayers: Player[] = [];
 
   _scene: BABYLON.Scene;
+  _camera: BABYLON.FollowCamera;
 
-  public createScene(engine: BABYLON.Engine): BABYLON.Scene {
+  public createScene(engine: BABYLON.Engine, identity?: PlayerIdentity ): BABYLON.Scene {
     if (this._scene) this.dispose();
     this._scene = new BABYLON.Scene(engine);
-    const camera = new BABYLON.FollowCamera(
+    this._camera = new BABYLON.FollowCamera(
       "camera1",
       new BABYLON.Vector3(0, 10, -10),
     );
@@ -27,11 +28,11 @@ export class MainScene {
       this._scene,
     );
 
-    camera.radius = 15;
-    camera.heightOffset = 4;
-    camera.rotationOffset = 180;
-    camera.cameraAcceleration = 0.05;
-    camera.maxCameraSpeed = 20;
+    this._camera.radius = 15;
+    this._camera.heightOffset = 4;
+    this._camera.rotationOffset = 180;
+    this._camera.cameraAcceleration = 0.05;
+    this._camera.maxCameraSpeed = 20;
 
     light.intensity = 0.7;
     HavokPhysics({ locateFile: () => havokWasmUrl }).then((havokInterface) => {
@@ -95,29 +96,36 @@ export class MainScene {
         );
         fixedMass.body.addConstraint(plane.body, joint);
 
-        this.mainPlayer = PlayerCharacter.createPlayer(true, "main", this._scene);
-        camera.setTarget(this.mainPlayer.characterPosition);
-        this.mainPlayer.addListenersToKeyboardAndMouse(this._scene, camera);
-
-        // Display tick update: compute new camera position/target, update the capsule for the character display
-        this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
-          this.mainPlayer.beforeRender(scene, camera);
-        });
-
-        // After physics update, compute and set new velocity, update the character controller state
-        this._scene.onAfterPhysicsObservable.add((_) => {
-          this.mainPlayer.afterPhysics(this._scene, camera);
-        });
+        if (identity) {
+          this.addMainPlayer(identity.id);
+        }
       });
     });
 
     return this._scene;
   }
 
+  public addMainPlayer(id: string) {
+    this.mainPlayer = PlayerCharacter.createPlayer(true, id, this._scene);
+    this._camera.setTarget(this.mainPlayer.characterPosition);
+    this.mainPlayer.addListenersToKeyboardAndMouse(this._scene, this._camera);
+
+    // Display tick update: compute new camera position/target, update the capsule for the character display
+    this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
+      this.mainPlayer.beforeRender(scene, this._camera);
+    });
+
+    // After physics update, compute and set new velocity, update the character controller state
+    this._scene.onAfterPhysicsObservable.add((_) => {
+      this.mainPlayer.afterPhysics(this._scene, this._camera);
+    });
+  }
+
   public dispose() {
-    this._scene.dispose();
-    this._scene.getEngine().dispose();
-    this._scene = null;
+    if (this._scene) {
+      this._scene.dispose();
+      this._scene = null;
+    }
   }
 
   public resize() {
@@ -125,10 +133,16 @@ export class MainScene {
   }
 
   public updatePlayerPosition(nextPlayers: Player[]) {
+    if (!this._scene) return;
     const currentOtherPlayersMeshName = Object.keys(this._otherPlayers);
     const nextOtherPlayerIds = [];
 
     for (const otherPlayer of nextPlayers) {
+      // Skipping if trying to update main player
+      if (otherPlayer.id === this.mainPlayer.id) { 
+        continue;
+      }
+
       nextOtherPlayerIds.push(otherPlayer.id);
       // If other player meshes doesn't exist; let's create it
       if (currentOtherPlayersMeshName.indexOf(otherPlayer.id) == -1) {
@@ -141,7 +155,7 @@ export class MainScene {
         this._otherPlayers[otherPlayer.id] = otherPlayerCharacter;
         continue;
       }
-      
+
       // Updates other player meshes position
       const otherPlayerCharacter = this._otherPlayers[otherPlayer.id];
       otherPlayerCharacter.updatePosition(
