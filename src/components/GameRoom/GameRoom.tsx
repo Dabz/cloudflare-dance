@@ -7,6 +7,12 @@ import {getPlayerIdentity, getPlayerInformationInRoom} from "../../security/auth
 import type {Player, PlayerUpdatesPayload} from "../../../worker/model/player";
 import Const from "../../../worker/const"
 import {useNavigate} from 'react-router';
+import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
+
+function getDisplayNameForJoin(displayName: string): string {
+  if (displayName !== UNKNOWN_DISPLAY_NAME) return displayName;
+  return getDisplayNameCookie() ?? displayName;
+}
 
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
@@ -28,7 +34,12 @@ const GameRoom: FC = () => {
 
     async function joinGame() {
       try {
-        const mainPlayer = await getPlayerInformationInRoom(roomId);
+        const identity = await getPlayerIdentity();
+        const displayName = getDisplayNameForJoin(identity.displayName);
+        const displayNameOverride = identity.displayName === UNKNOWN_DISPLAY_NAME && displayName !== UNKNOWN_DISPLAY_NAME
+          ? displayName
+          : undefined;
+        const mainPlayer = await getPlayerInformationInRoom(roomId, displayNameOverride);
         if (!mainPlayer || !mainPlayer.id) {
           console.error("Can't fetch identity information");
           return;
@@ -49,7 +60,8 @@ const GameRoom: FC = () => {
           return;
         }
 
-        ws = new WebSocket(`/ws/room/${roomId}`);
+        const wsUrl = `/ws/room/${roomId}${displayNameOverride ? `?displayName=${encodeURIComponent(displayNameOverride)}` : ""}`;
+        ws = new WebSocket(wsUrl);
         ws.onopen = () => console.log('WebSocket connected');
         ws.onclose = (ev) => {
           console.log('WebSocket disconnected');

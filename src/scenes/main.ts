@@ -47,9 +47,11 @@ export class MainScene {
 
     const lightmap = new BABYLON.Texture("/lightmap.jpg");
     const lightmapped = [
-      "level_primitive0",
-      "level_primitive1"
+       "level_primitive0",
+       "level_primitive1",
+       "level_primitive2"
     ];
+
     lightmapped.forEach((meshName) => {
       const mesh = scene.getMeshByName(meshName);
       new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
@@ -77,27 +79,28 @@ export class MainScene {
         { mass: 0.1 },
       );
     });
+
     const planeMesh = scene.getMeshByName("Cube.006");
     planeMesh.scaling.set(0.03, 3, 1);
-    const fixedMass = new BABYLON.PhysicsAggregate(
-      scene.getMeshByName("Cube.007"),
-      BABYLON.PhysicsShapeType.BOX,
-      { mass: 0 },
-    );
-    const plane = new BABYLON.PhysicsAggregate(
-      planeMesh,
-      BABYLON.PhysicsShapeType.BOX,
-      { mass: 0.1 },
-    );
+   const fixedMass = new BABYLON.PhysicsAggregate(
+     scene.getMeshByName("Cube.007"),
+     BABYLON.PhysicsShapeType.BOX,
+     { mass: 0 },
+   );
+   const plane = new BABYLON.PhysicsAggregate(
+     planeMesh,
+     BABYLON.PhysicsShapeType.BOX,
+     { mass: 0.1 },
+   );
 
-    const joint = new BABYLON.HingeConstraint(
-      new BABYLON.Vector3(0.75, 0, 0),
-      new BABYLON.Vector3(-0.25, 0, 0),
-      new BABYLON.Vector3(0, 0, -1),
-      new BABYLON.Vector3(0, 0, 1),
-      scene,
-    );
-    fixedMass.body.addConstraint(plane.body, joint);
+   const joint = new BABYLON.HingeConstraint(
+     new BABYLON.Vector3(0.75, 0, 0),
+     new BABYLON.Vector3(-0.25, 0, 0),
+     new BABYLON.Vector3(0, 0, -1),
+     new BABYLON.Vector3(0, 0, 1),
+     scene,
+   );
+   fixedMass.body.addConstraint(plane.body, joint);
 
     if (mainPlayer) {
       this.addMainPlayer(mainPlayer);

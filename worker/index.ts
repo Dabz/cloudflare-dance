@@ -1,6 +1,6 @@
 import { Hono } from "hono"
 import { env } from "cloudflare:workers";
-import { createPlayerIdCookie, getColo, getPlayerId, getPlayerIdentity } from "./auth";
+import { createPlayerIdCookie, getColo, getDisplayNameOverride, getPlayerId, getPlayerIdentity } from "./auth";
 import mds from "./mds";
 import type { Room } from "./model/room";
 import type {Player} from "./model/player";
@@ -51,13 +51,13 @@ const route = app
   .get("/room/:id/me", async (c) => {
     const { id } = c.req.param();
     const existingPlayerId = getPlayerId(c.req.raw.headers);
-    const identity = getPlayerIdentity(c.req.raw.headers);
+    const identity = getPlayerIdentity(c.req.raw.headers, getDisplayNameOverride(c.req.url));
 
     if (!existingPlayerId) {
       c.header("Set-Cookie", createPlayerIdCookie(identity.id));
     }
     const gameroomStub = c.env.GAME_ROOM.getByName(id);
-    const me = await gameroomStub.getSession(identity.id) as Player;
+    const me = await gameroomStub.getSession(identity.id, identity.displayName) as Player;
     return c.json(me);
   })
   .get("/room/:id", async (c) => {

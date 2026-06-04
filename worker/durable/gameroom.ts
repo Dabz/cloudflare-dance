@@ -1,6 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 import type { Player, PlayerUpdates, PlayerUpdatesPayload } from "../model/player";
-import {createPlayerIdCookie, getPlayerId, getPlayerIdentity} from "../auth";
+import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity} from "../auth";
 import Const from "../const"
 
 interface SessionData {
@@ -71,7 +71,7 @@ export class GameRoom extends DurableObject<Env> {
 
   async fetch(req: Request): Promise<Response> {
     const existingPlayerId = getPlayerId(req.headers);
-    const identity = getPlayerIdentity(req.headers)
+    const identity = getPlayerIdentity(req.headers, getDisplayNameOverride(req.url))
 
     try {
       this.deleteOldSessions();
@@ -108,14 +108,14 @@ export class GameRoom extends DurableObject<Env> {
     });
   }
 
-  public getSession(id: string): Player {
+  public getSession(id: string, displayName: string): Player {
     const res = this.ctx.storage.sql.exec(`SELECT ID, CREATED_AT, LAST_SEEN, X, Y, Z FROM SESSIONS WHERE ID = ?`, id);
     const next = res .next();
 
     if (next.done) {
       return {
         "id": id,
-        "displayName": id,
+        "displayName": displayName,
         "lastSeenSync": 0,
         "x": undefined,
         "y": undefined,
@@ -125,7 +125,7 @@ export class GameRoom extends DurableObject<Env> {
 
     return {
       "id": id,
-      "displayName": next.value["ID"],
+      "displayName": displayName,
       "lastSeenSync": next.value["LAST_SEEN"],
       "x": next.value["X"],
       "y": next.value["Y"],
@@ -223,12 +223,7 @@ export class GameRoom extends DurableObject<Env> {
     }
   }
 
-  async webSocketClose(
-    ws: WebSocket,
-    code: number,
-    reason: string,
-    wasClean: boolean,
-  ) {
+  async webSocketClose(ws: WebSocket) {
     const session = ws.deserializeAttachment() as SessionData;
     delete this.players[session.id];
     this.deleteSession(session.id);

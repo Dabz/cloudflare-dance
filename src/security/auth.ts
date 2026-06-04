@@ -19,9 +19,13 @@ export async function getPlayerIdentity() {
   return cachedIdentity;
 }
 
-export async function getPlayerInformationInRoom(roomId: string): Promise<Player> {
-  const client = hc<AppType>('/')
-  const meRes = await client.api.room[":id"].me.$get({param: {id: roomId}});
+export async function getPlayerInformationInRoom(roomId: string, displayName?: string): Promise<Player> {
+  const meUrl = new URL(`/api/room/${roomId}/me`, window.location.origin);
+  if (displayName) {
+    meUrl.searchParams.set("displayName", displayName);
+  }
+
+  const meRes = await fetch(meUrl);
   if (!meRes.ok) {
     throw new Error("Server failed to return credentials");
   }
