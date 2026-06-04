@@ -29,9 +29,14 @@ export class GameRoom extends DurableObject<Env> {
                                 ACTIVE INTEGER,
                                 X INTEGER,
                                 Y INTEGER,
-                                Z INTEGER
+                                Z INTEGER,
+                                ROTATION_Y REAL DEFAULT 0
                               );
                               `);
+    const columns = this.ctx.storage.sql.exec<{ name: string }>(`PRAGMA table_info(SESSIONS)`).toArray();
+    if (!columns.some((column) => column.name === "ROTATION_Y")) {
+      this.ctx.storage.sql.exec(`ALTER TABLE SESSIONS ADD COLUMN ROTATION_Y REAL DEFAULT 0`);
+    }
     this.ctx.storage.sql.exec(`
                               CREATE INDEX IF NOT EXISTS SESSION_LAST_SEEN_IDX
                               ON SESSIONS (LAST_SEEN);
@@ -109,7 +114,7 @@ export class GameRoom extends DurableObject<Env> {
   }
 
   public getSession(id: string, displayName: string): Player {
-    const res = this.ctx.storage.sql.exec(`SELECT ID, CREATED_AT, LAST_SEEN, X, Y, Z FROM SESSIONS WHERE ID = ?`, id);
+    const res = this.ctx.storage.sql.exec(`SELECT ID, CREATED_AT, LAST_SEEN, X, Y, Z, ROTATION_Y FROM SESSIONS WHERE ID = ?`, id);
     const next = res .next();
 
     if (next.done) {
@@ -120,6 +125,7 @@ export class GameRoom extends DurableObject<Env> {
         "x": undefined,
         "y": undefined,
         "z": undefined,
+        "rotationY": 0,
       } as Player
     }
 
@@ -129,7 +135,8 @@ export class GameRoom extends DurableObject<Env> {
       "lastSeenSync": next.value["LAST_SEEN"],
       "x": next.value["X"],
       "y": next.value["Y"],
-      "z": next.value["Z"]
+      "z": next.value["Z"],
+      "rotationY": next.value["ROTATION_Y"] ?? 0
     } as Player
   }
 
@@ -142,28 +149,29 @@ export class GameRoom extends DurableObject<Env> {
     const now = new Date().getTime();
     const res = this.ctx.storage.sql.exec(
       `
-      INSERT INTO SESSIONS (ID, CREATED_AT, LAST_SEEN, X, Y, Z) VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO SESSIONS (ID, CREATED_AT, LAST_SEEN, X, Y, Z, ROTATION_Y) VALUES (?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT (ID) DO 
-      UPDATE SET LAST_SEEN = excluded.LAST_SEEN, X = excluded.X, Y = excluded.Y, Z = excluded.Z
-      `, player.id, now, now, player.x, player.y, player.z
+      UPDATE SET LAST_SEEN = excluded.LAST_SEEN, X = excluded.X, Y = excluded.Y, Z = excluded.Z, ROTATION_Y = excluded.ROTATION_Y
+      `, player.id, now, now, player.x, player.y, player.z, player.rotationY
     );
     return res.rowsWritten;
   }
 
   async maybeUpdateLastseen(id: string) {
     const player = this.players[id];
-    if (player && player.lastSeenSync && player.lastSeenSync < Const.D1_LAST_SEEN_UPDATE_FREQENCY) {
+    const now = new Date().getTime();
+
+    if (!player) {
+      this.players[id] = { x: 0, y: 0, z: 0, rotationY: 0, id: id, displayName: "", lastSeenSync: now};
       return;
     }
-    const now = new Date().getTime();
-    this.updateUser(player);
 
-    if (!this.players[id]) {
-      this.players[id] = { x: 0, y: 0, z: 0, id: id, displayName: "", lastSeenSync: now};
-    } else {
-      this.players[id].lastSeenSync = now;
+    if (player.lastSeenSync && now - player.lastSeenSync < Const.D1_LAST_SEEN_UPDATE_FREQENCY) {
+      return;
     }
 
+    this.updateUser(player);
+    player.lastSeenSync = now;
   }
 
   async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string) {
@@ -174,10 +182,11 @@ export class GameRoom extends DurableObject<Env> {
         ...incomingPlayerData,
         id: session.id,
         displayName: session.displayName,
+        rotationY: incomingPlayerData.rotationY ?? 0,
       };
       this.maybeUpdateLastseen(playerData.id)
       this.players[session.id] = playerData;
-      this.updateUser(session.id);
+      this.updateUser(playerData);
       this.ensureBroadcastLoop();
     } catch(e) {
       console.error("failed processing WS incomming message", e)

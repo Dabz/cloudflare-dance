@@ -111,8 +111,11 @@ export class MainScene {
 
   public addMainPlayer(player: Player) {
     this.mainPlayer = PlayerCharacter.createPlayer(true, player.id, this._scene);
-    if (player.x && player.y && player.z) {
+    if (player.x != null && player.y != null && player.z != null) {
       this.mainPlayer.updatePosition(new BABYLON.Vector3(player.x, player.y, player.z))
+    }
+    if (player.rotationY != null) {
+      this.mainPlayer.updateRotation(player.rotationY, false);
     }
     this._camera.setTarget(this.mainPlayer.characterPosition);
     this.mainPlayer.addListenersToKeyboardAndMouse(this._scene, this._camera);
@@ -168,6 +171,7 @@ export class MainScene {
       otherPlayerCharacter.updatePosition(
         new BABYLON.Vector3(otherPlayer.x, otherPlayer.y, otherPlayer.z),
       );
+      otherPlayerCharacter.updateRotation(otherPlayer.rotationY ?? 0);
     }
 
     // Check if there are meshes to delete

@@ -82,6 +82,7 @@ const GameRoom: FC = () => {
             x: mainScene.mainPlayer.characterPosition.x,
             y: mainScene.mainPlayer.characterPosition.y,
             z: mainScene.mainPlayer.characterPosition.z,
+            rotationY: mainScene.mainPlayer.rotationY,
             lastSeenSync: new Date().getTime(),
           }
           ws.send(JSON.stringify(player))

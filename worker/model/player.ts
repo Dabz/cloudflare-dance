@@ -9,6 +9,7 @@ export interface Player {
   x: number,
   y: number,
   z: number,
+  rotationY: number,
   lastSeenSync: number,
 }
 

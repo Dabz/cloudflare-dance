@@ -13,6 +13,7 @@ export class PlayerCharacter {
   characterOrientation: BABYLON.Quaternion;
   characterGravity: BABYLON.Vector3;
   characterPosition: BABYLON.Vector3;
+  rotationY = 0;
 
   state: "IN_AIR" | "ON_GROUND" | "START_JUMP" = "IN_AIR";
   inputDirection = new BABYLON.Vector3(0,0,0);
@@ -47,6 +48,7 @@ export class PlayerCharacter {
 
     if (!mainPlayer && otherPlayer) {
       player.text = BABYLON.MeshBuilder.CreateText(otherPlayer.id, otherPlayer.displayName, fontData, { size: 1,  resolution: 1, depth: 0.1}, scene, earcut);
+      player.updateRotation(otherPlayer.rotationY ?? 0, false);
     }
 
     return player;
@@ -223,6 +225,7 @@ export class PlayerCharacter {
     const support = this.characterController.checkSupport(dt, down);
 
     BABYLON.Quaternion.FromEulerAnglesToRef(0,camera.rotation.y, 0, this.characterOrientation);
+    this.updateRotation(camera.rotation.y, false);
     const desiredLinearVelocity = this.getDesiredVelocity(dt, support, this.characterOrientation, this.characterController.getVelocity());
     this.characterController.setVelocity(desiredLinearVelocity);
     this.characterController.integrate(dt, support, this.characterGravity);
@@ -250,10 +253,26 @@ export class PlayerCharacter {
     }
   }
 
+  updateRotation(rotationY: number, animate = true) {
+    this.rotationY = rotationY;
+    if (this.mainPlayer || !animate) {
+      this.character.rotation.y = rotationY;
+      return;
+    }
+
+    const easingFunction = new BABYLON.CubicEase();
+    easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+    BABYLON.Animation.CreateAndStartAnimation("smoothRotate", this.character, "rotation.y", 60, 6, this.character.rotation.y, rotationY, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT, easingFunction);
+
+    if (this.text) {
+      BABYLON.Animation.CreateAndStartAnimation("smoothRotate", this.text, "rotation.y", 60, 6, this.text.rotation.y, rotationY * Math.PI, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT, easingFunction);
+    }
+
+  }
+
   dispose() {
     this.character.dispose();
     this.characterController.dispose();
     this.text.dispose();
   }
 }
-
