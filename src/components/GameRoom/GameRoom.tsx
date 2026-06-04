@@ -4,7 +4,7 @@ import * as BABYLON from "@babylonjs/core";
 import { MainScene } from "../../scenes/main";
 import {useParams} from "react-router";
 import {getPlayerIdentity, getPlayerInformationInRoom} from "../../security/auth";
-import type {Player, PlayerUpdatesPayload} from "../../../worker/model/player";
+import type {Player, PlayerDanceRequest, PlayerServerMessage} from "../../../worker/model/player";
 import Const from "../../../worker/const"
 import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
@@ -16,8 +16,18 @@ function getDisplayNameForJoin(displayName: string): string {
 
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
+  const mainSceneRef = useRef<MainScene | undefined>(undefined);
+  const wsRef = useRef<WebSocket | undefined>(undefined);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
+
+  function dance() {
+    mainSceneRef.current?.danceMainPlayer();
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      const payload: PlayerDanceRequest = { type: "dance" };
+      wsRef.current.send(JSON.stringify(payload));
+    }
+  }
 
   useEffect(() => {
     if (!roomId) return;
@@ -51,6 +61,7 @@ const GameRoom: FC = () => {
 
         console.log("Initiating main scene")
         mainScene = new MainScene();
+        mainSceneRef.current = mainScene;
         engine = new BABYLON.Engine(canvas, true);
         await mainScene.createScene(engine, mainPlayer);
 
@@ -62,6 +73,7 @@ const GameRoom: FC = () => {
 
         const wsUrl = `/ws/room/${roomId}${displayNameOverride ? `?displayName=${encodeURIComponent(displayNameOverride)}` : ""}`;
         ws = new WebSocket(wsUrl);
+        wsRef.current = ws;
         ws.onopen = () => console.log('WebSocket connected');
         ws.onclose = (ev) => {
           console.log('WebSocket disconnected');
@@ -99,7 +111,12 @@ const GameRoom: FC = () => {
         ws.addEventListener("message", (event) => {
           if (disposed || !mainScene?.mainPlayer) return;
 
-          const payload = JSON.parse(event.data) as PlayerUpdatesPayload
+          const payload = JSON.parse(event.data) as PlayerServerMessage
+          if ("type" in payload && payload.type === "dance") {
+            mainScene.dancePlayer(payload.playerId);
+            return;
+          }
+
           const otherPlayers = [] as Player[];
           const playerIds = Object.keys(payload.players);
           for (const playerId of playerIds) {
@@ -132,18 +149,25 @@ const GameRoom: FC = () => {
       console.log("Closing websocket")
       if (wsInterval) clearInterval(wsInterval);
       ws?.close();
+      wsRef.current = undefined;
       window.removeEventListener("resize", resizeListener);
 
       console.log("Destroying main scene")
       engine?.stopRenderLoop();
       mainScene?.dispose();
+      mainSceneRef.current = undefined;
       engine?.dispose();
     }
   }, [roomId, navigate]);
 
   return (
     <>
-    <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
+      <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
+      <div className={styles.Controls}>
+        <button type="button" onClick={() => navigate('/')}>Main Menu</button>
+        <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
+        <button type="button" onClick={dance}>Dance</button>
+      </div>
     </>
   );
 };

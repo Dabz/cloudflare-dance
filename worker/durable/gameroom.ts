@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import type { Player, PlayerUpdates, PlayerUpdatesPayload } from "../model/player";
+import type { Player, PlayerClientMessage, PlayerDancePayload, PlayerUpdates, PlayerUpdatesPayload } from "../model/player";
 import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity} from "../auth";
 import Const from "../const"
 
@@ -177,7 +177,13 @@ export class GameRoom extends DurableObject<Env> {
   async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string) {
     const session = ws.deserializeAttachment() as SessionData;
     try {
-      const incomingPlayerData = JSON.parse(message.toString()) as Player;
+      const incomingMessage = JSON.parse(message.toString()) as PlayerClientMessage;
+      if ("type" in incomingMessage && incomingMessage.type === "dance") {
+        this.broadcastDance(ws, session.id);
+        return;
+      }
+
+      const incomingPlayerData = incomingMessage as Player;
       const playerData: Player = {
         ...incomingPlayerData,
         id: session.id,
@@ -190,6 +196,21 @@ export class GameRoom extends DurableObject<Env> {
       this.ensureBroadcastLoop();
     } catch(e) {
       console.error("failed processing WS incomming message", e)
+    }
+  }
+
+  private broadcastDance(sender: WebSocket, playerId: string) {
+    const payload: PlayerDancePayload = {
+      type: "dance",
+      playerId,
+      time: new Date().getTime(),
+    };
+    const payloadString = JSON.stringify(payload);
+
+    for (const client of this.ctx.getWebSockets()) {
+      if (client !== sender) {
+        client.send(payloadString);
+      }
     }
   }
 

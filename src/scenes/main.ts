@@ -142,6 +142,26 @@ export class MainScene {
     this._scene?.getEngine().resize();
   }
 
+  public resetMainPlayerPosition() {
+    if (!this.mainPlayer) return;
+
+    this.mainPlayer.resetPosition();
+    this._camera.setTarget(this.mainPlayer.characterPosition);
+  }
+
+  public danceMainPlayer() {
+    this.mainPlayer?.dance();
+  }
+
+  public dancePlayer(playerId: string) {
+    if (this.mainPlayer?.id === playerId) {
+      this.mainPlayer.dance();
+      return;
+    }
+
+    this._otherPlayers[playerId]?.dance();
+  }
+
   public updatePlayerPosition(nextPlayers: Player[]) {
     if (!this._scene) return;
     const currentOtherPlayersMeshName = Object.keys(this._otherPlayers);

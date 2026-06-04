@@ -270,6 +270,28 @@ export class PlayerCharacter {
 
   }
 
+  resetPosition() {
+    const startPosition = this.startPosition.clone();
+    this.characterPosition = startPosition;
+    this.character.position.copyFrom(startPosition);
+    this.characterController.setPosition(startPosition);
+    this.characterController.setVelocity(BABYLON.Vector3.Zero());
+    this.inputDirection.set(0, 0, 0);
+  }
+
+  dance() {
+    const spinAnimation = BABYLON.Animation.CreateAndStartAnimation("danceSpin", this.character, "rotation.z", 60, 45, this.character.rotation.z, this.character.rotation.z + Math.PI * 2, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+    const bounceAnimation = BABYLON.Animation.CreateAndStartAnimation("danceBounce", this.character, "scaling.y", 60, 18, 1, 1.25, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+    setTimeout(() => {
+      if (!this.character.isDisposed()) {
+        this.character.scaling.y = 1;
+        this.character.rotation.z = 0;
+        spinAnimation.stop();
+        bounceAnimation.stop();
+      }
+    }, 6000);
+  }
+
   dispose() {
     this.character.dispose();
     this.characterController.dispose();

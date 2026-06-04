@@ -18,6 +18,19 @@ export interface PlayerUpdatesPayload {
   time: number;
 }
 
+export interface PlayerDanceRequest {
+  type: "dance";
+}
+
+export interface PlayerDancePayload {
+  type: "dance";
+  playerId: string;
+  time: number;
+}
+
+export type PlayerClientMessage = Player | PlayerDanceRequest;
+export type PlayerServerMessage = PlayerUpdatesPayload | PlayerDancePayload;
+
 export interface PlayerUpdates {
   [key: string]: Player;
 }
