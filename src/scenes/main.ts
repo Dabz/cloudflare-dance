@@ -48,8 +48,7 @@ export class MainScene {
     const lightmap = new BABYLON.Texture("/lightmap.jpg");
     const lightmapped = [
       "level_primitive0",
-      "level_primitive1",
-      "level_primitive2",
+      "level_primitive1"
     ];
     lightmapped.forEach((meshName) => {
       const mesh = scene.getMeshByName(meshName);

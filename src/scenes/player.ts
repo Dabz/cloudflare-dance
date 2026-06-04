@@ -23,6 +23,7 @@ export class PlayerCharacter {
   jumpHeight = 1.5;
 
   forwardLocalSpace = new BABYLON.Vector3(0, 0, 1);
+  startPosition = new BABYLON.Vector3(3., 0.3, -8.);
 
   public static createPlayer(mainPlayer: boolean, id: string, scene: BABYLON.Scene, otherPlayer?: Player): PlayerCharacter {
     const player = new PlayerCharacter()
@@ -41,7 +42,7 @@ export class PlayerCharacter {
       player.character.material.diffuseColor = new BABYLON.Color3(0.2,0.9,0.8);
     }
 
-    player.characterPosition = new BABYLON.Vector3(3., 0.3, -8.);
+    player.characterPosition = player.startPosition;
     player.characterController = new BABYLON.PhysicsCharacterController(player.characterPosition, {capsuleHeight: h, capsuleRadius: r}, scene);
 
     if (!mainPlayer && otherPlayer) {
@@ -195,6 +196,10 @@ export class PlayerCharacter {
   }
 
   public beforeRender(scene: BABYLON.Scene, camera: BABYLON.FollowCamera) {
+    // Falling use-case - reseting to initial position
+    if (this.characterController.getPosition().y < -20) {
+      this.characterController.setPosition(this.startPosition);
+    }
     this.character.position.copyFrom(this.characterController.getPosition());
 
     // Update Camera to follow main player
