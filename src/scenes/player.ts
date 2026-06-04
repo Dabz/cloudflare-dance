@@ -26,6 +26,8 @@ export class PlayerCharacter {
   forwardLocalSpace = new BABYLON.Vector3(0, 0, 1);
   startPosition = new BABYLON.Vector3(3., 0.3, -8.);
 
+  isDancing = false;
+
   public static createPlayer(mainPlayer: boolean, id: string, scene: BABYLON.Scene, otherPlayer?: Player): PlayerCharacter {
     const player = new PlayerCharacter()
     player.id = id;
@@ -58,74 +60,82 @@ export class PlayerCharacter {
     // Only add listeners for mainPlayer
     if (!this.mainPlayer) return;
 
-    let isKeyDown = false;
+    let keyDowns = 0;
     let isMouseDown = false;
 
     let mouseDownY = 0;
     scene.onPointerObservable.add((pointerInfo) => {
       switch (pointerInfo.type) {
-        case BABYLON.PointerEventTypes.POINTERDOWN:
-          isMouseDown = true;
+        case BABYLON.PointerEventTypes.POINTERDOWN: {
+          isMouseDown = true; 
           mouseDownY = pointerInfo.event.y;
           break;
+        }
 
-        case BABYLON.PointerEventTypes.POINTERUP:
+        case BABYLON.PointerEventTypes.POINTERUP: {
           isMouseDown = false;
-          if (!isKeyDown) {
+          if (keyDowns == 0) {
             this.inputDirection.z = 0;
           }
           break;
-
-        case BABYLON.PointerEventTypes.POINTERMOVE:
-          if (isMouseDown) {
-          const tgt = camera.getTarget().clone();
-          camera.position.addInPlace(camera.getDirection(BABYLON.Vector3.Right()).scale(pointerInfo.event.movementX * -0.02));
-          camera.setTarget(tgt);
-
-          if (!isKeyDown)
-            {
-              const deltaY = mouseDownY - pointerInfo.event.y;
-              if (Math.abs(deltaY) > 100) {
-                this.inputDirection.z = Math.sign(deltaY);
-              }
-            }
         }
-        break;
 
-        case BABYLON.PointerEventTypes.POINTERDOUBLETAP:
+        case BABYLON.PointerEventTypes.POINTERMOVE: {
+          if (isMouseDown) {
+            const tgt = camera.getTarget().clone();
+            camera.position.addInPlace(camera.getDirection(BABYLON.Vector3.Right()).scale(pointerInfo.event.movementX * -0.02));
+            camera.setTarget(tgt);
+
+            if (!keyDowns)
+              {
+                const deltaY = mouseDownY - pointerInfo.event.y;
+                if (Math.abs(deltaY) > 100) {
+                  this.inputDirection.z = Math.sign(deltaY);
+                }
+              }
+          }
+          break;
+        }
+
+        case BABYLON.PointerEventTypes.POINTERDOUBLETAP: {
           ++this.wantJump;
-        break;
+          break;
+        }
       }
     });
     // Input to direction
     // from keys down/up, update the Vector3 inputDirection to match the intended direction. Jump with space
     scene.onKeyboardObservable.add((kbInfo) => {
       switch (kbInfo.type) {
-        case BABYLON.KeyboardEventTypes.KEYDOWN:
-          isKeyDown = true;
-        if (kbInfo.event.key == 'w' || kbInfo.event.key == 'ArrowUp') {
-          this.inputDirection.z = 1;
-        } else if (kbInfo.event.key == 's' || kbInfo.event.key == 'ArrowDown') {
-          this.inputDirection.z = -1;
-        } else if (kbInfo.event.key == 'a' || kbInfo.event.key == 'ArrowLeft') {
-          this.inputDirection.x = -1;
-        } else if (kbInfo.event.key == 'd' || kbInfo.event.key == 'ArrowRight') {
-          this.inputDirection.x = 1;
-        } else if (kbInfo.event.key == ' ') {
-          this.wantJump += 1;
+        case BABYLON.KeyboardEventTypes.KEYDOWN: {
+          keyDowns += 1;
+          if (kbInfo.event.key == 'w' || kbInfo.event.key == 'ArrowUp') {
+            this.inputDirection.z = 1;
+          } else if (kbInfo.event.key == 's' || kbInfo.event.key == 'ArrowDown') {
+            this.inputDirection.z = -1;
+          } else if (kbInfo.event.key == 'a' || kbInfo.event.key == 'ArrowLeft') {
+            this.inputDirection.x = -1;
+          } else if (kbInfo.event.key == 'd' || kbInfo.event.key == 'ArrowRight') {
+            this.inputDirection.x = 1;
+          } else if (kbInfo.event.key == ' ') {
+            this.wantJump += 1;
+          } else if (kbInfo.event.key == 'q') {
+            this.dance();
+          }
+          break
         }
-        break;
-        case BABYLON.KeyboardEventTypes.KEYUP:
-          isKeyDown = false;
-        if (kbInfo.event.key == 'w' || kbInfo.event.key == 's' || kbInfo.event.key == 'ArrowUp' || kbInfo.event.key == 'ArrowDown') {
-          this.inputDirection.z = 0;    
+        case BABYLON.KeyboardEventTypes.KEYUP: {
+          keyDowns -= 1;
+          if (kbInfo.event.key == 'w' || kbInfo.event.key == 's' || kbInfo.event.key == 'ArrowUp' || kbInfo.event.key == 'ArrowDown') {
+            this.inputDirection.z = 0;
+          }
+          if (kbInfo.event.key == 'a' || kbInfo.event.key == 'd' || kbInfo.event.key == 'ArrowLeft' || kbInfo.event.key == 'ArrowRight') {
+            this.inputDirection.x = 0;
+          } else if (kbInfo.event.key == ' ') {
+            this.wantJump = 0;
+          }
+          break;
         }
-        if (kbInfo.event.key == 'a' || kbInfo.event.key == 'd' || kbInfo.event.key == 'ArrowLeft' || kbInfo.event.key == 'ArrowRight') {
-          this.inputDirection.x = 0;
-        } else if (kbInfo.event.key == ' ') {
-          this.wantJump = 0;
-        }
-        break;
       }
     });
   }
@@ -280,9 +290,11 @@ export class PlayerCharacter {
   }
 
   dance() {
+    this.isDancing = true;
     const spinAnimation = BABYLON.Animation.CreateAndStartAnimation("danceSpin", this.character, "rotation.z", 60, 45, this.character.rotation.z, this.character.rotation.z + Math.PI * 2, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
     const bounceAnimation = BABYLON.Animation.CreateAndStartAnimation("danceBounce", this.character, "scaling.y", 60, 18, 1, 1.25, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
     setTimeout(() => {
+      this.isDancing = false;
       if (!this.character.isDisposed()) {
         this.character.scaling.y = 1;
         this.character.rotation.z = 0;
