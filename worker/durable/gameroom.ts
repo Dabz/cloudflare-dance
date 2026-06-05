@@ -1,11 +1,30 @@
-import { DurableObject } from "cloudflare:workers";
-import type { Player, PlayerClientMessage, PlayerDancePayload, PlayerUpdates, PlayerUpdatesPayload } from "../model/player";
+import { DurableObject, env } from "cloudflare:workers";
+import puppeteer from "@cloudflare/puppeteer";
+import type { Player, PlayerClientMessage, PlayerDancePayload, PlayerUpdates, PlayerUpdatesPayload, RoomStatePayload } from "../model/player";
 import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity} from "../auth";
 import Const from "../const"
 
 interface SessionData {
   id: string;
   displayName: string;
+}
+
+const DISPLAY_URL_STORAGE_KEY = "displayUrl";
+const DISPLAY_IMAGE_STORAGE_KEY = "displayImage";
+
+function normalizeDisplayUrl(rawUrl: string): string {
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return "";
+
+  const withProtocol = /^[a-z][a-z\d+.-]*:\/\//i.test(trimmed)
+    ? trimmed
+    : `https://${trimmed}`;
+  const url = new URL(withProtocol);
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error("Display URL must use http or https");
+  }
+
+  return url.toString();
 }
 
 
@@ -100,6 +119,7 @@ export class GameRoom extends DurableObject<Env> {
     const sessionInfo: SessionData = { id: identity.id, displayName: identity.displayName };
     server.serializeAttachment(sessionInfo);
     this.ctx.acceptWebSocket(server, [identity.id]);
+    await this.sendRoomState(server);
 
     const headers = new Headers();
     if (!existingPlayerId) {
@@ -183,6 +203,13 @@ export class GameRoom extends DurableObject<Env> {
         return;
       }
 
+      if ("type" in incomingMessage && incomingMessage.type === "display-url") {
+        await this.setDisplayUrl(incomingMessage.url);
+        await this.refreshSnapshotUrlToPNG(incomingMessage.url);
+        await this.broadcastRoomState();
+        return;
+      }
+
       const incomingPlayerData = incomingMessage as Player;
       const playerData: Player = {
         ...incomingPlayerData,
@@ -212,6 +239,62 @@ export class GameRoom extends DurableObject<Env> {
         client.send(payloadString);
       }
     }
+  }
+
+  private async getDisplayUrl(): Promise<string> {
+    return (await this.ctx.storage.get<string>(DISPLAY_URL_STORAGE_KEY)) ?? "";
+  }
+
+  public async getDisplaySnapshot(): Promise<string> {
+    return (await this.ctx.storage.get<string>(DISPLAY_IMAGE_STORAGE_KEY)) ?? "";
+  }
+
+  public async refreshSnapshotUrlToPNG(url: string): Promise<string> {
+    try {
+      const browser = await puppeteer.launch(env.BROWSER);
+      const page = await browser.newPage();
+      page.setViewport({
+        width: 1024,
+        height: 512
+      })
+      await page.emulateMediaFeatures([
+         { name: "prefers-color-scheme", value: "dark" }
+      ]);
+
+      await page.goto(url);
+      const screenshot = await page.screenshot({ type: 'png', encoding: "base64" });
+      await this.ctx.storage.put(DISPLAY_IMAGE_STORAGE_KEY, screenshot);
+      await browser.close();
+      return screenshot;
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  }
+
+  private async setDisplayUrl(rawUrl: string) {
+    const displayUrl = normalizeDisplayUrl(rawUrl);
+    await this.ctx.storage.put(DISPLAY_URL_STORAGE_KEY, displayUrl);
+  }
+
+  private async sendRoomState(ws: WebSocket) {
+    ws.send(JSON.stringify(await this.createRoomStatePayload()));
+  }
+
+  private async broadcastRoomState() {
+    const payloadString = JSON.stringify(await this.createRoomStatePayload());
+    for (const client of this.ctx.getWebSockets()) {
+      client.send(payloadString);
+    }
+  }
+
+  private async createRoomStatePayload(): Promise<RoomStatePayload> {
+    return {
+      type: "room-state",
+      displayUrl: await this.ctx.storage.get(DISPLAY_URL_STORAGE_KEY),
+      displaySnapshot: await this.ctx.storage.get(DISPLAY_IMAGE_STORAGE_KEY),
+      time: new Date().getTime(),
+    };
   }
 
   private ensureBroadcastLoop() {

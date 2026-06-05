@@ -28,8 +28,20 @@ export interface PlayerDancePayload {
   time: number;
 }
 
-export type PlayerClientMessage = Player | PlayerDanceRequest;
-export type PlayerServerMessage = PlayerUpdatesPayload | PlayerDancePayload;
+export interface RoomDisplayUrlRequest {
+  type: "display-url";
+  url: string;
+}
+
+export interface RoomStatePayload {
+  type: "room-state";
+  displayUrl: string;
+  displaySnapshot: string;
+  time: number;
+}
+
+export type PlayerClientMessage = Player | PlayerDanceRequest | RoomDisplayUrlRequest;
+export type PlayerServerMessage = PlayerUpdatesPayload | PlayerDancePayload | RoomStatePayload;
 
 export interface PlayerUpdates {
   [key: string]: Player;

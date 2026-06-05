@@ -56,7 +56,7 @@ export class PlayerCharacter {
     return player;
   }
 
-  public addListenersToKeyboardAndMouse(scene: BABYLON.Scene, camera: BABYLON.FollowCamera) {
+  public addListenersToKeyboardAndMouse(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera) {
     // Only add listeners for mainPlayer
     if (!this.mainPlayer) return;
 
@@ -82,9 +82,11 @@ export class PlayerCharacter {
 
         case BABYLON.PointerEventTypes.POINTERMOVE: {
           if (isMouseDown) {
-            const tgt = camera.getTarget().clone();
-            camera.position.addInPlace(camera.getDirection(BABYLON.Vector3.Right()).scale(pointerInfo.event.movementX * -0.02));
-            camera.setTarget(tgt);
+            camera.alpha += pointerInfo.event.movementX * -0.02;
+            const newBeta = camera.beta + pointerInfo.event.movementY * -0.02;
+            if (newBeta >= 0 && newBeta <= Math.PI / 2) {
+              camera.beta = newBeta;
+            }
 
             if (!keyDowns)
               {
@@ -207,24 +209,13 @@ export class PlayerCharacter {
     }
   }
 
-  public beforeRender(scene: BABYLON.Scene, camera: BABYLON.FollowCamera) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public beforeRender(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera) {
     // Falling use-case - reseting to initial position
     if (this.characterController.getPosition().y < -20) {
       this.characterController.setPosition(this.startPosition);
     }
     this.character.position.copyFrom(this.characterController.getPosition());
-
-    // Update Camera to follow main player
-    if (this.mainPlayer) {
-      const cameraDirection = camera.getDirection(new BABYLON.Vector3(0,0,1));
-      cameraDirection.y = 0;
-      cameraDirection.normalize();
-      camera.setTarget(BABYLON.Vector3.Lerp(camera.getTarget(), this.character.position, 0.1));
-      const dist = BABYLON.Vector3.Distance(camera.position, this.character.position);
-      const amount = (Math.min(dist - 6, 0) + Math.max(dist - 9, 0)) * 0.04;
-      cameraDirection.scaleAndAddToRef(amount, camera.position);
-      camera.position.y += (this.character.position.y + 2 - camera.position.y) * 0.04;
-    }
   }
 
   public afterPhysics(scene: BABYLON.Scene, camera: BABYLON.FollowCamera) {

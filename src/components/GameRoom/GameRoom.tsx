@@ -1,10 +1,10 @@
-import { useEffect, useRef, type FC } from "react";
+import { useEffect, useRef, useState, type FC, type FormEvent } from "react";
 import styles from "./GameRoom.module.css";
 import * as BABYLON from "@babylonjs/core";
 import { MainScene } from "../../scenes/main";
 import {useParams} from "react-router";
 import {getPlayerIdentity, getPlayerInformationInRoom} from "../../security/auth";
-import type {Player, PlayerDanceRequest, PlayerServerMessage} from "../../../worker/model/player";
+import type {Player, PlayerDanceRequest, PlayerServerMessage, RoomDisplayUrlRequest} from "../../../worker/model/player";
 import Const from "../../../worker/const"
 import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
@@ -16,8 +16,11 @@ function getDisplayNameForJoin(displayName: string): string {
 
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
+  const tvFrameRef = useRef<HTMLIFrameElement | null>(null);
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
   const wsRef = useRef<WebSocket | undefined>(undefined);
+  const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
 
@@ -29,6 +32,18 @@ const GameRoom: FC = () => {
     }
   }
 
+  function saveDisplayUrl(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (wsRef.current?.readyState !== WebSocket.OPEN) return;
+
+    const payload: RoomDisplayUrlRequest = {
+      type: "display-url",
+      url: draftDisplayUrl,
+    };
+    wsRef.current.send(JSON.stringify(payload));
+    setSettingsOpen(false);
+  }
+
   useEffect(() => {
     if (!roomId) return;
 
@@ -37,6 +52,7 @@ const GameRoom: FC = () => {
     let engine: BABYLON.Engine | undefined;
     let ws: WebSocket | undefined;
     let wsInterval: ReturnType<typeof setInterval> | undefined;
+    const tvFrame = tvFrameRef.current;
 
     const resizeListener = function () {
       mainScene?.resize();
@@ -103,6 +119,7 @@ const GameRoom: FC = () => {
         engine.runRenderLoop(() => {
           if (!disposed) {
             mainScene?.render();
+            mainScene?.updateTvFramePosition(tvFrame);
           }
         });
 
@@ -114,6 +131,12 @@ const GameRoom: FC = () => {
           const payload = JSON.parse(event.data) as PlayerServerMessage
           if ("type" in payload && payload.type === "dance") {
             mainScene.dancePlayer(payload.playerId);
+            return;
+          }
+
+          if ("type" in payload && payload.type === "room-state") {
+            setDraftDisplayUrl(payload.displayUrl);
+            mainScene.setLaptopUrl(payload.displayUrl, payload.displaySnapshot);
             return;
           }
 
@@ -153,6 +176,7 @@ const GameRoom: FC = () => {
       window.removeEventListener("resize", resizeListener);
 
       console.log("Destroying main scene")
+      if (tvFrame) tvFrame.style.display = "none";
       engine?.stopRenderLoop();
       mainScene?.dispose();
       mainSceneRef.current = undefined;
@@ -167,7 +191,42 @@ const GameRoom: FC = () => {
         <button type="button" onClick={() => navigate('/')}>Main Menu</button>
         <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
         <button type="button" onClick={dance}>Dance</button>
+        <button type="button" aria-label="Room settings" onClick={() => setSettingsOpen(true)}>⚙</button>
       </div>
+      {settingsOpen && (
+        <div className={styles.ModalBackdrop} role="presentation" onClick={() => setSettingsOpen(false)}>
+          <section
+            aria-labelledby="room-settings-title"
+            aria-modal="true"
+            className={styles.ModalCard}
+            role="dialog"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className={styles.ModalHeader}>
+              <div>
+                <span className={styles.ModalKicker}>Room Settings</span>
+                <h2 id="room-settings-title">Shared display</h2>
+              </div>
+              <button type="button" aria-label="Close room settings" onClick={() => setSettingsOpen(false)}>×</button>
+            </div>
+            <form className={styles.DisplayUrlControls} onSubmit={saveDisplayUrl}>
+              <label htmlFor="room-display-url">Laptop URL</label>
+              <input
+                id="room-display-url"
+                type="text"
+                placeholder="https://example.com"
+                value={draftDisplayUrl}
+                onChange={(event) => setDraftDisplayUrl(event.target.value)}
+              />
+              <p>The configured page is shared by everyone in this room and appears on the TV.</p>
+              <div className={styles.ModalActions}>
+                <button type="button" onClick={() => setSettingsOpen(false)}>Cancel</button>
+                <button type="submit">Share URL</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
     </>
   );
 };

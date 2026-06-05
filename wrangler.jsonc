@@ -8,7 +8,7 @@
   "main": "worker/index.ts",
   "compatibility_date": "2026-05-22",
   "assets": {
-    "run_worker_first": ["/api/*", "/ws/*"],
+    "run_worker_first": ["/api/*", "/ws/*", "/browser/*"],
     "directory": "./dist/client/",
     "not_found_handling": "single-page-application",
   },
@@ -17,6 +17,14 @@
   },
   "upload_source_maps": true,
   "compatibility_flags": ["nodejs_compat"],
+  "browser": {
+    "binding": "BROWSER",
+    "remote": true,
+  },
+  "stream": {
+    "binding": "STREAM",
+    "remote": true,
+  },
   "durable_objects": {
     "bindings": [
       {
@@ -55,4 +63,3 @@
     "mode": "smart",
   },
 }
-
