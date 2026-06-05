@@ -11,6 +11,7 @@ interface SessionData {
 
 const DISPLAY_URL_STORAGE_KEY = "displayUrl";
 const DISPLAY_IMAGE_STORAGE_KEY = "displayImage";
+const DISPLAY_LAST_UPDATE = "displayLastUpdate";
 
 function normalizeDisplayUrl(rawUrl: string): string {
   const trimmed = rawUrl.trim();
@@ -25,6 +26,12 @@ function normalizeDisplayUrl(rawUrl: string): string {
   }
 
   return url.toString();
+}
+
+function isHlsUrl(url: string): boolean {
+  if (!url) return false;
+
+  return new URL(url).pathname.toLowerCase().endsWith(".m3u8");
 }
 
 
@@ -204,8 +211,12 @@ export class GameRoom extends DurableObject<Env> {
       }
 
       if ("type" in incomingMessage && incomingMessage.type === "display-url") {
-        await this.setDisplayUrl(incomingMessage.url);
-        await this.refreshSnapshotUrlToPNG(incomingMessage.url);
+        const displayUrl = await this.setDisplayUrl(incomingMessage.url);
+        if (!displayUrl || isHlsUrl(displayUrl)) {
+          await this.ctx.storage.delete(DISPLAY_IMAGE_STORAGE_KEY);
+        } else {
+          await this.refreshSnapshotUrlToPNG(displayUrl);
+        }
         await this.broadcastRoomState();
         return;
       }
@@ -272,9 +283,11 @@ export class GameRoom extends DurableObject<Env> {
     }
   }
 
-  private async setDisplayUrl(rawUrl: string) {
+  private async setDisplayUrl(rawUrl: string): Promise<string> {
     const displayUrl = normalizeDisplayUrl(rawUrl);
     await this.ctx.storage.put(DISPLAY_URL_STORAGE_KEY, displayUrl);
+    await this.ctx.storage.put(DISPLAY_LAST_UPDATE, new Date().getTime());
+    return displayUrl;
   }
 
   private async sendRoomState(ws: WebSocket) {
@@ -293,6 +306,7 @@ export class GameRoom extends DurableObject<Env> {
       type: "room-state",
       displayUrl: await this.ctx.storage.get(DISPLAY_URL_STORAGE_KEY),
       displaySnapshot: await this.ctx.storage.get(DISPLAY_IMAGE_STORAGE_KEY),
+      displayLastUpdate: await this.ctx.storage.get(DISPLAY_LAST_UPDATE),
       time: new Date().getTime(),
     };
   }

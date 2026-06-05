@@ -16,6 +16,10 @@ function getDisplayNameForJoin(displayName: string): string {
   return getDisplayNameCookie() ?? displayName;
 }
 
+function getStreamTitle(stream: StreamVideo, index: number): string {
+  return stream.meta?.name || stream.meta?.filename || `Video ${index + 1}`;
+}
+
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
   const tvFrameRef = useRef<HTMLIFrameElement | null>(null);
@@ -27,6 +31,17 @@ const GameRoom: FC = () => {
   const { id: roomId } = useParams()
   const navigate = useNavigate()
 
+  function shareDisplayUrl(url: string) {
+    if (wsRef.current?.readyState !== WebSocket.OPEN) return;
+
+    const payload: RoomDisplayUrlRequest = {
+      type: "display-url",
+      url,
+    };
+    wsRef.current.send(JSON.stringify(payload));
+    setSettingsOpen(false);
+  }
+
   function dance() {
     mainSceneRef.current?.danceMainPlayer();
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -37,14 +52,7 @@ const GameRoom: FC = () => {
 
   function saveDisplayUrl(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (wsRef.current?.readyState !== WebSocket.OPEN) return;
-
-    const payload: RoomDisplayUrlRequest = {
-      type: "display-url",
-      url: draftDisplayUrl,
-    };
-    wsRef.current.send(JSON.stringify(payload));
-    setSettingsOpen(false);
+    shareDisplayUrl(draftDisplayUrl);
   }
 
   useEffect(() => {
@@ -142,7 +150,7 @@ const GameRoom: FC = () => {
 
           if ("type" in payload && payload.type === "room-state") {
             setDraftDisplayUrl(payload.displayUrl);
-            mainScene.setLaptopUrl(payload.displayUrl, payload.displaySnapshot);
+            mainScene.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
             return;
           }
 
@@ -225,6 +233,25 @@ const GameRoom: FC = () => {
                 onChange={(event) => setDraftDisplayUrl(event.target.value)}
               />
               <p>The configured page is shared by everyone in this room and appears on the TV.</p>
+              <div className={styles.VideoList}>
+                <span className={styles.VideoListTitle}>Videos</span>
+                {streams === undefined && <p>Loading videos...</p>}
+                {streams?.length === 0 && <p>No videos are available.</p>}
+                {streams?.map((stream, index) => (
+                  <button
+                    key={stream.id}
+                    type="button"
+                    disabled={!stream.readyToStream || !stream.hlsPlaybackUrl}
+                    onClick={() => {
+                      setDraftDisplayUrl(stream.hlsPlaybackUrl);
+                      shareDisplayUrl(stream.hlsPlaybackUrl);
+                    }}
+                  >
+                    {stream.thumbnail && <img alt="" src={stream.thumbnail} />}
+                    <span>{getStreamTitle(stream, index)}</span>
+                  </button>
+                ))}
+              </div>
               <div className={styles.ModalActions}>
                 <button type="button" onClick={() => setSettingsOpen(false)}>Cancel</button>
                 <button type="submit">Share URL</button>

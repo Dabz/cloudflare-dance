@@ -12,6 +12,8 @@ export class MainScene {
   _otherPlayers: { [key: string]: PlayerCharacter } = {};
   otherPlayers: Player[] = [];
   _laptopScreenTexture?: BABYLON.DynamicTexture;
+  _laptopVideoTexture?: BABYLON.VideoTexture;
+  _laptopScreenMaterial?: BABYLON.StandardMaterial;
   _laptopUrl = "";
   _tvMesh?: BABYLON.AbstractMesh;
   _shadowGenerator?: BABYLON.ShadowGenerator;
@@ -158,8 +160,15 @@ export class MainScene {
     this._scene?.getEngine().resize();
   }
 
-  public setLaptopUrl(url: string, snapshot: string) {
+  public setLaptopUrl(url: string, snapshot: string, lastUpdate?: number) {
     this._laptopUrl = url;
+    if (this.isHlsUrl(url)) {
+      const videoDelta = lastUpdate ? (new Date().getTime() - lastUpdate) / 1000 : 0;
+      this.playLaptopVideo(url, videoDelta);
+      return;
+    }
+
+    this.stopLaptopVideo();
     this.drawLaptopScreen(url, snapshot);
   }
 
@@ -289,6 +298,7 @@ export class MainScene {
       scene,
     );
     const screenMaterial = new BABYLON.StandardMaterial("sharedLaptopScreenMaterial", scene);
+    this._laptopScreenMaterial = screenMaterial;
     screenMaterial.diffuseTexture = this._laptopScreenTexture;
     screenMaterial.emissiveColor = new BABYLON.Color3(0.85, 0.9, 1);
     screenMaterial.specularColor = new BABYLON.Color3(1, 1, 1);
@@ -310,7 +320,9 @@ export class MainScene {
   }
 
   private drawLaptopScreen(url: string, snapshot: string) {
-    if (!this._laptopScreenTexture) return;
+    if (!this._laptopScreenTexture || !this._laptopScreenMaterial) return;
+
+    this._laptopScreenMaterial.diffuseTexture = this._laptopScreenTexture;
 
     const context = this._laptopScreenTexture.getContext();
     const { width, height } = this._laptopScreenTexture.getSize();
@@ -327,5 +339,55 @@ export class MainScene {
     }
 
     this._laptopScreenTexture.update();
+  }
+
+  private playLaptopVideo(url: string, delta: number) {
+    if (!this._scene || !this._laptopScreenMaterial) return;
+
+    this.stopLaptopVideo();
+    const videoTexture = new BABYLON.VideoTexture(
+      "sharedLaptopVideoTexture",
+      url,
+      this._scene,
+      false,
+      false,
+      BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
+      {
+        autoPlay: false,
+        loop: true,
+        muted: true,
+      },
+    );
+    this._laptopVideoTexture = videoTexture;
+    this._laptopScreenMaterial.diffuseTexture = videoTexture;
+
+    videoTexture.video.addEventListener("loadedmetadata", () => {
+      videoTexture.video.currentTime = delta;
+      setTimeout(() => {
+        videoTexture.video.muted = false;
+        videoTexture.video.play().catch((error) => {
+          console.error("Failed to play laptop video", error);
+        });
+      }, 1000);
+    });
+
+  }
+
+  private stopLaptopVideo() {
+    if (!this._laptopVideoTexture) return;
+
+    this._laptopVideoTexture.video.pause();
+    this._laptopVideoTexture.dispose();
+    this._laptopVideoTexture = undefined;
+  }
+
+  private isHlsUrl(url: string) {
+    if (!url) return false;
+
+    try {
+      return new URL(url).pathname.toLowerCase().endsWith(".m3u8");
+    } catch {
+      return false;
+    }
   }
 }
