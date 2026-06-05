@@ -4,6 +4,7 @@ import { createPlayerIdCookie, getColo, getDisplayNameOverride, getPlayerId, get
 import mds from "./mds";
 import type { Room } from "./model/room";
 import type {Player} from "./model/player";
+import stream from "./stream/stream";
 
 
 const app = new Hono<{ Bindings: typeof env }>().basePath("/api");
@@ -114,6 +115,10 @@ const route = app
     };
 
     return c.json(res);
+  })
+  .get("/streams", async (c) => {
+    const streams = await stream.listStreams()
+    return c.json(streams);
   })
   .get("/", (c) => {
     return c.json({

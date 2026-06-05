@@ -8,6 +8,8 @@ import type {Player, PlayerDanceRequest, PlayerServerMessage, RoomDisplayUrlRequ
 import Const from "../../../worker/const"
 import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
+import type {StreamVideo} from "../../../worker/model/streams";
+import {listStreams} from "../../streams";
 
 function getDisplayNameForJoin(displayName: string): string {
   if (displayName !== UNKNOWN_DISPLAY_NAME) return displayName;
@@ -20,6 +22,7 @@ const GameRoom: FC = () => {
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
   const wsRef = useRef<WebSocket | undefined>(undefined);
   const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
+  const [streams, setStreams] = useState<StreamVideo[] | undefined>(undefined);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
@@ -47,6 +50,9 @@ const GameRoom: FC = () => {
   useEffect(() => {
     if (!roomId) return;
 
+    listStreams().then((streams) => { 
+      setStreams(streams);
+    });
     let disposed = false;
     let mainScene: MainScene | undefined;
     let engine: BABYLON.Engine | undefined;
