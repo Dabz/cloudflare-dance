@@ -362,7 +362,7 @@ export class MainScene {
     this._laptopScreenMaterial.diffuseTexture = videoTexture;
 
     videoTexture.video.addEventListener("loadedmetadata", () => {
-      videoTexture.video.currentTime = delta;
+      videoTexture.video.currentTime = (delta % videoTexture.video.duration);
       setTimeout(() => {
         videoTexture.video.muted = false;
         videoTexture.video.play().catch((error) => {
