@@ -17,6 +17,11 @@ export class MainScene {
   _laptopUrl = "";
   _tvMesh?: BABYLON.AbstractMesh;
   _shadowGenerator?: BABYLON.ShadowGenerator;
+  _sunLight?: BABYLON.DirectionalLight;
+  _sunFillLight?: BABYLON.HemisphericLight;
+  _sunLightSphere?: BABYLON.Mesh;
+  _discoLights: BABYLON.PointLight[] = [];
+  _discoLightSpheres: BABYLON.Mesh[] = [];
 
   _scene: BABYLON.Scene;
   _camera: BABYLON.ArcFollowCamera;
@@ -35,14 +40,8 @@ export class MainScene {
       scene,
     );
 
-    const light = new BABYLON.DirectionalLight("dir01", BABYLON.Vector3.Zero(), this._scene);
-    light.position = new BABYLON.Vector3(12, 30, -12);
-    light.setDirectionToTarget(new BABYLON.Vector3(0, 0, -4));
-    light.intensity = 2;
-    const lightSphere = BABYLON.Mesh.CreateSphere("sphere", 10, 2, scene);
-    lightSphere.position = light.position;
-    lightSphere.material = new BABYLON.StandardMaterial("light", scene);
-    lightSphere.material.emissiveColor = new BABYLON.Color3(1, 1, 0);
+    const light = this.addSunLight(scene);
+    this.addDiscoLights(scene);
     this._shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
     this._shadowGenerator.usePercentageCloserFiltering = true;
     this._shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH;
@@ -56,6 +55,7 @@ export class MainScene {
     await BABYLON.ImportMeshAsync("/level.glb", scene);
     if (this._scene !== scene) return scene;
     scene.meshes.forEach((mesh) => this.addShadowReceiver(mesh));
+    this.addNightSky(scene);
 
     const cubes = [
       "Cube",
@@ -151,6 +151,12 @@ export class MainScene {
       this._scene.dispose();
       this._scene = null;
     }
+
+    this._sunLight = undefined;
+    this._sunFillLight = undefined;
+    this._sunLightSphere = undefined;
+    this._discoLights = [];
+    this._discoLightSpheres = [];
   }
 
   public resize() {
@@ -303,6 +309,124 @@ export class MainScene {
     screenFrame.material = screenMaterial;
   }
 
+  private addSunLight(scene: BABYLON.Scene) {
+    const light = new BABYLON.DirectionalLight("sunLight", BABYLON.Vector3.Zero(), scene);
+    light.position = new BABYLON.Vector3(28, 44, -24);
+    light.setDirectionToTarget(new BABYLON.Vector3(0, 0, 0));
+    light.intensity = 3.2;
+    light.shadowMinZ = 1;
+    light.shadowMaxZ = 120;
+    light.orthoTop = 48;
+    light.orthoBottom = -48;
+    light.orthoLeft = -48;
+    light.orthoRight = 48;
+    this._sunLight = light;
+
+    const fillLight = new BABYLON.HemisphericLight(
+      "sunFillLight",
+      new BABYLON.Vector3(0, 1, 0),
+      scene,
+    );
+    fillLight.intensity = 0.55;
+    fillLight.diffuse = new BABYLON.Color3(0.85, 0.9, 1);
+    fillLight.groundColor = new BABYLON.Color3(0.22, 0.18, 0.14);
+    this._sunFillLight = fillLight;
+
+    const lightSphere = BABYLON.Mesh.CreateSphere("sunLightDisplay", 10, 2, scene);
+    lightSphere.position = light.position;
+    lightSphere.isPickable = false;
+    const lightMaterial = new BABYLON.StandardMaterial("sunLightDisplayMaterial", scene);
+    lightMaterial.emissiveColor = new BABYLON.Color3(1, 0.92, 0.45);
+    lightSphere.material = lightMaterial;
+    this._sunLightSphere = lightSphere;
+
+    return light;
+  }
+
+  private addDiscoLights(scene: BABYLON.Scene) {
+    const colors = [
+      new BABYLON.Color3(1, 0.1, 0.35),
+      new BABYLON.Color3(0.1, 0.75, 1),
+      new BABYLON.Color3(0.8, 0.2, 1),
+    ];
+
+    this._discoLights = colors.map((color, index) => {
+      const light = new BABYLON.PointLight(`discoLight${index}`, BABYLON.Vector3.Zero(), scene);
+      light.diffuse = color;
+      light.specular = color;
+      light.intensity = 0;
+      light.range = 42;
+
+      const sphere = BABYLON.Mesh.CreateSphere(`discoLightDisplay${index}`, 8, 0.45, scene);
+      sphere.isPickable = false;
+      sphere.setEnabled(false);
+      const material = new BABYLON.StandardMaterial(`discoLightDisplayMaterial${index}`, scene);
+      material.emissiveColor = color;
+      sphere.material = material;
+      this._discoLightSpheres.push(sphere);
+
+      return light;
+    });
+
+    scene.onBeforeRenderObservable.add(() => {
+      const time = performance.now() * 0.001;
+      this._discoLights.forEach((light, index) => {
+        if (light.intensity === 0) return;
+
+        const phase = time * (1.25 + index * 0.35) + index * Math.PI * 0.67;
+        const radius = 12 + index * 4;
+        light.position.set(
+          Math.cos(phase) * radius,
+          8 + Math.sin(phase * 1.7) * 4,
+          -4 + Math.sin(phase) * radius,
+        );
+        light.intensity = 1.4 + Math.sin(time * 5 + index) * 0.45;
+        this._discoLightSpheres[index].position.copyFrom(light.position);
+      });
+    });
+  }
+
+  private setVideoLighting(videoPlaying: boolean) {
+    this._sunLight?.setEnabled(!videoPlaying);
+    this._sunFillLight?.setEnabled(!videoPlaying);
+    this._sunLightSphere?.setEnabled(!videoPlaying);
+
+    this._discoLights.forEach((light, index) => {
+      light.setEnabled(videoPlaying);
+      light.intensity = videoPlaying ? 1.6 : 0;
+      this._discoLightSpheres[index]?.setEnabled(videoPlaying);
+    });
+  }
+
+  private addNightSky(scene: BABYLON.Scene) {
+    const skyDome = BABYLON.MeshBuilder.CreateSphere(
+      "nightSky",
+      {
+        diameter: 500,
+        segments: 48,
+        sideOrientation: BABYLON.Mesh.BACKSIDE,
+      },
+      scene,
+    );
+    skyDome.infiniteDistance = true;
+    skyDome.isPickable = false;
+
+    const skyTexture = new BABYLON.Texture("/night-sky.svg", scene);
+    skyTexture.coordinatesMode = BABYLON.Texture.SPHERICAL_MODE;
+    skyTexture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+    skyTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+
+    const skyMaterial = new BABYLON.StandardMaterial("nightSkyMaterial", scene);
+    skyMaterial.diffuseTexture = skyTexture;
+    skyMaterial.emissiveTexture = skyTexture;
+    skyMaterial.emissiveColor = new BABYLON.Color3(0.85, 0.9, 1);
+    skyMaterial.specularColor = BABYLON.Color3.Black();
+    skyMaterial.disableLighting = true;
+    skyMaterial.backFaceCulling = false;
+
+    skyDome.material = skyMaterial;
+  }
+
   private addShadowCaster(mesh?: BABYLON.AbstractMesh | null) {
     if (!mesh || !this._shadowGenerator) return;
 
@@ -357,6 +481,7 @@ export class MainScene {
     );
     this._laptopVideoTexture = videoTexture;
     this._laptopScreenMaterial.diffuseTexture = videoTexture;
+    this.setVideoLighting(true);
 
     videoTexture.video.addEventListener("loadedmetadata", () => {
       videoTexture.video.currentTime = (delta % videoTexture.video.duration);
@@ -371,6 +496,7 @@ export class MainScene {
   }
 
   private stopLaptopVideo() {
+    this.setVideoLighting(false);
     if (!this._laptopVideoTexture) return;
 
     this._laptopVideoTexture.video.pause();
