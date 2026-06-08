@@ -65,26 +65,23 @@ export class MainScene {
       "Cube.004",
       "Cube.005",
     ];
-    cubes.forEach((meshName) => {
-      const mesh = scene.getMeshByName(meshName)
-      new BABYLON.PhysicsAggregate(
-        mesh,
-        BABYLON.PhysicsShapeType.BOX,
-        { mass: 0.1 },
-      );   
-      this.addShadowCaster(mesh);
+    this._scene.meshes.forEach((mesh) => {
+      if (mesh.name.startsWith("Cube") || mesh.name.startsWith("Sphere")) {
+        new BABYLON.PhysicsAggregate(
+          mesh,
+          BABYLON.PhysicsShapeType.BOX,
+          { mass: 0.1 },
+        );   
+        this.addShadowCaster(mesh);
+      } else if (mesh.name.startsWith("TV") || mesh.name.startsWith("Icosphere") || mesh.name.startsWith("Wall")) {
+        new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
+        mesh.isPickable = false;
+        mesh.freezeWorldMatrix()
+        mesh.doNotSyncBoundingInfo = true;
+
+        this.addShadowCaster(mesh);
+      }
     });
-
-    const immutables = [ "TV", "TV_BORDER" ]
-    immutables.forEach((meshName) => {
-      const mesh = scene.getMeshByName(meshName);
-      new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
-      mesh.isPickable = false;
-      mesh.freezeWorldMatrix()
-      mesh.doNotSyncBoundingInfo = true;
-
-      this.addShadowCaster(mesh);
-    })
 
     const ground = scene.getMeshByName("Ground");
     if (ground) {
