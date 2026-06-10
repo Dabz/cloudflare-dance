@@ -1,21 +1,42 @@
 #renderCanvas {
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100svh;
   touch-action: none;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 
 .ControlsPanel {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.94);
+
+  position: fixed;
+  top: 18px;
+  right: 18px;
   z-index: 5;
-  width: min(300px, calc(100vw - 24px));
-  color: white;
+  width: min(360px, calc(100vw - 36px));
+  color: var(--room-cream);
+  pointer-events: none;
+}
+
+.ControlsPanel::before {
+  content: "";
+  position: absolute;
+  inset: -12px -10px auto auto;
+  z-index: -1;
+  width: min(380px, 86vw);
+  height: 150px;
+  background:
+    linear-gradient(112deg, transparent 0 12%, var(--room-black) 12.5% 78%, transparent 78.5% 100%),
+    radial-gradient(circle, rgba(255, 196, 71, 0.9) 0 2px, transparent 2px) 0 0 / 22px 22px;
+  filter: drop-shadow(12px 14px 0 rgba(255, 122, 22, 0.72));
+  opacity: 0.9;
+  transform: rotate(-3deg);
   pointer-events: none;
 }
 
@@ -29,56 +50,81 @@
   pointer-events: none;
 }
 
-.ControlsPanel button {
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: rgba(10, 16, 28, 0.58);
-  color: white;
+.ControlsPanel button,
+.TvDisplayPopup button {
+  border: 0;
+  border-radius: 0;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow: 6px 6px 0 var(--room-black), 10px 10px 0 rgba(255, 122, 22, 0.9);
+  clip-path: polygon(0 12%, 96% 0, 100% 84%, 6% 100%);
   cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  line-height: 1;
-  padding: 7px 10px;
-  backdrop-filter: blur(8px);
+  font: 950 12px/1 var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.06em;
+  padding: 10px 13px;
+  text-transform: uppercase;
+  transition: transform 150ms ease, filter 150ms ease, opacity 150ms ease, box-shadow 150ms ease;
+}
+
+.ControlsPanel button {
   pointer-events: auto;
 }
 
-.ControlsPanel button:hover {
-  background: rgba(24, 36, 58, 0.72);
+.ControlsPanel button:hover:not(:disabled),
+.TvDisplayPopup button:hover:not(:disabled),
+.ControlsPanel button:focus-visible,
+.TvDisplayPopup button:focus-visible {
+  transform: translate(4px, -4px);
+  filter: saturate(1.16) contrast(1.05);
 }
 
-.PanelToggle {
-  display: block;
-  margin-left: auto;
+.ControlsPanel button:focus-visible,
+.TvDisplayPopup button:focus-visible,
+.TvUrlRow input:focus-visible {
+  outline: 4px solid var(--room-cream);
+  outline-offset: 4px;
 }
 
-.PanelBody {
+.ControlsPanel button:disabled,
+.TvDisplayPopup button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+  filter: grayscale(0.45);
+}
+
+.PrimaryControls {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-height: calc(100vh - 58px);
-  margin-top: 8px;
-  overflow: auto;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 18px;
-  background: rgba(10, 16, 28, 0.88);
-  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.42);
-  padding: 12px;
-  backdrop-filter: blur(8px);
-  pointer-events: auto;
+  flex-flow: row-reverse wrap;
+  gap: 9px;
+  transform: rotate(-2deg);
+}
+
+.PrimaryControls button:nth-child(3) {
+  color: var(--room-cream);
+  background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
 }
 
 .KeyboardHelp {
+  position: relative;
   display: grid;
-  gap: 9px;
-  margin-top: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 16px;
-  background: rgba(10, 16, 28, 0.68);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.24);
-  padding: 11px;
-  backdrop-filter: blur(8px);
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow: 10px 10px 0 var(--room-black), 18px 18px 0 rgba(255, 122, 22, 0.86);
+  clip-path: polygon(0 6%, 97% 0, 100% 94%, 4% 100%);
   pointer-events: auto;
+  transform: rotate(1.5deg);
+}
+
+.KeyboardHelp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle, rgba(8, 6, 4, 0.18) 0 2px, transparent 2px) 0 0 / 20px 20px;
+  opacity: 0.7;
 }
 
 .KeyboardHelpToggle {
@@ -87,26 +133,29 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  border: 0;
-  border-radius: 0;
+  box-shadow: none;
   background: transparent;
+  clip-path: none;
   padding: 0;
+  color: var(--room-black);
   text-align: left;
 }
 
 .KeyboardHelpToggle span:last-child {
-  color: rgba(255, 255, 255, 0.72);
+  color: #9b2d07;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 950;
 }
 
-.ControlsPanel .KeyboardHelpToggle:hover {
-  background: transparent;
+.ControlsPanel .KeyboardHelpToggle:hover:not(:disabled),
+.ControlsPanel .KeyboardHelpToggle:focus-visible {
+  transform: none;
+  filter: none;
 }
 
 .KeyboardHelp dl {
   display: grid;
-  gap: 7px;
+  gap: 9px;
   margin: 0;
 }
 
@@ -122,64 +171,111 @@
   align-items: center;
   gap: 5px;
   min-width: 0;
-  color: rgba(255, 255, 255, 0.76);
+  color: rgba(22, 11, 4, 0.72);
   font-size: 11px;
+  font-weight: 800;
 }
 
 .KeyboardHelp dd {
   margin: 0;
-  color: white;
+  color: var(--room-black);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
 .KeyboardHelp kbd {
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-bottom-color: rgba(255, 255, 255, 0.42);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.12);
-  color: white;
-  font: inherit;
-  font-size: 11px;
-  line-height: 1;
+  border: 3px solid var(--room-black);
+  border-radius: 0;
+  background: var(--room-gold);
+  box-shadow: 3px 3px 0 var(--room-orange);
+  color: var(--room-black);
+  font: 950 11px/1 var(--sans, system-ui, sans-serif);
   padding: 4px 6px;
   white-space: nowrap;
 }
 
-.PrimaryControls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  flex-flow: row-reverse;
+.PanelKicker,
+.TvPopupHeader span,
+.TvVideoPickerTitle,
+.VideoListTitle {
+  color: #9b2d07;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .TvPopupBackdrop {
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.96);
+
   position: fixed;
   inset: 0;
   z-index: 10;
   display: grid;
   place-items: center;
-  background: rgba(2, 6, 14, 0.58);
   padding: 18px;
+  background:
+    linear-gradient(118deg, rgba(8, 6, 4, 0.88) 0 44%, rgba(255, 122, 22, 0.78) 44% 100%),
+    radial-gradient(circle at 80% 14%, rgba(255, 196, 71, 0.52), transparent 22rem);
+  backdrop-filter: blur(8px);
+}
+
+.TvPopupBackdrop::before,
+.TvPopupBackdrop::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.TvPopupBackdrop::before {
+  width: 86vw;
+  height: 22vh;
+  right: -24vw;
+  top: 11vh;
+  background: var(--room-black);
+  box-shadow: 0 28px 0 var(--room-cream), 0 50px 0 rgba(255, 196, 71, 0.86);
+  transform: rotate(-14deg) skewX(-18deg);
+}
+
+.TvPopupBackdrop::after {
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 242, 210, 0.28) 0 2px, transparent 2px) 0 0 / 24px 24px;
+  opacity: 0.46;
 }
 
 .TvDisplayPopup {
+  position: relative;
+  z-index: 1;
   display: grid;
-  gap: 18px;
-  width: min(620px, 100%);
-  max-height: min(720px, calc(100vh - 36px));
+  gap: 20px;
+  width: min(720px, 100%);
+  max-height: min(760px, calc(100svh - 36px));
+  box-sizing: border-box;
   overflow: auto;
-  border: 1px solid rgba(142, 230, 255, 0.35);
-  border-radius: 24px;
-  background: linear-gradient(
-    145deg,
-    rgba(8, 18, 34, 0.96),
-    rgba(16, 35, 54, 0.96)
-  );
-  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.58);
-  color: white;
-  padding: 18px;
+  color: var(--room-ink);
+  background: var(--room-paper);
+  box-shadow: 18px 18px 0 var(--room-black), 30px 30px 0 var(--room-orange), 0 34px 100px rgba(0, 0, 0, 0.55);
+  clip-path: polygon(0 4%, 98% 0, 100% 94%, 4% 100%);
+  padding: clamp(20px, 4vw, 34px);
+}
+
+.TvDisplayPopup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(154deg, transparent 0 58%, rgba(255, 122, 22, 0.18) 58.2% 100%),
+    radial-gradient(circle, rgba(8, 6, 4, 0.16) 0 2px, transparent 2px) 0 0 / 22px 22px;
 }
 
 .TvPopupHeader {
@@ -189,89 +285,85 @@
   gap: 12px;
 }
 
-.TvPopupHeader span,
-.TvVideoPickerTitle {
-  color: rgba(142, 230, 255, 0.92);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.TvDisplayPopup button {
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  line-height: 1;
-  padding: 9px 12px;
-}
-
-.TvDisplayPopup button:hover:not(:disabled) {
-  background: rgba(56, 178, 255, 0.3);
-}
-
-.TvDisplayPopup button:disabled {
-  cursor: not-allowed;
-  opacity: 0.46;
+.TvPopupHeader button {
+  color: var(--room-cream);
+  background: var(--room-black);
+  box-shadow: 6px 6px 0 var(--room-orange);
 }
 
 .TvUrlForm {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .TvUrlForm h2 {
   margin: 0;
-  font-size: 25px;
-  line-height: 1.05;
+  color: var(--room-black);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 950;
+  line-height: 0.84;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-shadow: 4px 4px 0 rgba(255, 122, 22, 0.58);
 }
 
 .TvUrlForm p,
-.TvVideoPicker p {
+.TvVideoPicker p,
+.DisplayUrlControls p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(22, 11, 4, 0.7);
   font-size: 13px;
+  font-weight: 700;
   line-height: 1.45;
 }
 
-.TvUrlForm label {
+.TvUrlForm label,
+.DisplayUrlControls label {
+  color: var(--room-black);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .TvUrlRow {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 8px;
+  gap: 10px;
 }
 
-.TvUrlRow input {
+.TvUrlRow input,
+.DisplayUrlControls input {
   min-width: 0;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font: inherit;
-  font-size: 13px;
-  padding: 9px 12px;
+  border: 4px solid var(--room-black);
+  border-radius: 0;
+  background: #fff9e9;
+  box-shadow: 7px 7px 0 var(--room-orange);
+  box-sizing: border-box;
+  color: var(--room-ink);
+  font: 900 13px/1 var(--sans, system-ui, sans-serif);
+  padding: 12px 14px;
 }
 
-.TvUrlRow input::placeholder {
-  color: rgba(255, 255, 255, 0.48);
+.TvUrlRow input::placeholder,
+.DisplayUrlControls input::placeholder {
+  color: rgba(22, 11, 4, 0.42);
 }
 
-.TvUrlRow button {
-  background: rgba(34, 128, 180, 0.86);
+.TvUrlRow button,
+.PanelActions button[type="submit"] {
+  color: var(--room-cream);
+  background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
+}
+
+.TvVideoPicker,
+.VideoList {
+  display: grid;
+  gap: 12px;
 }
 
 .TvVideoPicker {
-  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
 }
 
 .TvVideoPickerTitle,
@@ -279,28 +371,56 @@
   grid-column: 1 / -1;
 }
 
-.TvVideoPicker button {
+.TvVideoPicker button,
+.VideoList button {
   display: grid;
   grid-template-columns: 92px 1fr;
   align-items: center;
   gap: 10px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 7px;
+  border: 4px solid var(--room-black);
+  background: #fff6dd;
+  box-shadow: 7px 7px 0 var(--room-gold);
+  padding: 8px;
   text-align: left;
 }
 
-.TvVideoPicker img {
+.TvVideoPicker img,
+.VideoList img {
   width: 92px;
   height: 52px;
-  border-radius: 11px;
+  border: 3px solid var(--room-black);
+  border-radius: 0;
+  box-sizing: border-box;
   object-fit: cover;
 }
 
-.TvVideoPicker button span {
+.TvVideoPicker button span,
+.VideoList button span {
   overflow: hidden;
+  color: var(--room-black);
+  font-weight: 950;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.PanelToggle {
+  display: block;
+  margin-left: auto;
+}
+
+.PanelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: calc(100vh - 58px);
+  margin-top: 8px;
+  overflow: auto;
+  padding: 14px;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow: 10px 10px 0 var(--room-black), 18px 18px 0 rgba(255, 122, 22, 0.86);
+  clip-path: polygon(0 5%, 98% 0, 100% 95%, 4% 100%);
+  pointer-events: auto;
 }
 
 .PanelHeader {
@@ -310,15 +430,11 @@
 
 .PanelHeader h2 {
   margin: 0;
-  font-size: 18px;
-  line-height: 1.1;
-}
-
-.PanelKicker {
-  color: rgba(142, 230, 255, 0.9);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  color: var(--room-black);
+  font-size: 22px;
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
   text-transform: uppercase;
 }
 
@@ -327,79 +443,19 @@
   gap: 10px;
 }
 
-.DisplayUrlControls label {
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.DisplayUrlControls input {
-  min-width: 0;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font: inherit;
-  font-size: 12px;
-  padding: 7px 10px;
-}
-
-.DisplayUrlControls p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-.DisplayUrlControls input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
 .VideoList {
-  display: grid;
-  gap: 8px;
   margin-top: 4px;
   max-height: 190px;
   overflow: auto;
 }
 
-.VideoListTitle {
-  color: rgba(142, 230, 255, 0.9);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .VideoList button {
-  display: grid;
   grid-template-columns: 72px 1fr;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-  cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  padding: 6px;
-  text-align: left;
-}
-
-.VideoList button:hover:not(:disabled) {
-  background: rgba(34, 128, 180, 0.28);
-}
-
-.VideoList button:disabled {
-  cursor: not-allowed;
-  opacity: 0.48;
 }
 
 .VideoList img {
   width: 72px;
   height: 42px;
-  border-radius: 9px;
-  object-fit: cover;
 }
 
 .PanelActions {
@@ -409,40 +465,43 @@
   margin-top: 6px;
 }
 
-.PanelActions button {
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  line-height: 1;
-  padding: 7px 10px;
-}
-
-.PanelActions button[type="submit"] {
-  background: rgba(34, 128, 180, 0.7);
-}
-
 @media (max-width: 640px) {
   .ControlsPanel {
+    top: 12px;
     left: 12px;
+    right: 12px;
     width: auto;
   }
 
+  .ControlsPanel::before {
+    width: 94vw;
+  }
+
+  .PrimaryControls {
+    gap: 7px;
+  }
+
+  .ControlsPanel button,
+  .TvDisplayPopup button {
+    box-shadow: 4px 4px 0 var(--room-black), 7px 7px 0 rgba(255, 122, 22, 0.9);
+  }
+
   .TvDisplayPopup {
-    border-radius: 18px;
-    padding: 14px;
+    max-height: calc(100svh - 24px);
+    clip-path: polygon(0 2%, 98% 0, 100% 98%, 2% 100%);
+    box-shadow: 10px 10px 0 var(--room-black), 18px 18px 0 var(--room-orange), 0 24px 70px rgba(0, 0, 0, 0.55);
+    padding: 16px;
   }
 
   .TvUrlRow,
   .TvVideoPicker,
-  .TvVideoPicker button {
+  .TvVideoPicker button,
+  .VideoList button {
     grid-template-columns: 1fr;
   }
 
-  .TvVideoPicker img {
+  .TvVideoPicker img,
+  .VideoList img {
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 9;
