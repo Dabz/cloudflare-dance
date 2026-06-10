@@ -57,7 +57,8 @@
 }
 
 .ControlsPanel button,
-.TvDisplayPopup button {
+.TvDisplayPopup button,
+.ChatPanel button {
   border: 0;
   border-radius: 0;
   color: var(--room-black);
@@ -84,21 +85,26 @@
 
 .ControlsPanel button:hover:not(:disabled),
 .TvDisplayPopup button:hover:not(:disabled),
+.ChatPanel button:hover:not(:disabled),
 .ControlsPanel button:focus-visible,
-.TvDisplayPopup button:focus-visible {
+.TvDisplayPopup button:focus-visible,
+.ChatPanel button:focus-visible {
   transform: translate(4px, -4px);
   filter: saturate(1.16) contrast(1.05);
 }
 
 .ControlsPanel button:focus-visible,
 .TvDisplayPopup button:focus-visible,
-.TvUrlRow input:focus-visible {
+.ChatPanel button:focus-visible,
+.TvUrlRow input:focus-visible,
+.ChatForm input:focus-visible {
   outline: 4px solid var(--room-cream);
   outline-offset: 4px;
 }
 
 .ControlsPanel button:disabled,
-.TvDisplayPopup button:disabled {
+.TvDisplayPopup button:disabled,
+.ChatPanel button:disabled {
   cursor: not-allowed;
   opacity: 0.46;
   filter: grayscale(0.45);
@@ -224,7 +230,8 @@
 .PanelKicker,
 .TvPopupHeader span,
 .TvVideoPickerTitle,
-.VideoListTitle {
+.VideoListTitle,
+.ChatPlayerId {
   color: #9b2d07;
   font-size: 11px;
   font-weight: 950;
@@ -519,6 +526,162 @@
   margin-top: 6px;
 }
 
+.ChatPanel {
+  --room-black: #080604;
+  --room-ink: #160b04;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.96);
+
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 6;
+  width: min(420px, calc(100vw - 36px));
+  pointer-events: none;
+}
+
+.ChatPanel::before {
+  content: "";
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  z-index: -1;
+  width: 80%;
+  height: 54px;
+  background: var(--room-black);
+  box-shadow:
+    -18px -14px 0 rgba(255, 196, 71, 0.88),
+    -28px -22px 0 rgba(255, 122, 22, 0.78);
+  transform: rotate(-6deg) skewX(-18deg);
+}
+
+.ChatToggle {
+  display: block;
+  margin-left: auto;
+  min-width: 138px;
+  color: var(--room-black);
+  background: linear-gradient(102deg, var(--room-gold), var(--room-orange) 58%, var(--room-hot));
+  pointer-events: auto;
+  transform: rotate(-4deg);
+}
+
+.ChatPanelOpen .ChatToggle {
+  margin-bottom: 12px;
+}
+
+.ChatBody {
+  position: relative;
+  display: grid;
+  gap: 13px;
+  padding: 16px;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow:
+    12px 12px 0 var(--room-black),
+    22px 22px 0 rgba(255, 122, 22, 0.88);
+  clip-path: polygon(0 5%, 97% 0, 100% 93%, 5% 100%);
+  pointer-events: auto;
+}
+
+.ChatBody::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(154deg, transparent 0 58%, rgba(255, 122, 22, 0.18) 58.2% 100%),
+    radial-gradient(circle, rgba(8, 6, 4, 0.16) 0 2px, transparent 2px) 0 0 / 22px 22px;
+}
+
+.ChatMessages {
+  display: grid;
+  gap: 10px;
+  max-height: min(340px, 42svh);
+  overflow: auto;
+  padding: 4px 10px 8px 4px;
+}
+
+.ChatEmpty {
+  margin: 0;
+  color: rgba(22, 11, 4, 0.58);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ChatMessage {
+  display: grid;
+  gap: 5px;
+  justify-self: start;
+  max-width: 92%;
+  padding: 10px 12px;
+  color: var(--room-black);
+  background: #fff6dd;
+  box-shadow: 5px 5px 0 var(--room-gold);
+  clip-path: polygon(0 8%, 97% 0, 100% 90%, 4% 100%);
+}
+
+.ChatMessage p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.ChatMessageInternal {
+  justify-self: center;
+  color: var(--room-cream);
+  background: var(--room-black);
+  box-shadow: 5px 5px 0 var(--room-hot);
+}
+
+.ChatMessageInternal p {
+  color: var(--room-cream);
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ChatPlayerId {
+  max-width: 100%;
+  overflow: hidden;
+  color: #9b2d07;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ChatForm {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.ChatForm input {
+  min-width: 0;
+  border: 4px solid var(--room-black);
+  border-radius: 0;
+  background: #fff9e9;
+  box-shadow: 7px 7px 0 var(--room-orange);
+  box-sizing: border-box;
+  color: var(--room-ink);
+  font: 900 13px/1 var(--sans, system-ui, sans-serif);
+  padding: 12px 14px;
+}
+
+.ChatForm input::placeholder {
+  color: rgba(22, 11, 4, 0.42);
+}
+
+.ChatForm button {
+  color: var(--room-cream);
+  background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
+}
+
 @media (max-width: 640px) {
   .ControlsPanel {
     top: 12px;
@@ -536,7 +699,8 @@
   }
 
   .ControlsPanel button,
-  .TvDisplayPopup button {
+  .TvDisplayPopup button,
+  .ChatPanel button {
     box-shadow:
       4px 4px 0 var(--room-black),
       7px 7px 0 rgba(255, 122, 22, 0.9);
@@ -555,8 +719,20 @@
   .TvUrlRow,
   .TvVideoPicker,
   .TvVideoPicker button,
-  .VideoList button {
+  .VideoList button,
+  .ChatForm {
     grid-template-columns: 1fr;
+  }
+
+  .ChatPanel {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+  }
+
+  .ChatMessages {
+    max-height: 34svh;
   }
 
   .TvVideoPicker img,

@@ -4,13 +4,14 @@ import * as BABYLON from "@babylonjs/core";
 import { MainScene } from "../../scenes/main";
 import {useParams} from "react-router";
 import {getPlayerIdentity, getPlayerInformationInRoom} from "../../security/auth";
-import type {Player, PlayerDanceRequest, PlayerServerMessage, RoomDisplayUrlRequest} from "../../../worker/model/player";
+import type {Player} from "../../../worker/model/player";
 import Const from "../../../worker/const"
 import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
 import type {StreamVideo} from "../../../worker/model/streams";
 import {listStreams} from "../../streams";
-import type {PlayerUpdateRequest} from "../../../worker/model/gameroom";
+import type {ChatRequest, PlayerDanceRequest, PlayerUpdateRequest, RoomDisplayUrlRequest, WSServerMessage} from "../../../worker/model/gameroom";
+import type {Chat} from "../../../worker/model/chat";
 
 function getDisplayNameForJoin(displayName: string): string {
   if (displayName !== UNKNOWN_DISPLAY_NAME) return displayName;
@@ -25,7 +26,11 @@ const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
   const wsRef = useRef<WebSocket | undefined>(undefined);
+  const chatListRef = useRef<HTMLDivElement | null>(null);
   const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
+  const [draftChatMessage, setDraftChatMessage] = useState("");
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [chatOpen, setChatOpen] = useState(true);
   const [streams, setStreams] = useState<StreamVideo[] | undefined>(undefined);
   const [tvPopupOpen, setTvPopupOpen] = useState(false);
   const [howToPlayOpen, setHowToPlayOpen] = useState(true);
@@ -52,24 +57,59 @@ const GameRoom: FC = () => {
     shareDisplayUrl(draftDisplayUrl);
   }
 
+  function sendChatMessage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const content = draftChatMessage.trim();
+    if (!content || wsRef.current?.readyState !== WebSocket.OPEN) return;
+
+    const payload: ChatRequest = {
+      type: "chat",
+      id: crypto.randomUUID(),
+      content,
+    };
+    wsRef.current.send(JSON.stringify(payload));
+    setDraftChatMessage("");
+    setChatOpen(true);
+  }
+
+  useEffect(() => {
+    if (!chatOpen) return;
+
+    chatListRef.current?.scrollTo({
+      top: chatListRef.current.scrollHeight,
+    });
+  }, [chats, chatOpen]);
+
   useEffect(() => {
     if (!roomId) return;
 
-    listStreams().then((streams) => { 
-      setStreams(streams);
-    });
     let disposed = false;
     let mainScene: MainScene | undefined;
     let engine: BABYLON.Engine | undefined;
     let ws: WebSocket | undefined;
     let wsInterval: ReturnType<typeof setInterval> | undefined;
 
+    listStreams().then((streams) => { 
+      if (!disposed) setStreams(streams);
+    });
+    fetch(`/api/room/${encodeURIComponent(roomId)}/chats`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Failed to load chat history");
+        return await res.json() as { chats: Chat[] };
+      })
+      .then(({ chats }) => {
+        if (!disposed) setChats(chats);
+      })
+      .catch((error) => {
+        console.error("Failed to load chat history", error);
+      });
+
     const resizeListener = function () {
       mainScene?.resize();
     };
 
-    function connectWebSocket(roomId: string, displayNameOverride: string) {
-      const wsUrl = `/ws/room/${roomId}${displayNameOverride ? `?displayName=${encodeURIComponent(displayNameOverride)}` : ""}`;
+    function connectWebSocket(roomId: string, displayNameOverride: string, reconnection: boolean) {
+      const wsUrl = `/ws/room/${roomId}${displayNameOverride ? `?reconnect=${encodeURIComponent(reconnection)}&displayName=${encodeURIComponent(displayNameOverride)}` : ""}`;
       ws = new WebSocket(wsUrl);
       wsRef.current = ws;
       ws.onopen = () => console.log('WebSocket connected');
@@ -81,7 +121,7 @@ const GameRoom: FC = () => {
         }
 
         setTimeout(() => {
-          connectWebSocket(roomId, displayNameOverride)
+          connectWebSocket(roomId, displayNameOverride, true)
         }, 1000)
       };
       return ws;
@@ -130,7 +170,7 @@ const GameRoom: FC = () => {
             return;
           }
 
-          ws = connectWebSocket(roomId, displayNameOverride);
+          ws = connectWebSocket(roomId, displayNameOverride, false);
 
           wsInterval = setInterval(() => {
             if (!ws || ws.readyState !== ws.OPEN || !mainScene?.mainPlayer) {
@@ -162,11 +202,16 @@ const GameRoom: FC = () => {
           window.addEventListener("resize", resizeListener);
 
           ws.addEventListener("message", (event) => {
-            if (disposed || !mainScene?.mainPlayer) return;
+            if (disposed) return;
 
-            const payload = JSON.parse(event.data) as PlayerServerMessage
+            const payload = JSON.parse(event.data) as WSServerMessage
             if ("type" in payload && payload.type === "dance") {
               mainScene.dancePlayer(payload.playerId);
+              return;
+            }
+
+            if ("type" in payload && payload.type === "chat") {
+              setChats((currentChats) => [...currentChats, payload.chat].slice(-50));
               return;
             }
 
@@ -175,6 +220,8 @@ const GameRoom: FC = () => {
               mainScene.tv.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
               return;
             }
+
+            if (!mainScene?.mainPlayer) return;
 
             const otherPlayers = [] as Player[];
             const playerIds = Object.keys(payload.players);
@@ -192,7 +239,7 @@ const GameRoom: FC = () => {
         }
 
         console.error("Failed to join game", error);
-        ws?.close();
+        ws?.close(1000, Const.WS_REASON_LEAVING)
         engine?.stopRenderLoop();
         mainScene?.dispose();
         engine?.dispose();
@@ -207,7 +254,7 @@ const GameRoom: FC = () => {
 
       console.log("Closing websocket")
       if (wsInterval) clearInterval(wsInterval);
-      ws?.close();
+      ws?.close(1000, Const.WS_REASON_LEAVING)
       wsRef.current = undefined;
       window.removeEventListener("resize", resizeListener);
 
@@ -259,6 +306,40 @@ const GameRoom: FC = () => {
       </dl>
     )}
     </section>
+    </section>
+    <section className={`${styles.ChatPanel} ${chatOpen ? styles.ChatPanelOpen : ""}`} aria-label="Room chat">
+    <button
+    type="button"
+    className={styles.ChatToggle}
+    aria-expanded={chatOpen}
+    onClick={() => setChatOpen((open) => !open)}
+    >
+    Chat
+    </button>
+    {chatOpen && (
+      <div className={styles.ChatBody}>
+      <div className={styles.ChatMessages} ref={chatListRef}>
+      {chats.length === 0 && <p className={styles.ChatEmpty}>No messages</p>}
+      {chats.map((chat) => (
+        <article className={`${styles.ChatMessage} ${chat.isInternal ? styles.ChatMessageInternal : ""}`} key={chat.id}>
+        {!chat.isInternal && chat.playerDisplayName && <span className={styles.ChatPlayerId}>{chat.playerDisplayName}</span>}
+        <p>{chat.content}</p>
+        </article>
+      ))}
+      </div>
+      <form className={styles.ChatForm} onSubmit={sendChatMessage}>
+      <input
+      aria-label="Chat message"
+      maxLength={500}
+      onChange={(event) => setDraftChatMessage(event.target.value)}
+      placeholder="Say something"
+      type="text"
+      value={draftChatMessage}
+      />
+      <button type="submit" disabled={!draftChatMessage.trim()}>Send</button>
+      </form>
+      </div>
+    )}
     </section>
     {tvPopupOpen && (
       <div className={styles.TvPopupBackdrop} role="presentation" onMouseDown={() => setTvPopupOpen(false)}>

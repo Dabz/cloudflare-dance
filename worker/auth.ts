@@ -28,6 +28,10 @@ export function getDisplayNameOverride(url: string): string | undefined {
   return sanitizeDisplayName(new URL(url).searchParams.get("displayName"));
 }
 
+export function getReconnect(url: string): string | undefined {
+  return sanitizeDisplayName(new URL(url).searchParams.get("reconnect"));
+}
+
 export function getPlayerId(headers: Headers): string | undefined {
   const cookieHeader = headers.get("Cookie");
   if (!cookieHeader) return undefined;

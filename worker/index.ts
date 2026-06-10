@@ -4,6 +4,7 @@ import { createPlayerIdCookie, getColo, getDisplayNameOverride, getPlayerId, get
 import mds from "./mds";
 import type { Room } from "./model/room";
 import type {Player} from "./model/player";
+import type {Chat} from "./model/chat";
 import stream from "./stream/stream";
 
 
@@ -33,6 +34,10 @@ export type MeResponse = {
 
 export type PlayerCountResponse = {
   playerCount: number;
+}
+
+export type ChatHistoryResponse = {
+  chats: Chat[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -80,6 +85,15 @@ const route = app
     const count = await gameroomStub.getActiveUsersCount();
     return c.json({playerCount: count} as PlayerCountResponse)
   })
+  .get("/room/:id/chats", async (c) => {
+    const { id } = c.req.param();
+    const gameroomStub = c.env.GAME_ROOM.getByName(id);
+    const chats = await gameroomStub.getChats() as Chat[];
+    const response: ChatHistoryResponse = {
+      chats: chats
+    }
+    return c.json(response);
+  })
   .get("/room", async (c) => {
     const rooms = await mds.listRooms();
     const colo = getColo(c.req.raw.cf);
@@ -126,53 +140,58 @@ const route = app
     });
   });
 
-export default {
-  fetch: async (r: Request, e: Env) => {
-    const url = new URL(r.url);
-    
-    if (url.pathname.startsWith('/ws')) {
-      if (url.pathname.startsWith('/ws/room/')) {
-        return playerJoinRoom(r, e)
-     }
-    }
+  export default {
+    fetch: async (r: Request, e: Env) => {
+      const url = new URL(r.url);
 
-    return app.fetch(r, e);
-  },
-  async scheduled(
-    controller: ScheduledController,
-    env: Env,
-    ctx: ExecutionContext,
-  ) {
-    switch (controller.cron) {
-      case "*/5 * * * *": {
-         ctx.waitUntil(scheduled_clean_rooms(env, ctx))
+      if (url.pathname.startsWith('/ws')) {
+        if (url.pathname.startsWith('/ws/room/')) {
+          return playerJoinRoom(r, e)
+        }
       }
+
+      try {
+        return app.fetch(r, e);
+      } catch (e) {
+        console.error(e);
+        return new Response("Internal Server Error", { status: 500 })
+      }
+    },
+    async scheduled(
+      controller: ScheduledController,
+      env: Env,
+      ctx: ExecutionContext,
+    ) {
+      switch (controller.cron) {
+        case "*/5 * * * *": {
+ctx.waitUntil(scheduled_clean_rooms(env, ctx))
+        }
+      }
+    },
+  };
+
+  async function playerJoinRoom(r: Request, e: Env) {
+    const url = new URL(r.url);
+
+    if (r.headers.get("upgrade") !== "websocket") {
+      return new Response("Expected Upgrade: websocket", { status: 426 });
     }
-  },
-};
 
-async function playerJoinRoom(r: Request, e: Env) {
-  const url = new URL(r.url);
-
-  if (r.headers.get("upgrade") !== "websocket") {
-    return new Response("Expected Upgrade: websocket", { status: 426 });
+    const roomId = url.pathname.split('/').at(-1);
+    const stub = e.GAME_ROOM.getByName(roomId)
+    return stub.fetch(r);
   }
 
-  const roomId = url.pathname.split('/').at(-1);
-  const stub = e.GAME_ROOM.getByName(roomId)
-  return stub.fetch(r);
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function scheduled_clean_rooms(env: Env, ctx: ExecutionContext) {
-  const rooms = await mds.listRooms();
-  for (const room of rooms) {
-    const gameRoom = env.GAME_ROOM.getByName(room.ID);
-    await gameRoom.deleteOldSessions();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function scheduled_clean_rooms(env: Env, ctx: ExecutionContext) {
+    const rooms = await mds.listRooms();
+    for (const room of rooms) {
+      const gameRoom = env.GAME_ROOM.getByName(room.ID);
+      await gameRoom.deleteOldSessions();
+    }
+    const deletedRoomCount = mds.deleteOldEmptyRooms();
+    console.log(`Deleted ${deletedRoomCount} rooms`)
   }
-  const deletedRoomCount = mds.deleteOldEmptyRooms();
-  console.log(`Deleted ${deletedRoomCount} rooms`)
-}
 
-export { GameRoom } from "./durable/gameroom";
-export type AppType = typeof route;
+  export { GameRoom } from "./durable/gameroom";
+  export type AppType = typeof route;
