@@ -2,11 +2,13 @@ import { useEffect, useState, type FC } from "react";
 import styles from "./GameMenu.module.css";
 import { hc } from "hono/client";
 import type { AppType, RoomListResponse } from "../../../worker/index.ts";
+import type { Room } from "../../../worker/model/room.ts";
 import RoomMenuEntry from "../RoomMenuEntry/RoomMenuEntry.tsx";
 import { getPlayerIdentity } from "../../security/auth.ts";
 import { getDisplayNameCookie, sanitizeDisplayName, setDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName.ts";
 
 type ActiveModal = "displayName" | "rooms";
+type MenuAction = "join" | "rooms" | "create";
 
 const GameMenu: FC = () => {
   const client = hc<AppType>("/");
@@ -16,12 +18,12 @@ const GameMenu: FC = () => {
   const [displayName, setDisplayName] = useState("");
   const [serverDisplayName, setServerDisplayName] = useState<string>();
   const [activeModal, setActiveModal] = useState<ActiveModal>();
-  const [openRoomsAfterName, setOpenRoomsAfterName] = useState(false);
+  const [queuedAction, setQueuedAction] = useState<MenuAction>();
+  const [actionLoading, setActionLoading] = useState<MenuAction>();
 
   const identityLoaded = serverDisplayName !== undefined;
   const needsDisplayName = serverDisplayName === UNKNOWN_DISPLAY_NAME;
   const savedDisplayName = sanitizeDisplayName(displayName);
-  const shownDisplayName = needsDisplayName ? savedDisplayName || "Unnamed visitor" : displayName;
 
   useEffect(() => {
     let disposed = false;
@@ -45,40 +47,83 @@ const GameMenu: FC = () => {
     };
   }, []);
 
-  async function createRoom(loc: string) {
+  async function createRoom(loc: string): Promise<Room> {
     const res = await client.api.room[":loc"].$post({param: {loc: loc}})
     const roomCreateResponse = await res.json()
-    setRooms({
-      rooms: [roomCreateResponse.room],
-      roomsInLocation: [roomCreateResponse.room],
-      roomsOutsideLocation: [],
-      location: loc
-    })
+    return roomCreateResponse.room;
   }
 
-  async function loadRooms() {
+  async function loadRooms(): Promise<RoomListResponse> {
     setLoading(true);
-    const rooms_list_response = await client.api.room.$get();
-    const rooms = await rooms_list_response.json();
-    setRooms(rooms);
-    setLoading(false);
+    try {
+      const rooms_list_response = await client.api.room.$get();
+      const rooms = await rooms_list_response.json();
+      setRooms(rooms);
+      return rooms;
+    } finally {
+      setLoading(false);
+    }
   }
 
-  async function openRoomSelection() {
-    if (!identityLoaded) return;
+  function joinRoom(room: Room) {
+    window.location.assign(`/room/${encodeURIComponent(room.ID)}`);
+  }
+
+  function pickClosestRoom(roomData: RoomListResponse): Room | undefined {
+    const closestRooms = [...roomData.roomsInLocation].sort((l, r) => l.PLAYER_COUNT - r.PLAYER_COUNT);
+    const fallbackRooms = [...roomData.rooms].sort((l, r) => l.PLAYER_COUNT - r.PLAYER_COUNT);
+    return closestRooms[0] ?? fallbackRooms[0];
+  }
+
+  function canRunAction(action: MenuAction) {
+    if (!identityLoaded) return false;
 
     if (needsDisplayName && !savedDisplayName) {
-      setOpenRoomsAfterName(true);
+      setQueuedAction(action);
       setActiveModal("displayName");
-      return;
+      return false;
     }
 
     if (needsDisplayName) {
       setDisplayNameCookie(savedDisplayName);
     }
 
-    setActiveModal("rooms");
-    await loadRooms();
+    return true;
+  }
+
+  async function runMenuAction(action: MenuAction) {
+    if (!canRunAction(action)) return;
+
+    setActionLoading(action);
+    try {
+      if (action === "rooms") {
+        setActiveModal("rooms");
+        await loadRooms();
+        return;
+      }
+
+      const roomData = rooms ?? await loadRooms();
+      if (action === "join") {
+        const room = pickClosestRoom(roomData) ?? await createRoom(roomData.location);
+        joinRoom(room);
+        return;
+      }
+
+      const room = await createRoom(roomData.location);
+      joinRoom(room);
+    } finally {
+      setActionLoading(undefined);
+    }
+  }
+
+  async function createAndJoinRoom(loc: string) {
+    setActionLoading("create");
+    try {
+      const room = await createRoom(loc);
+      joinRoom(room);
+    } finally {
+      setActionLoading(undefined);
+    }
   }
 
   async function saveDisplayName() {
@@ -87,10 +132,11 @@ const GameMenu: FC = () => {
     setDisplayName(savedDisplayName);
     setDisplayNameCookie(savedDisplayName);
 
-    if (openRoomsAfterName) {
-      setOpenRoomsAfterName(false);
-      setActiveModal("rooms");
-      await loadRooms();
+    if (queuedAction) {
+      const action = queuedAction;
+      setQueuedAction(undefined);
+      setActiveModal(undefined);
+      await runMenuAction(action);
       return;
     }
 
@@ -98,27 +144,43 @@ const GameMenu: FC = () => {
   }
 
   function closeModal() {
-    setOpenRoomsAfterName(false);
+    setQueuedAction(undefined);
     setActiveModal(undefined);
   }
 
   return (
     <div className={styles.GameMenu} data-testid="GameMenu">
-      <div className={styles.TopBar}>
-        <span className={styles.BrandMark}>cf</span>
-        <button className={styles.ProfileButton} disabled={!identityLoaded} onClick={() => setActiveModal("displayName")}>
-          <span>Playing as</span>
-          <strong>{identityLoaded ? shownDisplayName : "Loading..."}</strong>
-        </button>
+      <div className={styles.MenuBackdrop} aria-hidden="true">
+        <span className={styles.SlashOne}></span>
+        <span className={styles.SlashTwo}></span>
+        <span className={styles.DotGrid}></span>
       </div>
 
-      <main className={styles.HeroCard}>
-        <div className={styles.HeroEyebrow}>Edge-native multiplayer</div>
-        <h1>ORANGE DANCE!</h1>
-        <p className={styles.Tagline}>Pick a name, find the closest room, and race the edge before anyone else claims the low-latency lane.</p>
-        <div className={styles.HeroActions}>
-          <button className={styles.PrimaryButton} disabled={!identityLoaded} onClick={openRoomSelection}>Find a room</button>
-        </div>
+      <main className={styles.MenuPanel} aria-label="Main menu">
+        <button
+          aria-busy={actionLoading === "join"}
+          className={`${styles.MenuEntry} ${styles.MenuEntryPrimary}`}
+          disabled={!identityLoaded || actionLoading !== undefined}
+          onClick={() => void runMenuAction("join")}
+        >
+          Join closest Room
+        </button>
+        <button
+          aria-busy={actionLoading === "rooms" || loading}
+          className={styles.MenuEntry}
+          disabled={!identityLoaded || actionLoading !== undefined}
+          onClick={() => void runMenuAction("rooms")}
+        >
+          See rooms
+        </button>
+        <button
+          aria-busy={actionLoading === "create"}
+          className={styles.MenuEntry}
+          disabled={!identityLoaded || actionLoading !== undefined}
+          onClick={() => void runMenuAction("create")}
+        >
+          Create a new Room
+        </button>
       </main>
 
       {activeModal === "displayName" && (
@@ -126,7 +188,6 @@ const GameMenu: FC = () => {
           <section aria-labelledby="display-name-title" aria-modal="true" className={styles.ModalCard} role="dialog">
             <div className={styles.ModalHeader}>
               <div>
-                <span className={styles.ModalKicker}>Identity</span>
                 <h2 id="display-name-title">Choose your display name</h2>
               </div>
               <button className={styles.IconButton} onClick={closeModal}>Close</button>
@@ -149,7 +210,7 @@ const GameMenu: FC = () => {
                   />
                 </label>
                 <button className={styles.PrimaryButton} disabled={!savedDisplayName} type="submit">
-                  {openRoomsAfterName ? "Save and find rooms" : "Save display name"}
+                  {queuedAction ? "Save" : "Save display name"}
                 </button>
               </form>
             )}
@@ -162,8 +223,7 @@ const GameMenu: FC = () => {
           <section aria-labelledby="room-selection-title" aria-modal="true" className={`${styles.ModalCard} ${styles.RoomModal}`} role="dialog">
             <div className={styles.ModalHeader}>
               <div>
-                <span className={styles.ModalKicker}>Room browser</span>
-                <h2 id="room-selection-title">Choose your edge room</h2>
+                <h2 id="room-selection-title">Rooms</h2>
               </div>
               <button className={styles.IconButton} onClick={closeModal}>Close</button>
             </div>
@@ -181,7 +241,7 @@ const GameMenu: FC = () => {
                   ))}
                 </div>
                 {rooms.roomsInLocation.length === 0 && (
-                  <button className={styles.CreateRoomButton} onClick={() => createRoom(rooms.location)}>Create a room in {rooms.location}</button>
+                  <button className={styles.CreateRoomButton} onClick={() => void createAndJoinRoom(rooms.location)}>Create a new Room</button>
                 )}
 
                 {rooms.roomsOutsideLocation.length > 0 && (

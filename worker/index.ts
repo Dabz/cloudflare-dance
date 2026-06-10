@@ -93,25 +93,11 @@ const route = app
   })
   .post("/room/:loc", async (c) => {
     const { loc } = c.req.param();
-    const existingRooms = await mds.getRoomsInLoc(loc);
-    let room: Room;
-    let created = false;
-
-    for (const existingRoom of existingRooms) {
-      if (existingRoom.PLAYER_COUNT < 100) {
-        room = existingRoom;
-        break;
-      }
-    }
-
-    if (!room) {
-      room = await mds.upsertRoom(loc, loc);
-      created = true;
-    }
+    const room = await mds.upsertRoom(crypto.randomUUID(), loc);
 
     const res: RoomUpsertResponse = {
       room: room,
-      created: created,
+      created: true,
     };
 
     return c.json(res);
