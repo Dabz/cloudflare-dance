@@ -6,22 +6,17 @@ import havokWasmUrl from "../../node_modules/@babylonjs/havok/lib/esm/HavokPhysi
 import "@babylonjs/loaders/glTF";
 import type { Player } from "../../worker/model/player";
 import { PlayerCharacter } from "./player";
+import {TV} from "./tv";
 
 export class MainScene {
   mainPlayer: PlayerCharacter;
+  tv: TV;
   _otherPlayers: { [key: string]: PlayerCharacter } = {};
   otherPlayers: Player[] = [];
-  _laptopScreenTexture?: BABYLON.DynamicTexture;
-  _laptopVideoTexture?: BABYLON.VideoTexture;
-  _laptopScreenMaterial?: BABYLON.StandardMaterial;
-  _laptopUrl = "";
-  _tvMesh?: BABYLON.AbstractMesh;
   _shadowGenerator?: BABYLON.ShadowGenerator;
   _sunLight?: BABYLON.DirectionalLight;
   _sunFillLight?: BABYLON.HemisphericLight;
   _sunLightSphere?: BABYLON.Mesh;
-  _discoLights: BABYLON.PointLight[] = [];
-  _discoLightSpheres: BABYLON.Mesh[] = [];
 
   _scene: BABYLON.Scene;
   _camera: BABYLON.ArcFollowCamera;
@@ -41,7 +36,6 @@ export class MainScene {
     );
 
     const light = this.addSunLight(scene);
-    this.addDiscoLights(scene);
     this._shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
     this._shadowGenerator.usePercentageCloserFiltering = true;
     this._shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH;
@@ -55,16 +49,8 @@ export class MainScene {
     await BABYLON.ImportMeshAsync("/level.glb", scene);
     if (this._scene !== scene) return scene;
     scene.meshes.forEach((mesh) => this.addShadowReceiver(mesh));
-    this.addNightSky(scene);
+    this.addSky(scene);
 
-    const cubes = [
-      "Cube",
-      "Cube.001",
-      "Cube.002",
-      "Cube.003",
-      "Cube.004",
-      "Cube.005",
-    ];
     this._scene.meshes.forEach((mesh) => {
       if (mesh.name.startsWith("Cube") || mesh.name.startsWith("Sphere")) {
         new BABYLON.PhysicsAggregate(
@@ -80,18 +66,17 @@ export class MainScene {
         mesh.doNotSyncBoundingInfo = true;
 
         this.addShadowCaster(mesh);
+      } else if (mesh.name.startsWith("floor") || mesh.name.startsWith("Ground") ||  mesh.name.startsWith("Cube")) {
+        new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
       }
     });
 
-    const ground = scene.getMeshByName("Ground");
-    if (ground) {
-      new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.MESH);
-      this.addShadowCaster(ground)
-    }
 
-    this.addLaptop(scene);
+    this.tv = new TV();
+    this.tv.init(scene);
 
     const planeMesh = scene.getMeshByName("Cube.006");
+    if (planeMesh) {
     planeMesh.scaling.set(0.03, 3, 1);
     const fixedMass = new BABYLON.PhysicsAggregate(
       scene.getMeshByName("Cube.007"),
@@ -103,9 +88,6 @@ export class MainScene {
       BABYLON.PhysicsShapeType.BOX,
       { mass: 0.1 },
     );
-    this.addShadowCaster(scene.getMeshByName("Cube.007"));
-    this.addShadowCaster(planeMesh);
-
     const joint = new BABYLON.HingeConstraint(
       new BABYLON.Vector3(0.75, 0, 0),
       new BABYLON.Vector3(-0.25, 0, 0),
@@ -114,6 +96,7 @@ export class MainScene {
       scene,
     );
     fixedMass.body.addConstraint(plane.body, joint);
+    }
 
     if (mainPlayer) {
       this.addMainPlayer(mainPlayer);
@@ -123,6 +106,9 @@ export class MainScene {
   }
 
   public addMainPlayer(player: Player) {
+    if (this.mainPlayer) {
+      return;
+    }
     this.mainPlayer = PlayerCharacter.createPlayer(true, player.id, this._scene);
     this.addShadowCaster(this.mainPlayer.character);
     this._camera.setMeshTarget(this.mainPlayer.character)
@@ -155,71 +141,10 @@ export class MainScene {
     this._sunLight = undefined;
     this._sunFillLight = undefined;
     this._sunLightSphere = undefined;
-    this._discoLights = [];
-    this._discoLightSpheres = [];
   }
 
   public resize() {
     this._scene?.getEngine().resize();
-  }
-
-  public setLaptopUrl(url: string, snapshot: string, lastUpdate?: number) {
-    this._laptopUrl = url;
-    if (this.isHlsUrl(url)) {
-      const videoDelta = lastUpdate ? (new Date().getTime() - lastUpdate) / 1000 : 0;
-      this.playLaptopVideo(url, videoDelta);
-      return;
-    }
-
-    this.stopLaptopVideo();
-    this.drawLaptopScreen(url, snapshot);
-  }
-
-  public updateTvFramePosition(frame: HTMLIFrameElement | null) {
-    if (!frame || !this._scene || !this._camera || !this._tvMesh || !this._laptopUrl) {
-      if (frame) frame.style.display = "none";
-      return;
-    }
-
-    const engine = this._scene.getEngine();
-    const canvas = engine.getRenderingCanvas();
-    if (!canvas) {
-      frame.style.display = "none";
-      return;
-    }
-
-    const boundingInfo = this._tvMesh.getBoundingInfo();
-    const transform = this._tvMesh.getWorldMatrix();
-    const viewport = this._camera.viewport.toGlobal(engine.getRenderWidth(), engine.getRenderHeight());
-    const projected = boundingInfo.boundingBox.vectors.map((point) => (
-      BABYLON.Vector3.Project(
-        point,
-        transform,
-        this._scene.getTransformMatrix(),
-        viewport,
-      )
-    ));
-
-    const canvasRect = canvas.getBoundingClientRect();
-    const scaleX = canvasRect.width / engine.getRenderWidth();
-    const scaleY = canvasRect.height / engine.getRenderHeight();
-    const xs = projected.map((point) => canvasRect.left + point.x * scaleX);
-    const ys = projected.map((point) => canvasRect.top + point.y * scaleY);
-    const left = Math.min(...xs);
-    const right = Math.max(...xs);
-    const top = Math.min(...ys);
-    const bottom = Math.max(...ys);
-
-    if (right <= 0 || bottom <= 0 || left >= window.innerWidth || top >= window.innerHeight) {
-      frame.style.display = "none";
-      return;
-    }
-
-    frame.style.display = "block";
-    frame.style.left = `${left}px`;
-    frame.style.top = `${top}px`;
-    frame.style.width = `${right - left}px`;
-    frame.style.height = `${bottom - top}px`;
   }
 
   public resetMainPlayerPosition() {
@@ -289,26 +214,6 @@ export class MainScene {
     this._scene?.render();
   }
 
-  private addLaptop(scene: BABYLON.Scene) {
-    const screenFrame = scene.getMeshByName("TV");
-    if (!screenFrame) return;
-
-    this._tvMesh = screenFrame;
-
-    this._laptopScreenTexture = new BABYLON.DynamicTexture(
-      "sharedLaptopScreenTexture",
-      { width: 0, height: 0 },
-      scene,
-    );
-    const screenMaterial = new BABYLON.StandardMaterial("sharedLaptopScreenMaterial", scene);
-    this._laptopScreenMaterial = screenMaterial;
-    screenMaterial.diffuseTexture = this._laptopScreenTexture;
-    screenMaterial.emissiveColor = new BABYLON.Color3(0.85, 0.9, 1);
-    screenMaterial.specularColor = new BABYLON.Color3(1, 1, 1);
-    screenMaterial.backFaceCulling = false;
-    screenFrame.material = screenMaterial;
-  }
-
   private addSunLight(scene: BABYLON.Scene) {
     const light = new BABYLON.DirectionalLight("sunLight", BABYLON.Vector3.Zero(), scene);
     light.position = new BABYLON.Vector3(28, 44, -24);
@@ -343,64 +248,15 @@ export class MainScene {
     return light;
   }
 
-  private addDiscoLights(scene: BABYLON.Scene) {
-    const colors = [
-      new BABYLON.Color3(1, 0.1, 0.35),
-      new BABYLON.Color3(0.1, 0.75, 1),
-      new BABYLON.Color3(0.8, 0.2, 1),
-    ];
 
-    this._discoLights = colors.map((color, index) => {
-      const light = new BABYLON.PointLight(`discoLight${index}`, BABYLON.Vector3.Zero(), scene);
-      light.diffuse = color;
-      light.specular = color;
-      light.intensity = 0;
-      light.range = 42;
+  private addSky(scene: BABYLON.Scene) {
+    const currentHour = new Date().getHours();
+    const isSunlightTime = currentHour >= 6 && currentHour < 19;
+    const skyName = isSunlightTime ? "daySky" : "nightSky";
+    const skyTexturePath = isSunlightTime ? "/day-sky.svg" : "/night-sky.svg";
 
-      const sphere = BABYLON.Mesh.CreateSphere(`discoLightDisplay${index}`, 8, 0.45, scene);
-      sphere.isPickable = false;
-      sphere.setEnabled(false);
-      const material = new BABYLON.StandardMaterial(`discoLightDisplayMaterial${index}`, scene);
-      material.emissiveColor = color;
-      sphere.material = material;
-      this._discoLightSpheres.push(sphere);
-
-      return light;
-    });
-
-    scene.onBeforeRenderObservable.add(() => {
-      const time = performance.now() * 0.001;
-      this._discoLights.forEach((light, index) => {
-        if (light.intensity === 0) return;
-
-        const phase = time * (1.25 + index * 0.35) + index * Math.PI * 0.67;
-        const radius = 12 + index * 4;
-        light.position.set(
-          Math.cos(phase) * radius,
-          8 + Math.sin(phase * 1.7) * 4,
-          -4 + Math.sin(phase) * radius,
-        );
-        light.intensity = 1.4 + Math.sin(time * 5 + index) * 0.45;
-        this._discoLightSpheres[index].position.copyFrom(light.position);
-      });
-    });
-  }
-
-  private setVideoLighting(videoPlaying: boolean) {
-    this._sunLight?.setEnabled(!videoPlaying);
-    this._sunFillLight?.setEnabled(!videoPlaying);
-    this._sunLightSphere?.setEnabled(!videoPlaying);
-
-    this._discoLights.forEach((light, index) => {
-      light.setEnabled(videoPlaying);
-      light.intensity = videoPlaying ? 1.6 : 0;
-      this._discoLightSpheres[index]?.setEnabled(videoPlaying);
-    });
-  }
-
-  private addNightSky(scene: BABYLON.Scene) {
     const skyDome = BABYLON.MeshBuilder.CreateSphere(
-      "nightSky",
+      skyName,
       {
         diameter: 500,
         segments: 48,
@@ -411,15 +267,17 @@ export class MainScene {
     skyDome.infiniteDistance = true;
     skyDome.isPickable = false;
 
-    const skyTexture = new BABYLON.Texture("/night-sky.svg", scene);
+    const skyTexture = new BABYLON.Texture(skyTexturePath, scene);
     skyTexture.coordinatesMode = BABYLON.Texture.SPHERICAL_MODE;
     skyTexture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
     skyTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
 
-    const skyMaterial = new BABYLON.StandardMaterial("nightSkyMaterial", scene);
+    const skyMaterial = new BABYLON.StandardMaterial(`${skyName}Material`, scene);
     skyMaterial.diffuseTexture = skyTexture;
     skyMaterial.emissiveTexture = skyTexture;
-    skyMaterial.emissiveColor = new BABYLON.Color3(0.85, 0.9, 1);
+    skyMaterial.emissiveColor = isSunlightTime
+      ? new BABYLON.Color3(1, 1, 1)
+      : new BABYLON.Color3(0.85, 0.9, 1);
     skyMaterial.specularColor = BABYLON.Color3.Black();
     skyMaterial.disableLighting = true;
     skyMaterial.backFaceCulling = false;
@@ -440,77 +298,4 @@ export class MainScene {
     this._shadowGenerator.addShadowCaster(mesh);
   }
 
-  private drawLaptopScreen(url: string, snapshot: string) {
-    if (!this._laptopScreenTexture || !this._laptopScreenMaterial) return;
-
-    this._laptopScreenMaterial.diffuseTexture = this._laptopScreenTexture;
-
-    const context = this._laptopScreenTexture.getContext();
-    const { width, height } = this._laptopScreenTexture.getSize();
-    context.clearRect(0, 0, width, height);
-    if (url && snapshot) {
-      this._laptopScreenTexture.updateURL(`data:image/png;base64, ${snapshot}`)
-    } else {
-      context.fillStyle = "#eaf9ff";
-      context.font = "bold 48px sans-serif";
-      context.fillText("No URL configured", 54, 225);
-      context.fillStyle = "#6bdcff";
-      context.font = "30px sans-serif";
-      context.fillText("Use the URL control to set the room display.", 54, 282);
-    }
-
-    this._laptopScreenTexture.update();
-  }
-
-  private playLaptopVideo(url: string, delta: number) {
-    if (!this._scene || !this._laptopScreenMaterial) return;
-
-    this.stopLaptopVideo();
-    const videoTexture = new BABYLON.VideoTexture(
-      "sharedLaptopVideoTexture",
-      url,
-      this._scene,
-      false,
-      false,
-      BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
-      {
-        autoPlay: false,
-        loop: true,
-        muted: true,
-      },
-    );
-    this._laptopVideoTexture = videoTexture;
-    this._laptopScreenMaterial.diffuseTexture = videoTexture;
-    this.setVideoLighting(true);
-
-    videoTexture.video.addEventListener("loadedmetadata", () => {
-      videoTexture.video.currentTime = (delta % videoTexture.video.duration);
-      setTimeout(() => {
-        videoTexture.video.muted = false;
-        videoTexture.video.play().catch((error) => {
-          console.error("Failed to play laptop video", error);
-        });
-      }, 1000);
-    });
-
-  }
-
-  private stopLaptopVideo() {
-    this.setVideoLighting(false);
-    if (!this._laptopVideoTexture) return;
-
-    this._laptopVideoTexture.video.pause();
-    this._laptopVideoTexture.dispose();
-    this._laptopVideoTexture = undefined;
-  }
-
-  private isHlsUrl(url: string) {
-    if (!url) return false;
-
-    try {
-      return new URL(url).pathname.toLowerCase().endsWith(".m3u8");
-    } catch {
-      return false;
-    }
-  }
 }

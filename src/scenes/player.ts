@@ -24,7 +24,7 @@ export class PlayerCharacter {
   jumpHeight = 1.5;
 
   forwardLocalSpace = new BABYLON.Vector3(0, 0, 1);
-  startPosition = new BABYLON.Vector3(3., 0.3, -8.);
+  startPosition = new BABYLON.Vector3(0., 5, 0.);
 
   isDancing = false;
 
@@ -218,7 +218,7 @@ export class PlayerCharacter {
     this.character.position.copyFrom(this.characterController.getPosition());
   }
 
-  public afterPhysics(scene: BABYLON.Scene, camera: BABYLON.FollowCamera) {
+  public afterPhysics(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera) {
     const dt = scene.deltaTime / 1000.0;
     if (dt == 0) return;
 

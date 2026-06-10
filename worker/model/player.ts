@@ -37,6 +37,7 @@ export interface RoomStatePayload {
   type: "room-state";
   displayUrl: string;
   displaySnapshot: string;
+  displayLastUpdate: number;
   time: number;
 }
 

@@ -28,6 +28,7 @@ const GameRoom: FC = () => {
   const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
   const [streams, setStreams] = useState<StreamVideo[] | undefined>(undefined);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [howToPlayOpen, setHowToPlayOpen] = useState(true);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
 
@@ -133,7 +134,6 @@ const GameRoom: FC = () => {
         engine.runRenderLoop(() => {
           if (!disposed) {
             mainScene?.render();
-            mainScene?.updateTvFramePosition(tvFrame);
           }
         });
 
@@ -150,7 +150,7 @@ const GameRoom: FC = () => {
 
           if ("type" in payload && payload.type === "room-state") {
             setDraftDisplayUrl(payload.displayUrl);
-            mainScene.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
+            mainScene.tv.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
             return;
           }
 
@@ -201,29 +201,27 @@ const GameRoom: FC = () => {
   return (
     <>
       <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
-      <div className={styles.Controls}>
-        <button type="button" onClick={() => navigate('/')}>Main Menu</button>
-        <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
-        <button type="button" onClick={dance}>Dance</button>
-        <button type="button" aria-label="Room settings" onClick={() => setSettingsOpen(true)}>⚙</button>
-      </div>
-      {settingsOpen && (
-        <div className={styles.ModalBackdrop} role="presentation" onClick={() => setSettingsOpen(false)}>
-          <section
-            aria-labelledby="room-settings-title"
-            aria-modal="true"
-            className={styles.ModalCard}
-            role="dialog"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className={styles.ModalHeader}>
-              <div>
-                <span className={styles.ModalKicker}>Room Settings</span>
-                <h2 id="room-settings-title">Shared display</h2>
-              </div>
-              <button type="button" aria-label="Close room settings" onClick={() => setSettingsOpen(false)}>×</button>
+      <section className={styles.ControlsPanel} aria-label="Room controls">
+        <button
+          type="button"
+          className={styles.PanelToggle}
+          aria-expanded={settingsOpen}
+          onClick={() => setSettingsOpen((open) => !open)}
+        >
+          {settingsOpen ? "Hide controls" : "Controls"}
+        </button>
+        {settingsOpen && (
+          <div className={styles.PanelBody}>
+            <div className={styles.PrimaryControls}>
+              <button type="button" onClick={() => navigate('/')}>Main Menu</button>
+              <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
+              <button type="button" onClick={dance}>Dance</button>
             </div>
             <form className={styles.DisplayUrlControls} onSubmit={saveDisplayUrl}>
+              <div className={styles.PanelHeader}>
+                <span className={styles.PanelKicker}>Room Settings</span>
+                <h2>Shared display</h2>
+              </div>
               <label htmlFor="room-display-url">Laptop URL</label>
               <input
                 id="room-display-url"
@@ -252,14 +250,45 @@ const GameRoom: FC = () => {
                   </button>
                 ))}
               </div>
-              <div className={styles.ModalActions}>
+              <div className={styles.PanelActions}>
                 <button type="button" onClick={() => setSettingsOpen(false)}>Cancel</button>
                 <button type="submit">Share URL</button>
               </div>
             </form>
-          </section>
-        </div>
-      )}
+          </div>
+        )}
+        <section className={styles.KeyboardHelp} aria-label="How to play">
+          <button
+            type="button"
+            className={styles.KeyboardHelpToggle}
+            aria-expanded={howToPlayOpen}
+            onClick={() => setHowToPlayOpen((open) => !open)}
+          >
+            <span className={styles.PanelKicker}>How to play</span>
+            <span>{howToPlayOpen ? "Hide" : "Show"}</span>
+          </button>
+          {howToPlayOpen && (
+            <dl>
+              <div>
+                <dt><kbd>WASD</kbd> <span>or</span> <kbd>Arrows</kbd></dt>
+                <dd>Move</dd>
+              </div>
+              <div>
+                <dt><kbd>Space</kbd></dt>
+                <dd>Jump</dd>
+              </div>
+              <div>
+                <dt><kbd>Q</kbd></dt>
+                <dd>Dance</dd>
+              </div>
+              <div>
+                <dt><kbd>Mouse drag</kbd></dt>
+                <dd>Look around</dd>
+              </div>
+            </dl>
+          )}
+        </section>
+      </section>
     </>
   );
 };

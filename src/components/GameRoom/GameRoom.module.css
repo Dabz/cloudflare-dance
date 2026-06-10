@@ -9,13 +9,14 @@
   right: 0;
 }
 
-.Controls {
+.ControlsPanel {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1;
-  display: flex;
-  gap: 6px;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  width: min(300px, calc(100vw - 24px));
+  color: white;
+  pointer-events: none;
 }
 
 .DisplayFrame {
@@ -28,8 +29,7 @@
   pointer-events: none;
 }
 
-.Controls button {
-  z-index: 100;
+.ControlsPanel button {
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
   background: rgba(10, 16, 28, 0.58);
@@ -40,62 +40,131 @@
   line-height: 1;
   padding: 7px 10px;
   backdrop-filter: blur(8px);
+  pointer-events: auto;
 }
 
-.Controls button:hover {
+.ControlsPanel button:hover {
   background: rgba(24, 36, 58, 0.72);
 }
 
-.ModalBackdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(2, 6, 14, 0.48);
-  backdrop-filter: blur(3px);
-  padding: 18px;
+.PanelToggle {
+  display: block;
+  margin-left: auto;
 }
 
-.ModalCard {
-  width: min(430px, 100%);
+.PanelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: calc(100vh - 58px);
+  margin-top: 8px;
+  overflow: auto;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 22px;
+  border-radius: 18px;
   background: rgba(10, 16, 28, 0.88);
   box-shadow: 0 22px 80px rgba(0, 0, 0, 0.42);
-  color: white;
-  padding: 18px;
+  padding: 12px;
   backdrop-filter: blur(8px);
+  pointer-events: auto;
 }
 
-.ModalHeader {
+.KeyboardHelp {
+  display: grid;
+  gap: 9px;
+  margin-top: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background: rgba(10, 16, 28, 0.68);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.24);
+  padding: 11px;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.KeyboardHelpToggle {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
 }
 
-.ModalHeader h2 {
-  margin: 4px 0 0;
-  font-size: 24px;
+.KeyboardHelpToggle span:last-child {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ControlsPanel .KeyboardHelpToggle:hover {
+  background: transparent;
+}
+
+.KeyboardHelp dl {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+}
+
+.KeyboardHelp div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.KeyboardHelp dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 11px;
+}
+
+.KeyboardHelp dd {
+  margin: 0;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.KeyboardHelp kbd {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-bottom-color: rgba(255, 255, 255, 0.42);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+.PrimaryControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.PanelHeader {
+  display: grid;
+  gap: 3px;
+}
+
+.PanelHeader h2 {
+  margin: 0;
+  font-size: 18px;
   line-height: 1.1;
 }
 
-.ModalHeader button {
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  cursor: pointer;
-  font: inherit;
-  font-size: 18px;
-  line-height: 1;
-  padding: 5px 9px;
-}
-
-.ModalKicker {
+.PanelKicker {
   color: rgba(142, 230, 255, 0.9);
   font-size: 11px;
   font-weight: 700;
@@ -139,7 +208,7 @@
   display: grid;
   gap: 8px;
   margin-top: 4px;
-  max-height: 220px;
+  max-height: 190px;
   overflow: auto;
 }
 
@@ -183,14 +252,14 @@
   object-fit: cover;
 }
 
-.ModalActions {
+.PanelActions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   margin-top: 6px;
 }
 
-.ModalActions button {
+.PanelActions button {
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.1);
@@ -202,13 +271,13 @@
   padding: 7px 10px;
 }
 
-.ModalActions button[type="submit"] {
+.PanelActions button[type="submit"] {
   background: rgba(34, 128, 180, 0.7);
 }
 
 @media (max-width: 640px) {
-  .ModalBackdrop {
-    align-items: flex-end;
-    padding: 12px;
+  .ControlsPanel {
+    left: 12px;
+    width: auto;
   }
 }
