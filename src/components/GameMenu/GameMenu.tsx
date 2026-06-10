@@ -7,8 +7,10 @@ import RoomMenuEntry from "../RoomMenuEntry/RoomMenuEntry.tsx";
 import { getPlayerIdentity } from "../../security/auth.ts";
 import { getDisplayNameCookie, sanitizeDisplayName, setDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName.ts";
 
-type ActiveModal = "displayName" | "rooms";
+type ActiveModal = "displayName" | "rooms" | "createRoom";
 type MenuAction = "join" | "rooms" | "create";
+
+const ROOM_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{2,31}$/;
 
 const GameMenu: FC = () => {
   const client = hc<AppType>("/");
@@ -20,6 +22,9 @@ const GameMenu: FC = () => {
   const [activeModal, setActiveModal] = useState<ActiveModal>();
   const [queuedAction, setQueuedAction] = useState<MenuAction>();
   const [actionLoading, setActionLoading] = useState<MenuAction>();
+  const [createRoomLocation, setCreateRoomLocation] = useState<string>();
+  const [roomId, setRoomId] = useState("");
+  const [roomIdError, setRoomIdError] = useState<string>();
 
   const identityLoaded = serverDisplayName !== undefined;
   const needsDisplayName = serverDisplayName === UNKNOWN_DISPLAY_NAME;
@@ -47,9 +52,14 @@ const GameMenu: FC = () => {
     };
   }, []);
 
-  async function createRoom(loc: string): Promise<Room> {
-    const res = await client.api.room[":loc"].$post({param: {loc: loc}})
+  const savedRoomId = roomId.trim();
+
+  async function createRoom(loc: string, roomId: string): Promise<Room> {
+    const res = await client.api.room[":loc"].$post({param: {loc: loc}, json: {roomId}})
     const roomCreateResponse = await res.json()
+    if (!res.ok) {
+      throw new Error("error" in roomCreateResponse ? roomCreateResponse.error : "Room could not be created.");
+    }
     return roomCreateResponse.room;
   }
 
@@ -104,23 +114,44 @@ const GameMenu: FC = () => {
 
       const roomData = rooms ?? await loadRooms();
       if (action === "join") {
-        const room = pickClosestRoom(roomData) ?? await createRoom(roomData.location);
-        joinRoom(room);
+        const room = pickClosestRoom(roomData);
+        if (room) {
+          joinRoom(room);
+          return;
+        }
+
+        openCreateRoomModal(roomData.location);
         return;
       }
 
-      const room = await createRoom(roomData.location);
-      joinRoom(room);
+      openCreateRoomModal(roomData.location);
     } finally {
       setActionLoading(undefined);
     }
   }
 
-  async function createAndJoinRoom(loc: string) {
+  function openCreateRoomModal(loc: string) {
+    setCreateRoomLocation(loc);
+    setRoomId("");
+    setRoomIdError(undefined);
+    setActiveModal("createRoom");
+  }
+
+  async function submitCreateRoom() {
+    if (!createRoomLocation) return;
+
+    if (!ROOM_ID_PATTERN.test(savedRoomId)) {
+      setRoomIdError("Use 3-32 letters, numbers, dashes, or underscores.");
+      return;
+    }
+
     setActionLoading("create");
+    setRoomIdError(undefined);
     try {
-      const room = await createRoom(loc);
+      const room = await createRoom(createRoomLocation, savedRoomId);
       joinRoom(room);
+    } catch (error) {
+      setRoomIdError(error instanceof Error ? error.message : "Room could not be created.");
     } finally {
       setActionLoading(undefined);
     }
@@ -145,6 +176,7 @@ const GameMenu: FC = () => {
 
   function closeModal() {
     setQueuedAction(undefined);
+    setRoomIdError(undefined);
     setActiveModal(undefined);
   }
 
@@ -241,7 +273,7 @@ const GameMenu: FC = () => {
                   ))}
                 </div>
                 {rooms.roomsInLocation.length === 0 && (
-                  <button className={styles.CreateRoomButton} onClick={() => void createAndJoinRoom(rooms.location)}>Create a new Room</button>
+                  <button className={styles.CreateRoomButton} onClick={() => openCreateRoomModal(rooms.location)}>Create a new Room</button>
                 )}
 
                 {rooms.roomsOutsideLocation.length > 0 && (
@@ -259,6 +291,40 @@ const GameMenu: FC = () => {
                 )}
               </div>
             )}
+          </section>
+        </div>
+      )}
+
+      {activeModal === "createRoom" && (
+        <div className={styles.ModalBackdrop} role="presentation">
+          <section aria-labelledby="create-room-title" aria-modal="true" className={styles.ModalCard} role="dialog">
+            <div className={styles.ModalHeader}>
+              <div>
+                <h2 id="create-room-title">Create Room</h2>
+              </div>
+              <button className={styles.IconButton} onClick={closeModal}>Close</button>
+            </div>
+
+            <form className={styles.DisplayNameForm} onSubmit={(event) => { event.preventDefault(); void submitCreateRoom(); }}>
+              <label className={styles.DisplayNameField}>
+                <span>Room ID</span>
+                <input
+                  autoFocus
+                  maxLength={32}
+                  onChange={(event) => {
+                    setRoomId(event.target.value);
+                    setRoomIdError(undefined);
+                  }}
+                  placeholder="orange-room"
+                  type="text"
+                  value={roomId}
+                />
+              </label>
+              {roomIdError && <p className={styles.ErrorText}>{roomIdError}</p>}
+              <button className={styles.PrimaryButton} disabled={actionLoading === "create" || !savedRoomId} type="submit">
+                Create a new Room
+              </button>
+            </form>
           </section>
         </div>
       )}

@@ -21,6 +21,10 @@ export type RoomUpsertResponse = {
   created: boolean;
 };
 
+export type RoomCreateErrorResponse = {
+  error: string;
+};
+
 export type MeResponse = {
   location: string;
   id: string;
@@ -93,7 +97,17 @@ const route = app
   })
   .post("/room/:loc", async (c) => {
     const { loc } = c.req.param();
-    const room = await mds.upsertRoom(crypto.randomUUID(), loc);
+    const body = await c.req.json<{ roomId?: unknown }>().catch(() => ({}));
+    const roomId = typeof body.roomId === "string" ? body.roomId.trim() : "";
+
+    if (!/^[A-Za-z0-9][A-Za-z0-9_-]{2,31}$/.test(roomId)) {
+      return c.json({ error: "Room ID must be 3-32 letters, numbers, dashes, or underscores." } as RoomCreateErrorResponse, 400);
+    }
+
+    const room = await mds.createRoom(roomId, loc);
+    if (!room) {
+      return c.json({ error: "Room ID is already taken." } as RoomCreateErrorResponse, 409);
+    }
 
     const res: RoomUpsertResponse = {
       room: room,
@@ -156,7 +170,8 @@ async function scheduled_clean_rooms(env: Env, ctx: ExecutionContext) {
     const gameRoom = env.GAME_ROOM.getByName(room.ID);
     await gameRoom.deleteOldSessions();
   }
-  mds.deleteOldEmptyRooms();
+  const deletedRoomCount = mds.deleteOldEmptyRooms();
+  console.log(`Deleted ${deletedRoomCount} rooms`)
 }
 
 export { GameRoom } from "./durable/gameroom";

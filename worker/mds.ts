@@ -2,6 +2,18 @@ import { env } from "cloudflare:workers";
 import type {Room} from "./model/room";
 
 export default {
+  async createRoom(id: string, colo: string): Promise<Room | undefined> {
+    const now = Date.now();
+    const res = await env.CLOUDFLARE_PLEASE_METADATA.prepare(
+      `INSERT INTO ROOMS (ID, LOCATION, PLAYER_COUNT, CREATED_AT, LAST_UPDATED_AT) VALUES (?, ?, ?, ?, ?)
+      ON CONFLICT (ID) DO NOTHING
+      RETURNING *`,
+    ).bind(id, colo, 0, now, now)
+    .run<Room>();
+
+    return res.results.at(0)
+  },
+
   async upsertRoom(id: string, colo: string): Promise<Room> {
     const now = Date.now();
     const res = await env.CLOUDFLARE_PLEASE_METADATA.prepare(

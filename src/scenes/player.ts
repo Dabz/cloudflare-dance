@@ -5,6 +5,30 @@ import type {UsableObject} from "./object";
 import type {InteractionSubscriber} from "./main";
 const fontData = await (await fetch("/font.json")).json();
 
+const textColors = [
+  new BABYLON.Color4(1, 0.95, 0.82, 1),
+  new BABYLON.Color4(1, 0.27, 0.04, 1),
+  new BABYLON.Color4(1, 0.48, 0.09, 1),
+  new BABYLON.Color4(0.03, 0.02, 0.01, 1),
+];
+
+function createText(name: string, text: string, scene: BABYLON.Scene, size = 1): BABYLON.Mesh {
+  const mesh = BABYLON.MeshBuilder.CreateText(name, text, fontData, {
+    size,
+    faceColors: textColors,
+    resolution: 2,
+    depth: 0.16,
+  }, scene, earcut);
+  const material = new BABYLON.StandardMaterial(`${name}_orange`, scene);
+  material.diffuseColor = new BABYLON.Color3(1, 0.48, 0.09);
+  material.emissiveColor = new BABYLON.Color3(0.42, 0.12, 0.01);
+  material.specularColor = new BABYLON.Color3(1, 0.76, 0.22);
+  mesh.material = material;
+  mesh.scaling.x = 1.08;
+  mesh.rotation.z = -0.08;
+  return mesh;
+}
+
 export class PlayerCharacter {
   mainPlayer: boolean;
   id: string;
@@ -59,7 +83,7 @@ export class PlayerCharacter {
     player.characterController = new BABYLON.PhysicsCharacterController(player.characterPosition, {capsuleHeight: h, capsuleRadius: r}, scene);
 
     if (!mainPlayer && otherPlayer) {
-      player.text = BABYLON.MeshBuilder.CreateText(otherPlayer.id, otherPlayer.displayName, fontData, { size: 1,  resolution: 1, depth: 0.1}, scene, earcut);
+      player.text = createText(otherPlayer.id, otherPlayer.displayName, scene);
       player.updateRotation(otherPlayer.rotationY ?? 0, false);
     }
 
@@ -311,13 +335,7 @@ export class PlayerCharacter {
   }
 
   createInteractHint() {
-    const color = [
-      new BABYLON.Color4(0, 0.8, 1, 0.5),
-      new BABYLON.Color4(0, 0.9, 1, 0.5),
-      new BABYLON.Color4(0, 0.9, 1, 0.5),
-      new BABYLON.Color4(0, 0, 1, 0.5),
-    ]
-    this.interact = BABYLON.MeshBuilder.CreateText("hint_interact", "Press E", fontData, { size: 1, faceColors: color, resolution: 1, depth: 0.1}, this.character.getScene(), earcut);
+    this.interact = createText("hint_interact", "Press E", this.character.getScene(), 0.9);
     this.interact.position = this.character.position.clone();
     this.interact.position.y += 1;
   }

@@ -27,13 +27,19 @@
 .ControlsPanel::before {
   content: "";
   position: absolute;
-  inset: -12px -10px auto auto;
+  inset: -6px -10px auto auto;
   z-index: -1;
   width: min(380px, 86vw);
-  height: 150px;
+  height: 60px;
   background:
-    linear-gradient(112deg, transparent 0 12%, var(--room-black) 12.5% 78%, transparent 78.5% 100%),
-    radial-gradient(circle, rgba(255, 196, 71, 0.9) 0 2px, transparent 2px) 0 0 / 22px 22px;
+    linear-gradient(
+      112deg,
+      transparent 0 12%,
+      var(--room-black) 12.5% 78%,
+      transparent 78.5% 100%
+    ),
+    radial-gradient(circle, rgba(255, 196, 71, 0.9) 0 2px, transparent 2px) 0
+      0 / 22px 22px;
   filter: drop-shadow(12px 14px 0 rgba(255, 122, 22, 0.72));
   opacity: 0.9;
   transform: rotate(-3deg);
@@ -56,14 +62,20 @@
   border-radius: 0;
   color: var(--room-black);
   background: var(--room-paper);
-  box-shadow: 6px 6px 0 var(--room-black), 10px 10px 0 rgba(255, 122, 22, 0.9);
+  box-shadow:
+    6px 6px 0 var(--room-black),
+    10px 10px 0 rgba(255, 122, 22, 0.9);
   clip-path: polygon(0 12%, 96% 0, 100% 84%, 6% 100%);
   cursor: pointer;
   font: 950 12px/1 var(--sans, system-ui, sans-serif);
   letter-spacing: 0.06em;
   padding: 10px 13px;
   text-transform: uppercase;
-  transition: transform 150ms ease, filter 150ms ease, opacity 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform 150ms ease,
+    filter 150ms ease,
+    opacity 150ms ease,
+    box-shadow 150ms ease;
 }
 
 .ControlsPanel button {
@@ -101,7 +113,12 @@
 
 .PrimaryControls button:nth-child(3) {
   color: var(--room-cream);
-  background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
 }
 
 .KeyboardHelp {
@@ -112,7 +129,9 @@
   padding: 16px;
   color: var(--room-black);
   background: var(--room-paper);
-  box-shadow: 10px 10px 0 var(--room-black), 18px 18px 0 rgba(255, 122, 22, 0.86);
+  box-shadow:
+    10px 10px 0 var(--room-black),
+    18px 18px 0 rgba(255, 122, 22, 0.86);
   clip-path: polygon(0 6%, 97% 0, 100% 94%, 4% 100%);
   pointer-events: auto;
   transform: rotate(1.5deg);
@@ -123,7 +142,12 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle, rgba(8, 6, 4, 0.18) 0 2px, transparent 2px) 0 0 / 20px 20px;
+  background: radial-gradient(
+      circle,
+      rgba(8, 6, 4, 0.18) 0 2px,
+      transparent 2px
+    )
+    0 0 / 20px 20px;
   opacity: 0.7;
 }
 
@@ -224,8 +248,16 @@
   place-items: center;
   padding: 18px;
   background:
-    linear-gradient(118deg, rgba(8, 6, 4, 0.88) 0 44%, rgba(255, 122, 22, 0.78) 44% 100%),
-    radial-gradient(circle at 80% 14%, rgba(255, 196, 71, 0.52), transparent 22rem);
+    linear-gradient(
+      118deg,
+      rgba(8, 6, 4, 0.88) 0 44%,
+      rgba(255, 122, 22, 0.78) 44% 100%
+    ),
+    radial-gradient(
+      circle at 80% 14%,
+      rgba(255, 196, 71, 0.52),
+      transparent 22rem
+    );
   backdrop-filter: blur(8px);
 }
 
@@ -242,13 +274,20 @@
   right: -24vw;
   top: 11vh;
   background: var(--room-black);
-  box-shadow: 0 28px 0 var(--room-cream), 0 50px 0 rgba(255, 196, 71, 0.86);
+  box-shadow:
+    0 28px 0 var(--room-cream),
+    0 50px 0 rgba(255, 196, 71, 0.86);
   transform: rotate(-14deg) skewX(-18deg);
 }
 
 .TvPopupBackdrop::after {
   inset: 0;
-  background: radial-gradient(circle, rgba(255, 242, 210, 0.28) 0 2px, transparent 2px) 0 0 / 24px 24px;
+  background: radial-gradient(
+      circle,
+      rgba(255, 242, 210, 0.28) 0 2px,
+      transparent 2px
+    )
+    0 0 / 24px 24px;
   opacity: 0.46;
 }
 
@@ -263,7 +302,10 @@
   overflow: auto;
   color: var(--room-ink);
   background: var(--room-paper);
-  box-shadow: 18px 18px 0 var(--room-black), 30px 30px 0 var(--room-orange), 0 34px 100px rgba(0, 0, 0, 0.55);
+  box-shadow:
+    18px 18px 0 var(--room-black),
+    30px 30px 0 var(--room-orange),
+    0 34px 100px rgba(0, 0, 0, 0.55);
   clip-path: polygon(0 4%, 98% 0, 100% 94%, 4% 100%);
   padding: clamp(20px, 4vw, 34px);
 }
@@ -274,8 +316,13 @@
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(154deg, transparent 0 58%, rgba(255, 122, 22, 0.18) 58.2% 100%),
-    radial-gradient(circle, rgba(8, 6, 4, 0.16) 0 2px, transparent 2px) 0 0 / 22px 22px;
+    linear-gradient(
+      154deg,
+      transparent 0 58%,
+      rgba(255, 122, 22, 0.18) 58.2% 100%
+    ),
+    radial-gradient(circle, rgba(8, 6, 4, 0.16) 0 2px, transparent 2px) 0 0 /
+      22px 22px;
 }
 
 .TvPopupHeader {
@@ -353,7 +400,12 @@
 .TvUrlRow button,
 .PanelActions button[type="submit"] {
   color: var(--room-cream);
-  background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
+  background: linear-gradient(
+    102deg,
+    var(--room-hot),
+    var(--room-orange) 58%,
+    var(--room-gold)
+  );
 }
 
 .TvVideoPicker,
@@ -418,7 +470,9 @@
   padding: 14px;
   color: var(--room-black);
   background: var(--room-paper);
-  box-shadow: 10px 10px 0 var(--room-black), 18px 18px 0 rgba(255, 122, 22, 0.86);
+  box-shadow:
+    10px 10px 0 var(--room-black),
+    18px 18px 0 rgba(255, 122, 22, 0.86);
   clip-path: polygon(0 5%, 98% 0, 100% 95%, 4% 100%);
   pointer-events: auto;
 }
@@ -483,13 +537,18 @@
 
   .ControlsPanel button,
   .TvDisplayPopup button {
-    box-shadow: 4px 4px 0 var(--room-black), 7px 7px 0 rgba(255, 122, 22, 0.9);
+    box-shadow:
+      4px 4px 0 var(--room-black),
+      7px 7px 0 rgba(255, 122, 22, 0.9);
   }
 
   .TvDisplayPopup {
     max-height: calc(100svh - 24px);
     clip-path: polygon(0 2%, 98% 0, 100% 98%, 2% 100%);
-    box-shadow: 10px 10px 0 var(--room-black), 18px 18px 0 var(--room-orange), 0 24px 70px rgba(0, 0, 0, 0.55);
+    box-shadow:
+      10px 10px 0 var(--room-black),
+      18px 18px 0 var(--room-orange),
+      0 24px 70px rgba(0, 0, 0, 0.55);
     padding: 16px;
   }
 

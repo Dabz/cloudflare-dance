@@ -1,8 +1,10 @@
 import { DurableObject, env } from "cloudflare:workers";
 import puppeteer from "@cloudflare/puppeteer";
-import type { Player, PlayerClientMessage, PlayerDancePayload, PlayerUpdates, PlayerUpdatesPayload, RoomStatePayload } from "../model/player";
+import type { ChatPayload, ChatRequest, WSClientMessage, PlayerDancePayload, PlayerUpdateRequest, PlayerUpdates, PlayerUpdatesPayload, RoomDisplayUrlRequest, RoomStatePayload } from "../model/gameroom";
 import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity} from "../auth";
 import Const from "../const"
+import type {Player, PlayerIdentity} from "../model/player";
+import type {Chat} from "../model/chat";
 
 interface SessionData {
   id: string;
@@ -71,6 +73,20 @@ export class GameRoom extends DurableObject<Env> {
                               CREATE INDEX IF NOT EXISTS SESSION_ACTIVE_IDX
                               ON SESSIONS (ACTIVE);
                               `);
+
+    this.ctx.storage.sql.exec(`
+                              CREATE TABLE IF NOT EXISTS CHATS (
+                                ID TEXT PRIMARY KEY,
+                                CONTENT TEXT INTEGER,
+                                CREATED_AT INTEGER,
+                                IS_INTERNAL NUMBER DEFAULT 0,
+                                PLAYER_ID TEXT,
+                              );
+                              `);
+    this.ctx.storage.sql.exec(`
+                              CREATE INDEX IF NOT EXISTS CHATS_CREATED_IDX
+                              ON SESSIONS (CREATED_AT);
+                              `);
   }
 
   deleteOldSessions() {
@@ -110,17 +126,7 @@ export class GameRoom extends DurableObject<Env> {
     } catch (e) {
       console.error("Failed deleting old sessions", e)
     }
-    const now = Date.now();
-    this.ctx.storage.sql.exec(
-      `
-                                            INSERT INTO SESSIONS (ID, CREATED_AT, LAST_SEEN, ACTIVE) VALUES (?, ?, ?, 1)
-                                             ON CONFLICT (ID) DO UPDATE SET LAST_SEEN = excluded.LAST_SEEN, ACTIVE = excluded.ACTIVE
-                                             `,
-      identity.id,
-      now,
-      now,
-    );
-
+    this.upsertSession(identity);
     const webSocketPair = new WebSocketPair();
     const [client, server] = Object.values(webSocketPair);
     const sessionInfo: SessionData = { id: identity.id, displayName: identity.displayName };
@@ -140,9 +146,52 @@ export class GameRoom extends DurableObject<Env> {
     });
   }
 
+  private upsertChat(id: string, content: string, options: { isInternal: 0, playerId: string}) {
+    const now = Date.now();
+    this.ctx.storage.sql.exec(
+      `
+                                            INSERT INTO CHATS (ID, CONTENT, CREATED_AT, IS_INTERNAL, PLAYER_ID) VALUES (?, ?, ?, ?, ?)
+                                             ON CONFLICT (ID) DO UPDATE SET CONTENT = excluded.CONTENT
+                                             `, id, content, now, options.isInternal, options.playerId
+    );
+  }
+
+  private upsertSession(identity: PlayerIdentity) {
+    const now = Date.now();
+    this.ctx.storage.sql.exec(
+      `
+                                            INSERT INTO SESSIONS (ID, CREATED_AT, LAST_SEEN, ACTIVE) VALUES (?, ?, ?, 1)
+                                             ON CONFLICT (ID) DO UPDATE SET LAST_SEEN = excluded.LAST_SEEN, ACTIVE = excluded.ACTIVE
+                                             `,
+      identity.id,
+      now,
+      now
+    );
+  }
+
+  public getChats(): Chat[] {
+    const res = this.ctx.storage.sql.exec(`SELECT ID, CONTENT, CREATED_AT, IS_INTERNAL, PLAYER_ID FROM CHAT ORDER BY CREATED_AT DESC LIMITS 50`);
+    const chats: Chat[] = [];
+    while (true) {
+      const r = res.next();
+      if (r.done) {
+        break;
+      }
+      const chat = {
+        id: r.value["ID"],
+        content: r.value["CONTENT"],
+        playerId: r.value["PLAYER_ID"],
+        isInternal: r.value["IS_INTERNAL"],
+        createdAt: r.value["CREATED_AT"]
+      } as Chat;
+      chats.push(chat);
+    }
+    return chats;
+  }
+
   public getSession(id: string, displayName: string): Player {
     const res = this.ctx.storage.sql.exec(`SELECT ID, CREATED_AT, LAST_SEEN, X, Y, Z, ROTATION_Y FROM SESSIONS WHERE ID = ?`, id);
-    const next = res .next();
+    const next = res.next();
 
     if (next.done) {
       return {
@@ -204,37 +253,66 @@ export class GameRoom extends DurableObject<Env> {
   async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string) {
     const session = ws.deserializeAttachment() as SessionData;
     try {
-      const incomingMessage = JSON.parse(message.toString()) as PlayerClientMessage;
+      const incomingMessage = JSON.parse(message.toString()) as WSClientMessage;
       if ("type" in incomingMessage && incomingMessage.type === "dance") {
-        this.broadcastDance(ws, session.id);
-        return;
+        return this.handleDanceMessage(ws, session);
       }
 
       if ("type" in incomingMessage && incomingMessage.type === "display-url") {
-        const displayUrl = await this.setDisplayUrl(incomingMessage.url);
-        if (!displayUrl || isHlsUrl(displayUrl)) {
-          await this.ctx.storage.delete(DISPLAY_IMAGE_STORAGE_KEY);
-        } else {
-          await this.refreshSnapshotUrlToPNG(displayUrl);
-        }
-        await this.broadcastRoomState();
-        return;
+        return await this.handleDisplayUrlMessage(incomingMessage);
       }
 
-      const incomingPlayerData = incomingMessage as Player;
-      const playerData: Player = {
-        ...incomingPlayerData,
-        id: session.id,
-        displayName: session.displayName,
-        rotationY: incomingPlayerData.rotationY ?? 0,
-      };
-      this.maybeUpdateLastseen(playerData.id)
-      this.players[session.id] = playerData;
-      this.updateUser(playerData);
-      this.ensureBroadcastLoop();
+      if ("type" in incomingMessage && incomingMessage.type === "player") {
+        this.handlePlayerMessage(incomingMessage, session);
+      }
+      if ("type" in incomingMessage && incomingMessage.type === "chat") {
+        this.handleChat(incomingMessage, session)
+      }
     } catch(e) {
       console.error("failed processing WS incomming message", e)
     }
+  }
+
+  private handlePlayerMessage(incomingMessage: PlayerUpdateRequest & Record<"type", unknown>, session: SessionData) {
+    const incomingPlayerData = incomingMessage.player as Player;
+    const playerData: Player = {
+      ...incomingPlayerData,
+      id: session.id,
+      displayName: session.displayName,
+      rotationY: incomingPlayerData.rotationY ?? 0,
+    };
+    this.maybeUpdateLastseen(playerData.id);
+    this.players[session.id] = playerData;
+    this.updateUser(playerData);
+    this.ensureBroadcastLoop();
+  }
+
+  private async handleDisplayUrlMessage(incomingMessage: RoomDisplayUrlRequest) {
+    const displayUrl = await this.setDisplayUrl(incomingMessage.url);
+    if (!displayUrl || isHlsUrl(displayUrl)) {
+      await this.ctx.storage.delete(DISPLAY_IMAGE_STORAGE_KEY);
+    } else {
+      await this.refreshSnapshotUrlToPNG(displayUrl);
+    }
+    await this.broadcastRoomState();
+    return;
+  }
+  private async handleChat(incomingMessage: ChatRequest, session: SessionData) {
+    const chat: Chat = {
+      id: incomingMessage.id,
+      content: incomingMessage.content,
+      playerId: session.id,
+      isInternal: 0,
+      createdAt: new Date().getTime()
+    }
+    this.upsertChat(incomingMessage.id, incomingMessage.content, {isInternal: 0, playerId: session.id})
+    this.broadcastChat(chat)
+    return;
+  }
+
+  private handleDanceMessage(ws: WebSocket, session: SessionData) {
+    this.broadcastDance(ws, session.id);
+    return;
   }
 
   private broadcastDance(sender: WebSocket, playerId: string) {
@@ -249,6 +327,17 @@ export class GameRoom extends DurableObject<Env> {
       if (client !== sender) {
         client.send(payloadString);
       }
+    }
+  }
+  private broadcastChat(chat: Chat) {
+    const payload: ChatPayload = {
+      type: "chat",
+      chat: chat
+    };
+    const payloadString = JSON.stringify(payload);
+
+    for (const client of this.ctx.getWebSockets()) {
+      client.send(payloadString);
     }
   }
 
@@ -269,7 +358,7 @@ export class GameRoom extends DurableObject<Env> {
         height: 512
       })
       await page.emulateMediaFeatures([
-         { name: "prefers-color-scheme", value: "dark" }
+        { name: "prefers-color-scheme", value: "dark" }
       ]);
 
       await page.goto(url);
@@ -339,6 +428,7 @@ export class GameRoom extends DurableObject<Env> {
     if (Object.entries(this.players).length > 0) {
       const updatesToSend: PlayerUpdates = { ...this.players };
       const payload: PlayerUpdatesPayload = {
+        type: "player",
         players: updatesToSend,
         time: new Date().getTime(),
       };

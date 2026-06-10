@@ -235,10 +235,17 @@
 }
 
 .ModalCopy,
-.LoadingText {
+.LoadingText,
+.ErrorText {
   color: rgba(22, 11, 4, 0.72);
   font-size: 1.04rem;
   line-height: 1.4;
+}
+
+.ErrorText {
+  color: #b51f00;
+  font-weight: 950;
+  text-transform: uppercase;
 }
 
 .DisplayNameForm {

@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
 import type {StreamVideo} from "../../../worker/model/streams";
 import {listStreams} from "../../streams";
+import type {PlayerUpdateRequest} from "../../../worker/model/gameroom";
 
 function getDisplayNameForJoin(displayName: string): string {
   if (displayName !== UNKNOWN_DISPLAY_NAME) return displayName;
@@ -145,7 +146,11 @@ const GameRoom: FC = () => {
               rotationY: mainScene.mainPlayer.rotationY,
               lastSeenSync: new Date().getTime(),
             }
-            ws.send(JSON.stringify(player))
+            const playerUpdateRequest: PlayerUpdateRequest = {
+              player: player,
+              type: "player"
+            }
+            ws.send(JSON.stringify(playerUpdateRequest))
           }, 100);
 
           engine.runRenderLoop(() => {
