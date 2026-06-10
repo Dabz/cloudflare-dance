@@ -1,6 +1,6 @@
 import { Hono } from "hono"
 import { env } from "cloudflare:workers";
-import { createPlayerIdCookie, getColo, getDisplayNameOverride, getPlayerId, getPlayerIdentity } from "./auth";
+import { createPlayerIdCookie, getLocation, getDisplayNameOverride, getPlayerId, getPlayerIdentity } from "./auth";
 import mds from "./mds";
 import type { Room } from "./model/room";
 import type {Player} from "./model/player";
@@ -44,7 +44,7 @@ export type ChatHistoryResponse = {
 const route = app
   .get("/me", (c) => {
     const cf = c.req.raw.cf;
-    const colo = getColo(cf);
+    const colo = getLocation(cf);
     const existingPlayerId = getPlayerId(c.req.raw.headers);
     const identity = getPlayerIdentity(c.req.raw.headers);
 
@@ -96,7 +96,7 @@ const route = app
   })
   .get("/room", async (c) => {
     const rooms = await mds.listRooms();
-    const colo = getColo(c.req.raw.cf);
+    const colo = getLocation(c.req.raw.cf);
     const roomsColo = rooms.filter((r) => r.LOCATION == colo);
     const roomsNotInColo = rooms.filter((r) => r.LOCATION !== colo);
 

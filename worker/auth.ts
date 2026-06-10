@@ -61,10 +61,9 @@ export function getPlayerIdentity(headers: Headers, displayNameOverride?: string
   };
 }
 
-export function getColo(cf: unknown): string {
-  if (cf && typeof cf === "object" && "colo" in cf) {
-    const { colo } = cf as { colo?: unknown };
-    return typeof colo === "string" ? colo : "UNKNOWN";
+export function getLocation(cf: CfProperties): string {
+  if (cf && typeof cf === "object" && "country" in cf) {
+    return `${cf.city} ${cf.country}` as string;
   }
 
   return UNKNOWN_DISPLAY_NAME;

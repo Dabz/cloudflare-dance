@@ -135,7 +135,7 @@ export class MainScene {
     this._camera.setTarget(this.mainPlayer.characterPosition);
     this.mainPlayer.addListenersToKeyboardAndMouse(this._scene, this._camera);
 
-    // Display tick update: compute new camera position/target, update the capsule for the character display
+    // Display tick update: compute new camera position/target, update the character display
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
       this.mainPlayer.beforeRender(scene, this._camera);
     });
