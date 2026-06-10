@@ -1,12 +1,14 @@
 import * as BABYLON from "@babylonjs/core";
 import type {Player} from "../../worker/model/player";
 import earcut from 'earcut';
+import type {UsableObject} from "./object";
 const fontData = await (await fetch("/font.json")).json();
 
 export class PlayerCharacter {
   mainPlayer: boolean;
   id: string;
   text?: BABYLON.Mesh;
+  interact?: BABYLON.Mesh;
 
   character: BABYLON.Mesh;
   characterController: BABYLON.PhysicsCharacterController;
@@ -27,6 +29,7 @@ export class PlayerCharacter {
   startPosition = new BABYLON.Vector3(0., 5, 0.);
 
   isDancing = false;
+  usableObject?: UsableObject = undefined;
 
   public static createPlayer(mainPlayer: boolean, id: string, scene: BABYLON.Scene, otherPlayer?: Player): PlayerCharacter {
     const player = new PlayerCharacter()
@@ -128,6 +131,9 @@ export class PlayerCharacter {
         }
         case BABYLON.KeyboardEventTypes.KEYUP: {
           keyDowns -= 1;
+          if (kbInfo.event.key == 'e' && this.usableObject) {
+            this.usableObject.interact(this.character.getScene(), this);
+          }
           if (kbInfo.event.key == 'w' || kbInfo.event.key == 's' || kbInfo.event.key == 'ArrowUp' || kbInfo.event.key == 'ArrowDown') {
             this.inputDirection.z = 0;
           }
@@ -216,6 +222,20 @@ export class PlayerCharacter {
       this.characterController.setPosition(this.startPosition);
     }
     this.character.position.copyFrom(this.characterController.getPosition());
+
+    if (this.usableObject && !this.interact) {
+      this.createInteractHint();
+    }
+
+    if (!this.usableObject && this.interact) {
+      this.interact.dispose();
+      this.interact = undefined;
+    }
+
+    if (this.interact) {
+      this.interact.position = this.character.position.clone();
+      this.interact.position.y += 1;
+    }
   }
 
   public afterPhysics(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera) {
@@ -258,6 +278,10 @@ export class PlayerCharacter {
     this.rotationY = rotationY;
     if (this.mainPlayer || !animate) {
       this.character.rotation.y = rotationY;
+
+      if (this.interact) {
+        this.interact.rotation.y = rotationY;
+      }
       return;
     }
 
@@ -268,7 +292,6 @@ export class PlayerCharacter {
     if (this.text) {
       BABYLON.Animation.CreateAndStartAnimation("smoothRotate", this.text, "rotation.y", 60, 6, this.text.rotation.y, rotationY * Math.PI, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT, easingFunction);
     }
-
   }
 
   resetPosition() {
@@ -279,6 +302,19 @@ export class PlayerCharacter {
     this.characterController.setVelocity(BABYLON.Vector3.Zero());
     this.inputDirection.set(0, 0, 0);
   }
+
+  createInteractHint() {
+    const color = [
+      new BABYLON.Color4(0, 0.8, 1, 0.5),
+      new BABYLON.Color4(0, 0.9, 1, 0.5),
+      new BABYLON.Color4(0, 0.9, 1, 0.5),
+      new BABYLON.Color4(0, 0, 1, 0.5),
+    ]
+    this.interact = BABYLON.MeshBuilder.CreateText("hint_interact", "Press E", fontData, { size: 1, faceColors: color, resolution: 1, depth: 0.1}, this.character.getScene(), earcut);
+    this.interact.position = this.character.position.clone();
+    this.interact.position.y += 1;
+  }
+
 
   dance() {
     this.isDancing = true;

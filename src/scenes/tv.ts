@@ -1,6 +1,8 @@
 import * as BABYLON from '@babylonjs/core'
+import type {PlayerCharacter} from './player';
+import {UsableObject} from './object';
 
-export class TV {
+export class TV extends UsableObject {
   _laptopScreenTexture?: BABYLON.DynamicTexture;
   _laptopVideoTexture?: BABYLON.VideoTexture;
   _laptopScreenMaterial?: BABYLON.StandardMaterial;
@@ -117,6 +119,24 @@ export class TV {
 
     this.stopLaptopVideo();
     this.drawLaptopScreen(url, snapshot);
+  }
+
+  public interact(scene: BABYLON.Scene, mainPlayer: PlayerCharacter) {
+    console.log("Clicked!");
+  }
+
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public beforeRender(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera, mainPlayer?: PlayerCharacter) {
+    if (mainPlayer) {
+      const distance = BABYLON.Vector3.Distance(this._tvMesh.getAbsolutePosition(), mainPlayer.character.getAbsolutePosition());
+      if (distance < this.InteractDistance && mainPlayer.usableObject != this) {
+        mainPlayer.usableObject = this;
+      } 
+      if (distance > this.InteractDistance && mainPlayer.usableObject == this) {
+        mainPlayer.usableObject = null;
+      }
+    }
   }
 
 }

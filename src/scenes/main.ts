@@ -71,10 +71,6 @@ export class MainScene {
       }
     });
 
-
-    this.tv = new TV();
-    this.tv.init(scene);
-
     const planeMesh = scene.getMeshByName("Cube.006");
     if (planeMesh) {
     planeMesh.scaling.set(0.03, 3, 1);
@@ -98,11 +94,20 @@ export class MainScene {
     fixedMass.body.addConstraint(plane.body, joint);
     }
 
+    this.addTV(scene);
+
     if (mainPlayer) {
       this.addMainPlayer(mainPlayer);
     }
 
     return scene;
+  }
+  public addTV(scene: BABYLON.Scene) {
+    this.tv = new TV();
+    this.tv.init(scene);
+    this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
+      this.tv.beforeRender(scene, this._camera, this.mainPlayer);
+    });
   }
 
   public addMainPlayer(player: Player) {
@@ -278,11 +283,11 @@ export class MainScene {
     skyMaterial.emissiveColor = isSunlightTime
       ? new BABYLON.Color3(1, 1, 1)
       : new BABYLON.Color3(0.85, 0.9, 1);
-    skyMaterial.specularColor = BABYLON.Color3.Black();
-    skyMaterial.disableLighting = true;
-    skyMaterial.backFaceCulling = false;
+      skyMaterial.specularColor = BABYLON.Color3.Black();
+      skyMaterial.disableLighting = true;
+      skyMaterial.backFaceCulling = false;
 
-    skyDome.material = skyMaterial;
+      skyDome.material = skyMaterial;
   }
 
   private addShadowCaster(mesh?: BABYLON.AbstractMesh | null) {
