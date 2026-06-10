@@ -1,6 +1,7 @@
 import * as BABYLON from '@babylonjs/core'
 import type {PlayerCharacter} from './player';
 import {UsableObject} from './object';
+import type {InteractionSubscriber} from './main';
 
 export class TV extends UsableObject {
   _laptopScreenTexture?: BABYLON.DynamicTexture;
@@ -9,6 +10,12 @@ export class TV extends UsableObject {
   _laptopUrl = "";
   _tvMesh?: BABYLON.AbstractMesh;
   _scene: BABYLON.Scene;
+  _onInteract?: InteractionSubscriber;
+
+  constructor(onInteract?: InteractionSubscriber) {
+    super();
+    this._onInteract = onInteract;
+  }
 
   init(scene: BABYLON.Scene) {
     this._scene = scene;
@@ -16,6 +23,13 @@ export class TV extends UsableObject {
     if (!screenFrame) return;
 
     this._tvMesh = screenFrame;
+    screenFrame.isPickable = true;
+    screenFrame.actionManager = new BABYLON.ActionManager(scene);
+    screenFrame.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, () => {
+        this._onInteract?.("tv-interact");
+      }),
+    );
 
     this._laptopScreenTexture = new BABYLON.DynamicTexture(
       "sharedLaptopScreenTexture",
@@ -122,18 +136,19 @@ export class TV extends UsableObject {
   }
 
   public interact(scene: BABYLON.Scene, mainPlayer: PlayerCharacter) {
-    console.log("Clicked!");
+    void scene;
+    void mainPlayer;
+    this._onInteract?.("tv-interact");
   }
 
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public beforeRender(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera, mainPlayer?: PlayerCharacter) {
+  public beforeRender(_scene: BABYLON.Scene, _camera: BABYLON.ArcFollowCamera, mainPlayer?: PlayerCharacter) {
     if (mainPlayer) {
       const distance = BABYLON.Vector3.Distance(this._tvMesh.getAbsolutePosition(), mainPlayer.character.getAbsolutePosition());
       if (distance < this.InteractDistance && mainPlayer.usableObject != this) {
         mainPlayer.usableObject = this;
       } 
       if (distance > this.InteractDistance && mainPlayer.usableObject == this) {
+        this._onInteract?.("tv-leave");
         mainPlayer.usableObject = null;
       }
     }

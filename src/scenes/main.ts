@@ -8,6 +8,10 @@ import type { Player } from "../../worker/model/player";
 import { PlayerCharacter } from "./player";
 import {TV} from "./tv";
 
+export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance";
+
+export type InteractionSubscriber = (event: InteractEventType) => void;
+
 export class MainScene {
   mainPlayer: PlayerCharacter;
   tv: TV;
@@ -20,6 +24,11 @@ export class MainScene {
 
   _scene: BABYLON.Scene;
   _camera: BABYLON.ArcFollowCamera;
+  private onInteract?: (event: InteractEventType) => void;
+
+  constructor(onInteract?: InteractionSubscriber) {
+    this.onInteract = onInteract;
+  }
 
   public async createScene(engine: BABYLON.Engine, mainPlayer?: Player ): Promise<BABYLON.Scene> {
     if (this._scene) this.dispose();
@@ -103,7 +112,7 @@ export class MainScene {
     return scene;
   }
   public addTV(scene: BABYLON.Scene) {
-    this.tv = new TV();
+    this.tv = new TV(this.onInteract);
     this.tv.init(scene);
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
       this.tv.beforeRender(scene, this._camera, this.mainPlayer);

@@ -22,12 +22,11 @@ function getStreamTitle(stream: StreamVideo, index: number): string {
 
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
-  const tvFrameRef = useRef<HTMLIFrameElement | null>(null);
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
   const wsRef = useRef<WebSocket | undefined>(undefined);
   const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
   const [streams, setStreams] = useState<StreamVideo[] | undefined>(undefined);
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [tvPopupOpen, setTvPopupOpen] = useState(false);
   const [howToPlayOpen, setHowToPlayOpen] = useState(true);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
@@ -40,15 +39,11 @@ const GameRoom: FC = () => {
       url,
     };
     wsRef.current.send(JSON.stringify(payload));
-    setSettingsOpen(false);
+    setTvPopupOpen(false);
   }
 
   function dance() {
     mainSceneRef.current?.danceMainPlayer();
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      const payload: PlayerDanceRequest = { type: "dance" };
-      wsRef.current.send(JSON.stringify(payload));
-    }
   }
 
   function saveDisplayUrl(event: FormEvent<HTMLFormElement>) {
@@ -67,11 +62,30 @@ const GameRoom: FC = () => {
     let engine: BABYLON.Engine | undefined;
     let ws: WebSocket | undefined;
     let wsInterval: ReturnType<typeof setInterval> | undefined;
-    const tvFrame = tvFrameRef.current;
 
     const resizeListener = function () {
       mainScene?.resize();
     };
+
+    function connectWebSocket(roomId: string, displayNameOverride: string) {
+      const wsUrl = `/ws/room/${roomId}${displayNameOverride ? `?displayName=${encodeURIComponent(displayNameOverride)}` : ""}`;
+      ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
+      ws.onopen = () => console.log('WebSocket connected');
+      ws.onclose = (ev) => {
+        console.log('WebSocket disconnected');
+        if (!disposed && ev.reason === Const.WS_REASON_RECONNECT) {
+          console.warn("Disconnecting as a connection with similar ID have been detected");
+          navigate('/');
+        }
+
+        setTimeout(() => {
+          connectWebSocket(roomId, displayNameOverride)
+        }, 1000)
+      };
+      return ws;
+    }
+
 
     async function joinGame() {
       try {
@@ -80,90 +94,93 @@ const GameRoom: FC = () => {
         const displayNameOverride = identity.displayName === UNKNOWN_DISPLAY_NAME && displayName !== UNKNOWN_DISPLAY_NAME
           ? displayName
           : undefined;
-        const mainPlayer = await getPlayerInformationInRoom(roomId, displayNameOverride);
-        if (!mainPlayer || !mainPlayer.id) {
-          console.error("Can't fetch identity information");
-          return;
-        }
-        if (disposed) return;
-
-        const { current: canvas } = reactCanvas;
-        if (!canvas) return;
-
-        console.log("Initiating main scene")
-        mainScene = new MainScene();
-        mainSceneRef.current = mainScene;
-        engine = new BABYLON.Engine(canvas, true);
-        await mainScene.createScene(engine, mainPlayer);
-
-        if (disposed) {
-          mainScene.dispose();
-          engine.dispose();
-          return;
-        }
-
-        const wsUrl = `/ws/room/${roomId}${displayNameOverride ? `?displayName=${encodeURIComponent(displayNameOverride)}` : ""}`;
-        ws = new WebSocket(wsUrl);
-        wsRef.current = ws;
-        ws.onopen = () => console.log('WebSocket connected');
-        ws.onclose = (ev) => {
-          console.log('WebSocket disconnected');
-          if (!disposed && ev.reason === Const.WS_REASON_RECONNECT) {
-            console.warn("Disconnecting as a connection with similar ID have been detected")
-            navigate('/')
-          }
-        }
-
-        wsInterval = setInterval(() => {
-          if (!ws || ws.readyState !== ws.OPEN || !mainScene?.mainPlayer) {
-            return
-          }
-
-          const player: Player = {
-            id: mainPlayer.id,
-            displayName: mainPlayer.displayName,
-            x: mainScene.mainPlayer.characterPosition.x,
-            y: mainScene.mainPlayer.characterPosition.y,
-            z: mainScene.mainPlayer.characterPosition.z,
-            rotationY: mainScene.mainPlayer.rotationY,
-            lastSeenSync: new Date().getTime(),
-          }
-          ws.send(JSON.stringify(player))
-        }, 100);
-
-        engine.runRenderLoop(() => {
-          if (!disposed) {
-            mainScene?.render();
-          }
-        });
-
-        window.addEventListener("resize", resizeListener);
-
-        ws.addEventListener("message", (event) => {
-          if (disposed || !mainScene?.mainPlayer) return;
-
-          const payload = JSON.parse(event.data) as PlayerServerMessage
-          if ("type" in payload && payload.type === "dance") {
-            mainScene.dancePlayer(payload.playerId);
+          const mainPlayer = await getPlayerInformationInRoom(roomId, displayNameOverride);
+          if (!mainPlayer || !mainPlayer.id) {
+            console.error("Can't fetch identity information");
             return;
           }
+          if (disposed) return;
 
-          if ("type" in payload && payload.type === "room-state") {
-            setDraftDisplayUrl(payload.displayUrl);
-            mainScene.tv.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
-            return;
-          }
+          const { current: canvas } = reactCanvas;
+          if (!canvas) return;
 
-          const otherPlayers = [] as Player[];
-          const playerIds = Object.keys(payload.players);
-          for (const playerId of playerIds) {
-            if (playerId == mainPlayer.id) {
-              continue;
+          console.log("Initiating main scene")
+          mainScene = new MainScene((event) => {
+            if (event === "tv-interact") {
+              setTvPopupOpen(true)
             }
-            otherPlayers.push(payload.players[playerId])
+            if (event === "tv-leave") {
+              setTvPopupOpen(false);
+            }
+            if (event === "player-dance") {
+              if (wsRef.current?.readyState === WebSocket.OPEN) {
+                const payload: PlayerDanceRequest = { type: "dance" };
+                wsRef.current.send(JSON.stringify(payload));
+              }
+            }
+          });
+          mainSceneRef.current = mainScene;
+          engine = new BABYLON.Engine(canvas, true);
+          await mainScene.createScene(engine, mainPlayer);
+
+          if (disposed) {
+            mainScene.dispose();
+            engine.dispose();
+            return;
           }
-          mainScene.updatePlayerPosition(otherPlayers);
-        });
+
+          ws = connectWebSocket(roomId, displayNameOverride);
+
+          wsInterval = setInterval(() => {
+            if (!ws || ws.readyState !== ws.OPEN || !mainScene?.mainPlayer) {
+              return
+            }
+
+            const player: Player = {
+              id: mainPlayer.id,
+              displayName: mainPlayer.displayName,
+              x: mainScene.mainPlayer.characterPosition.x,
+              y: mainScene.mainPlayer.characterPosition.y,
+              z: mainScene.mainPlayer.characterPosition.z,
+              rotationY: mainScene.mainPlayer.rotationY,
+              lastSeenSync: new Date().getTime(),
+            }
+            ws.send(JSON.stringify(player))
+          }, 100);
+
+          engine.runRenderLoop(() => {
+            if (!disposed) {
+              mainScene?.render();
+            }
+          });
+
+          window.addEventListener("resize", resizeListener);
+
+          ws.addEventListener("message", (event) => {
+            if (disposed || !mainScene?.mainPlayer) return;
+
+            const payload = JSON.parse(event.data) as PlayerServerMessage
+            if ("type" in payload && payload.type === "dance") {
+              mainScene.dancePlayer(payload.playerId);
+              return;
+            }
+
+            if ("type" in payload && payload.type === "room-state") {
+              setDraftDisplayUrl(payload.displayUrl);
+              mainScene.tv.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
+              return;
+            }
+
+            const otherPlayers = [] as Player[];
+            const playerIds = Object.keys(payload.players);
+            for (const playerId of playerIds) {
+              if (playerId == mainPlayer.id) {
+                continue;
+              }
+              otherPlayers.push(payload.players[playerId])
+            }
+            mainScene.updatePlayerPosition(otherPlayers);
+          });
       } catch (error) {
         if (disposed) {
           return;
@@ -190,7 +207,6 @@ const GameRoom: FC = () => {
       window.removeEventListener("resize", resizeListener);
 
       console.log("Destroying main scene")
-      if (tvFrame) tvFrame.style.display = "none";
       engine?.stopRenderLoop();
       mainScene?.dispose();
       mainSceneRef.current = undefined;
@@ -200,95 +216,95 @@ const GameRoom: FC = () => {
 
   return (
     <>
-      <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
-      <section className={styles.ControlsPanel} aria-label="Room controls">
+    <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
+    <section className={styles.ControlsPanel} aria-label="Room controls">
+    <div className={styles.PrimaryControls}>
+    <button type="button" onClick={() => navigate('/')}>Main Menu</button>
+    <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
+    <button type="button" onClick={dance}>Dance</button>
+    </div>
+    <section className={styles.KeyboardHelp} aria-label="How to play">
+    <button
+    type="button"
+    className={styles.KeyboardHelpToggle}
+    aria-expanded={howToPlayOpen}
+    onClick={() => setHowToPlayOpen((open) => !open)}
+    >
+    <span className={styles.PanelKicker}>How to play</span>
+    <span>{howToPlayOpen ? "Hide" : "Show"}</span>
+    </button>
+    {howToPlayOpen && (
+      <dl>
+      <div>
+      <dt><kbd>WASD</kbd> <span>or</span> <kbd>Arrows</kbd></dt>
+      <dd>Move</dd>
+      </div>
+      <div>
+      <dt><kbd>Space</kbd></dt>
+      <dd>Jump</dd>
+      </div>
+      <div>
+      <dt><kbd>Q</kbd></dt>
+      <dd>Dance</dd>
+      </div>
+      <div>
+      <dt><kbd>Mouse drag</kbd></dt>
+      <dd>Look around</dd>
+      </div>
+      </dl>
+    )}
+    </section>
+    </section>
+    {tvPopupOpen && (
+      <div className={styles.TvPopupBackdrop} role="presentation" onMouseDown={() => setTvPopupOpen(false)}>
+      <section
+      className={styles.TvDisplayPopup}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tv-display-title"
+      onMouseDown={(event) => event.stopPropagation()}
+      >
+      <div className={styles.TvPopupHeader}>
+      <span>Room TV</span>
+      <button type="button" aria-label="Close TV display controls" onClick={() => setTvPopupOpen(false)}>Close</button>
+      </div>
+      <form className={styles.TvUrlForm} onSubmit={saveDisplayUrl}>
+      <h2 id="tv-display-title">Set the laptop display</h2>
+      <p>Share a webpage or video on the TV for everyone in this room.</p>
+        <label htmlFor="tv-display-url">Laptop URL</label>
+      <div className={styles.TvUrlRow}>
+      <input
+      id="tv-display-url"
+      type="text"
+      placeholder="https://example.com"
+      value={draftDisplayUrl}
+      onChange={(event) => setDraftDisplayUrl(event.target.value)}
+      />
+      <button type="submit">Share</button>
+      </div>
+      </form>
+      <div className={styles.TvVideoPicker}>
+      <span className={styles.TvVideoPickerTitle}>Choose a video</span>
+      {streams === undefined && <p>Loading videos...</p>}
+      {streams?.length === 0 && <p>No videos are available.</p>}
+      {streams?.map((stream, index) => (
         <button
-          type="button"
-          className={styles.PanelToggle}
-          aria-expanded={settingsOpen}
-          onClick={() => setSettingsOpen((open) => !open)}
+        key={stream.id}
+        type="button"
+        disabled={!stream.readyToStream || !stream.hlsPlaybackUrl}
+        onClick={() => {
+          setDraftDisplayUrl(stream.hlsPlaybackUrl);
+          shareDisplayUrl(stream.hlsPlaybackUrl);
+        }}
         >
-          {settingsOpen ? "Hide controls" : "Controls"}
+        {stream.thumbnail && <img alt="" src={stream.thumbnail} />}
+        <span>{getStreamTitle(stream, index)}</span>
         </button>
-        {settingsOpen && (
-          <div className={styles.PanelBody}>
-            <div className={styles.PrimaryControls}>
-              <button type="button" onClick={() => navigate('/')}>Main Menu</button>
-              <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
-              <button type="button" onClick={dance}>Dance</button>
-            </div>
-            <form className={styles.DisplayUrlControls} onSubmit={saveDisplayUrl}>
-              <div className={styles.PanelHeader}>
-                <span className={styles.PanelKicker}>Room Settings</span>
-                <h2>Shared display</h2>
-              </div>
-              <label htmlFor="room-display-url">Laptop URL</label>
-              <input
-                id="room-display-url"
-                type="text"
-                placeholder="https://example.com"
-                value={draftDisplayUrl}
-                onChange={(event) => setDraftDisplayUrl(event.target.value)}
-              />
-              <p>The configured page is shared by everyone in this room and appears on the TV.</p>
-              <div className={styles.VideoList}>
-                <span className={styles.VideoListTitle}>Videos</span>
-                {streams === undefined && <p>Loading videos...</p>}
-                {streams?.length === 0 && <p>No videos are available.</p>}
-                {streams?.map((stream, index) => (
-                  <button
-                    key={stream.id}
-                    type="button"
-                    disabled={!stream.readyToStream || !stream.hlsPlaybackUrl}
-                    onClick={() => {
-                      setDraftDisplayUrl(stream.hlsPlaybackUrl);
-                      shareDisplayUrl(stream.hlsPlaybackUrl);
-                    }}
-                  >
-                    {stream.thumbnail && <img alt="" src={stream.thumbnail} />}
-                    <span>{getStreamTitle(stream, index)}</span>
-                  </button>
-                ))}
-              </div>
-              <div className={styles.PanelActions}>
-                <button type="button" onClick={() => setSettingsOpen(false)}>Cancel</button>
-                <button type="submit">Share URL</button>
-              </div>
-            </form>
-          </div>
-        )}
-        <section className={styles.KeyboardHelp} aria-label="How to play">
-          <button
-            type="button"
-            className={styles.KeyboardHelpToggle}
-            aria-expanded={howToPlayOpen}
-            onClick={() => setHowToPlayOpen((open) => !open)}
-          >
-            <span className={styles.PanelKicker}>How to play</span>
-            <span>{howToPlayOpen ? "Hide" : "Show"}</span>
-          </button>
-          {howToPlayOpen && (
-            <dl>
-              <div>
-                <dt><kbd>WASD</kbd> <span>or</span> <kbd>Arrows</kbd></dt>
-                <dd>Move</dd>
-              </div>
-              <div>
-                <dt><kbd>Space</kbd></dt>
-                <dd>Jump</dd>
-              </div>
-              <div>
-                <dt><kbd>Q</kbd></dt>
-                <dd>Dance</dd>
-              </div>
-              <div>
-                <dt><kbd>Mouse drag</kbd></dt>
-                <dd>Look around</dd>
-              </div>
-            </dl>
-          )}
-        </section>
+      ))}
+      </div>
       </section>
+      </div>
+    )}
     </>
   );
 };

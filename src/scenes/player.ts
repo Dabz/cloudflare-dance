@@ -2,6 +2,7 @@ import * as BABYLON from "@babylonjs/core";
 import type {Player} from "../../worker/model/player";
 import earcut from 'earcut';
 import type {UsableObject} from "./object";
+import type {InteractionSubscriber} from "./main";
 const fontData = await (await fetch("/font.json")).json();
 
 export class PlayerCharacter {
@@ -30,6 +31,12 @@ export class PlayerCharacter {
 
   isDancing = false;
   usableObject?: UsableObject = undefined;
+
+  _onInteract?: InteractionSubscriber;
+
+  constructor(onInteract?: InteractionSubscriber) {
+    this._onInteract = onInteract;
+  }
 
   public static createPlayer(mainPlayer: boolean, id: string, scene: BABYLON.Scene, otherPlayer?: Player): PlayerCharacter {
     const player = new PlayerCharacter()
@@ -317,6 +324,9 @@ export class PlayerCharacter {
 
 
   dance() {
+    if (this._onInteract) {
+      this._onInteract("player-dance");
+    }
     this.isDancing = true;
     const spinAnimation = BABYLON.Animation.CreateAndStartAnimation("danceSpin", this.character, "rotation.z", 60, 45, this.character.rotation.z, this.character.rotation.z + Math.PI * 2, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
     const bounceAnimation = BABYLON.Animation.CreateAndStartAnimation("danceBounce", this.character, "scaling.y", 60, 18, 1, 1.25, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);

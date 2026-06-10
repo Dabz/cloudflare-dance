@@ -151,6 +151,156 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  flex-flow: row-reverse;
+}
+
+.TvPopupBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 6, 14, 0.58);
+  padding: 18px;
+}
+
+.TvDisplayPopup {
+  display: grid;
+  gap: 18px;
+  width: min(620px, 100%);
+  max-height: min(720px, calc(100vh - 36px));
+  overflow: auto;
+  border: 1px solid rgba(142, 230, 255, 0.35);
+  border-radius: 24px;
+  background: linear-gradient(
+    145deg,
+    rgba(8, 18, 34, 0.96),
+    rgba(16, 35, 54, 0.96)
+  );
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.58);
+  color: white;
+  padding: 18px;
+}
+
+.TvPopupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.TvPopupHeader span,
+.TvVideoPickerTitle {
+  color: rgba(142, 230, 255, 0.92);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.TvDisplayPopup button {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  padding: 9px 12px;
+}
+
+.TvDisplayPopup button:hover:not(:disabled) {
+  background: rgba(56, 178, 255, 0.3);
+}
+
+.TvDisplayPopup button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.TvUrlForm {
+  display: grid;
+  gap: 10px;
+}
+
+.TvUrlForm h2 {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.05;
+}
+
+.TvUrlForm p,
+.TvVideoPicker p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.TvUrlForm label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.TvUrlRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.TvUrlRow input {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font: inherit;
+  font-size: 13px;
+  padding: 9px 12px;
+}
+
+.TvUrlRow input::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.TvUrlRow button {
+  background: rgba(34, 128, 180, 0.86);
+}
+
+.TvVideoPicker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.TvVideoPickerTitle,
+.TvVideoPicker p {
+  grid-column: 1 / -1;
+}
+
+.TvVideoPicker button {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 7px;
+  text-align: left;
+}
+
+.TvVideoPicker img {
+  width: 92px;
+  height: 52px;
+  border-radius: 11px;
+  object-fit: cover;
+}
+
+.TvVideoPicker button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .PanelHeader {
@@ -279,5 +429,22 @@
   .ControlsPanel {
     left: 12px;
     width: auto;
+  }
+
+  .TvDisplayPopup {
+    border-radius: 18px;
+    padding: 14px;
+  }
+
+  .TvUrlRow,
+  .TvVideoPicker,
+  .TvVideoPicker button {
+    grid-template-columns: 1fr;
+  }
+
+  .TvVideoPicker img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 }
