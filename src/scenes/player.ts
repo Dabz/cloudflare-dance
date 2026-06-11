@@ -60,6 +60,7 @@ export class PlayerCharacter {
   onInteract?: InteractionSubscriber;
   assetPrefix: string;
   animation: BABYLON.AnimationGroup;
+  remoteTargetPosition?: BABYLON.Vector3;
 
   constructor(onInteract?: InteractionSubscriber) {
     this.onInteract = onInteract;
@@ -88,6 +89,13 @@ export class PlayerCharacter {
 
     if (!mainPlayer && otherPlayer) {
       player.text = createText(otherPlayer.id, otherPlayer.displayName, scene);
+      if (otherPlayer.x != null && otherPlayer.y != null && otherPlayer.z != null) {
+        const initialPosition = new BABYLON.Vector3(otherPlayer.x, otherPlayer.y, otherPlayer.z);
+        player.characterPosition = initialPosition.clone();
+        player.character.position.copyFrom(initialPosition);
+        player.characterController.setPosition(initialPosition.clone());
+        player.text.position = new BABYLON.Vector3(initialPosition.x, initialPosition.y + 1, initialPosition.z);
+      }
       player.updateRotation(otherPlayer.rotationY ?? 0, false);
     }
 
@@ -271,6 +279,11 @@ export class PlayerCharacter {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public beforeRender(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera) {
+    if (!this.mainPlayer) {
+      this.beforeRenderRemote(scene);
+      return;
+    }
+
     // Falling use-case - reseting to initial position
     if (this.characterController.getPosition().y < -20) {
       this.characterController.setPosition(this.startPosition);
@@ -289,6 +302,45 @@ export class PlayerCharacter {
     if (this.interact) {
       this.interact.position = this.character.position.clone();
       this.interact.position.y += 1;
+    }
+  }
+
+  private beforeRenderRemote(scene: BABYLON.Scene) {
+    if (!this.remoteTargetPosition) return;
+
+    const deltaTime = scene.getEngine().getDeltaTime() / 1000;
+    const currentPosition = this.character.position.clone();
+    const remaining = this.remoteTargetPosition.subtract(currentPosition);
+    const distance = remaining.length();
+
+    if (distance < 0.03) {
+      this.character.position.copyFrom(this.remoteTargetPosition);
+      this.characterPosition = this.remoteTargetPosition.clone();
+      this.characterController.setPosition(this.characterPosition.clone());
+      this.remoteTargetPosition = undefined;
+      if (this.animation && !this.animation.name.endsWith("idle")) {
+        this.ensureAnimation(scene, "idle");
+      }
+      this.updateTextPosition();
+      return;
+    }
+
+    const step = remaining.scale(Math.min(1, deltaTime * 12));
+    const horizontalStep = new BABYLON.Vector3(step.x, 0, step.z);
+    if (horizontalStep.lengthSquared() > 0.0005) {
+      this.updateRotation(Math.atan2(horizontalStep.x, horizontalStep.z), false);
+    }
+    this.character.moveWithCollisions(step);
+    this.characterPosition = this.character.position.clone();
+    this.characterController.setPosition(this.characterPosition.clone());
+    this.updateTextPosition();
+
+    if (Math.abs(step.y) > 0.035) {
+      this.ensureAnimation(scene, "jump");
+    } else if (horizontalStep.lengthSquared() > 0.0005) {
+      this.ensureAnimation(scene, "run");
+    } else if (this.animation && !this.animation.name.endsWith("idle")) {
+      this.ensureAnimation(scene, "idle");
     }
   }
 
@@ -316,6 +368,8 @@ export class PlayerCharacter {
   }
 
   updatePosition(newPosition: BABYLON.Vector3) {
+    if (!Number.isFinite(newPosition.x) || !Number.isFinite(newPosition.y) || !Number.isFinite(newPosition.z)) return;
+
     if (this.mainPlayer) {
       this.characterPosition = newPosition;
       this.character.position = newPosition;
@@ -323,16 +377,43 @@ export class PlayerCharacter {
       return;
     }
     const previousPosition = this.character.position.clone();
-    this.character.moveWithCollisions(newPosition.subtract(previousPosition));
-    this.characterPosition = this.character.position.clone();
-    this.characterController.setPosition(this.characterPosition.clone())
+    const displacement = newPosition.subtract(previousPosition);
 
-    if (this.text) {
-      this.text.position = new BABYLON.Vector3(this.characterPosition.x, this.characterPosition.y + 1, this.characterPosition.z)
+    if (displacement.length() > 3) {
+      this.character.position.copyFrom(newPosition);
+      this.remoteTargetPosition = undefined;
+      this.characterPosition = this.character.position.clone();
+      this.characterController.setPosition(this.characterPosition.clone())
+      this.updateTextPosition();
+      if (this.animation && !this.animation.name.endsWith("idle")) {
+        this.ensureAnimation(this.character.getScene(), "idle");
+      }
+      return;
+    } else {
+      this.remoteTargetPosition = newPosition.clone();
+      const horizontalDisplacement = new BABYLON.Vector3(displacement.x, 0, displacement.z);
+      if (horizontalDisplacement.lengthSquared() > 0.0005) {
+        this.updateRotation(Math.atan2(horizontalDisplacement.x, horizontalDisplacement.z), false);
+      }
     }
   }
 
+  private updateTextPosition() {
+    if (!this.text) return;
+
+    this.text.position = new BABYLON.Vector3(this.characterPosition.x, this.characterPosition.y + 1, this.characterPosition.z)
+  }
+
   updateRotation(rotationY: number, animate = true) {
+    if (!this.mainPlayer && this.remoteTargetPosition) {
+      const movementDirection = this.remoteTargetPosition.subtract(this.character.position);
+      const horizontalMovementDirection = new BABYLON.Vector3(movementDirection.x, 0, movementDirection.z);
+      if (horizontalMovementDirection.lengthSquared() > 0.0005) {
+        rotationY = Math.atan2(horizontalMovementDirection.x, horizontalMovementDirection.z);
+        animate = false;
+      }
+    }
+
     this.rotationY = rotationY;
     if (this.mainPlayer || !animate) {
       this.character.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(rotationY, 0, 0)

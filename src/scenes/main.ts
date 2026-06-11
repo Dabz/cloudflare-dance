@@ -172,6 +172,9 @@ export class MainScene {
     // Display tick update: compute new camera position/target, update the character display
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
       this.mainPlayer.beforeRender(scene, this._camera);
+      for (const otherPlayer of Object.values(this._otherPlayers)) {
+        otherPlayer.beforeRender(scene, this._camera);
+      }
     });
 
     // After physics update, compute and set new velocity, update the character controller state
