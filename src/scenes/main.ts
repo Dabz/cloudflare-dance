@@ -266,7 +266,7 @@ export class MainScene {
     const light = new BABYLON.DirectionalLight("sunLight", BABYLON.Vector3.Zero(), scene);
     light.position = new BABYLON.Vector3(28, 44, -24);
     light.setDirectionToTarget(new BABYLON.Vector3(0, 0, 0));
-    light.intensity = 3.2;
+    light.intensity = 0.75;
     light.shadowMinZ = 1;
     light.shadowMaxZ = 120;
     light.orthoTop = 48;
@@ -280,7 +280,7 @@ export class MainScene {
       new BABYLON.Vector3(0, 1, 0),
       scene,
     );
-    fillLight.intensity = 0.55;
+    fillLight.intensity = 0.14;
     fillLight.diffuse = new BABYLON.Color3(0.85, 0.9, 1);
     fillLight.groundColor = new BABYLON.Color3(0.22, 0.18, 0.14);
     this._sunFillLight = fillLight;

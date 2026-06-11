@@ -647,6 +647,10 @@
   text-transform: uppercase;
 }
 
+.ChatInternalPlayerName {
+  text-shadow: 0 0 10px currentColor;
+}
+
 .ChatPlayerId {
   max-width: 100%;
   overflow: hidden;

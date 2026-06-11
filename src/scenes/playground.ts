@@ -23,7 +23,7 @@ function createMaterial(name: string, scene: BABYLON.Scene, color: BABYLON.Color
   const material = new BABYLON.StandardMaterial(name, scene);
   material.diffuseColor = color;
   material.specularColor = new BABYLON.Color3(0.85, 0.85, 0.85);
-  if (emissive) material.emissiveColor = color.scale(0.7);
+  if (emissive) material.emissiveColor = color.scale(0.14);
   return material;
 }
 
@@ -166,7 +166,7 @@ export class Playground {
     if (this.discoEnabled) {
       this.discoLights.forEach((light, index) => {
         light.diffuse = BABYLON.Color3.FromHSV((time * 100 + index * 90) % 360, 0.9, 1);
-        light.intensity = 1.2 + Math.sin(time * 5 + index) * 0.35;
+        light.intensity = 11 + Math.sin(time * 5 + index) * 4;
       });
     }
 
@@ -188,8 +188,9 @@ export class Playground {
     let closestDistance = Number.POSITIVE_INFINITY;
     for (const object of this.objects) {
       const distance = BABYLON.Vector3.Distance(object.mesh.getAbsolutePosition(), mainPlayer.character.getAbsolutePosition());
-      object.label.setEnabled(distance < object.InteractDistance + 2);
-      object.originalLabel?.setEnabled(distance >= object.InteractDistance);
+      const canInteract = distance < object.InteractDistance;
+      object.label.setEnabled(canInteract);
+      object.originalLabel?.setEnabled(!canInteract);
       if (distance < object.InteractDistance && distance < closestDistance) {
         closest = object;
         closestDistance = distance;
@@ -321,14 +322,16 @@ export class Playground {
       orb.material = createMaterial(`disco_orb_${index}_mat`, scene, neonColors[index + 1], true);
       const light = new BABYLON.PointLight(`disco_light_${index}`, orb.position.clone(), scene);
       light.diffuse = neonColors[index + 1];
-      light.intensity = 10.15;
-      light.range = 13;
+      light.specular = neonColors[index + 1];
+      light.intensity = 11;
+      light.range = 36;
       this.discoLights.push(light);
       this.addShadowCaster(orb);
 
       const button = this.createButton(`light_switch_${index}`, `${name} LIGHT`, new BABYLON.Vector3(-6 + index * 6, 0.85, -8), [mats.green, mats.purple, mats.yellow][index], scene);
       this.addObject(`toggle-light-${index}`, button, `Toggle ${name}`, 2.4, () => {
         light.setEnabled(!light.isEnabled());
+        setMeshColor(orb, light.isEnabled() ? neonColors[index + 1] : new BABYLON.Color3(0.04, 0.04, 0.06));
         setMeshColor(button, light.isEnabled() ? neonColors[index + 1] : new BABYLON.Color3(0.08, 0.08, 0.1));
       });
     });

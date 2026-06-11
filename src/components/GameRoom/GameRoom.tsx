@@ -32,6 +32,26 @@ function parseChatContent(content: string): { content: string; playerNameColor?:
   };
 }
 
+function getPlayerNameColor(playerName: string): string {
+  let hash = 0;
+  for (let index = 0; index < playerName.length; index++) {
+    hash = (hash * 31 + playerName.charCodeAt(index)) % 360;
+  }
+
+  return `hsl(${hash} 92% 68%)`;
+}
+
+function parseInternalPlayerMessage(content: string): { before: string; playerName: string; after: string } | undefined {
+  const match = content.match(/^Player (.+) (join|left) the room$/);
+  if (!match) return undefined;
+
+  return {
+    before: "Player ",
+    playerName: match[1],
+    after: ` ${match[2]} the room`,
+  };
+}
+
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
@@ -347,6 +367,7 @@ const GameRoom: FC = () => {
       {chats.length === 0 && <p className={styles.ChatEmpty}>No messages</p>}
       {chats.map((chat) => {
         const parsedChat = parseChatContent(chat.content);
+        const internalPlayerMessage = chat.isInternal ? parseInternalPlayerMessage(parsedChat.content) : undefined;
         return (
           <article className={`${styles.ChatMessage} ${chat.isInternal ? styles.ChatMessageInternal : ""}`} key={chat.id}>
           {!chat.isInternal && chat.playerDisplayName && (
@@ -354,7 +375,17 @@ const GameRoom: FC = () => {
             {chat.playerDisplayName}
             </span>
           )}
-          <p>{parsedChat.content}</p>
+          <p>
+          {internalPlayerMessage ? (
+            <>
+            {internalPlayerMessage.before}
+            <span className={styles.ChatInternalPlayerName} style={{ color: getPlayerNameColor(internalPlayerMessage.playerName) }}>
+            {internalPlayerMessage.playerName}
+            </span>
+            {internalPlayerMessage.after}
+            </>
+          ) : parsedChat.content}
+          </p>
           </article>
         );
       })}
