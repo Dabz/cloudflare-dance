@@ -3,7 +3,8 @@ import type { PlayerCharacter } from "./player";
 import { UsableObject } from "./object";
 
 type ShadowCaster = (mesh?: BABYLON.AbstractMesh | null) => void;
-type PlaygroundAction = (scene: BABYLON.Scene, player: PlayerCharacter, object: PlaygroundInteractable) => void;
+type PlaygroundAction = (scene: BABYLON.Scene, player: PlayerCharacter | undefined, object: PlaygroundInteractable) => void;
+type PlaygroundInteractionPublisher = (actionId: string) => void;
 
 const neonColors = [
   new BABYLON.Color3(1, 0.12, 0.2),
@@ -66,21 +67,37 @@ function applyImpulseToBody(aggregate: BABYLON.PhysicsAggregate, impulse: BABYLO
   aggregate.body.applyImpulse(impulse, aggregate.transformNode.getAbsolutePosition());
 }
 
+function makeCollidable(mesh: BABYLON.AbstractMesh) {
+  mesh.checkCollisions = true;
+  return mesh;
+}
+
 export class PlaygroundInteractable extends UsableObject {
   mesh: BABYLON.AbstractMesh;
   label: BABYLON.AbstractMesh;
+  originalLabel?: BABYLON.AbstractMesh;
+  id: string;
   private action: PlaygroundAction;
+  private publish?: PlaygroundInteractionPublisher;
 
-  constructor(mesh: BABYLON.AbstractMesh, label: BABYLON.AbstractMesh, distance: number, action: PlaygroundAction) {
+  constructor(id: string, mesh: BABYLON.AbstractMesh, label: BABYLON.AbstractMesh, originalLabel: BABYLON.AbstractMesh | undefined, distance: number, action: PlaygroundAction, publish?: PlaygroundInteractionPublisher) {
     super();
+    this.id = id;
     this.mesh = mesh;
     this.label = label;
+    this.originalLabel = originalLabel;
     this.InteractDistance = distance;
     this.action = action;
+    this.publish = publish;
   }
 
   public interact(scene: BABYLON.Scene, mainPlayer: PlayerCharacter) {
-    this.action(scene, mainPlayer, this);
+    this.run(scene, mainPlayer, true);
+  }
+
+  public run(scene: BABYLON.Scene, player?: PlayerCharacter, broadcast = false) {
+    this.action(scene, player, this);
+    if (broadcast) this.publish?.(this.id);
   }
 }
 
@@ -96,9 +113,11 @@ export class Playground {
   private discoLights: BABYLON.PointLight[] = [];
   private fanRotor?: BABYLON.AbstractMesh;
   private merry?: BABYLON.AbstractMesh;
+  private publish?: PlaygroundInteractionPublisher;
 
-  constructor(addShadowCaster: ShadowCaster) {
+  constructor(addShadowCaster: ShadowCaster, publish?: PlaygroundInteractionPublisher) {
     this.addShadowCaster = addShadowCaster;
+    this.publish = publish;
   }
 
   public init(scene: BABYLON.Scene) {
@@ -113,12 +132,28 @@ export class Playground {
       white: createMaterial("playground_white", scene, new BABYLON.Color3(0.93, 0.96, 1)),
     };
 
+    this.createPlaygroundFloor(scene, mats);
     this.createBallPit(scene, mats);
     this.createBowlingAlley(scene, mats);
     this.createBlockStacks(scene, mats);
     this.createRampGarden(scene, mats);
     this.createInteractiveStations(scene, mats);
     this.createSillyDecor(scene, mats);
+  }
+
+  private createPlaygroundFloor(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
+    const floor = makeCollidable(BABYLON.MeshBuilder.CreateBox("giant_playground_floor", { width: 92, height: 0.18, depth: 92 }, scene));
+    floor.position = new BABYLON.Vector3(0, -0.12, 0);
+    floor.material = mats.white;
+    floor.receiveShadows = true;
+    new BABYLON.PhysicsAggregate(floor, BABYLON.PhysicsShapeType.BOX, { mass: 0, friction: 0.65, restitution: 0.08 });
+  }
+
+  public interact(actionId: string, player?: PlayerCharacter) {
+    const object = this.objects.find((candidate) => candidate.id === actionId);
+    if (!object) return;
+
+    object.run(object.mesh.getScene(), player, false);
   }
 
   public beforeRender(scene: BABYLON.Scene, mainPlayer?: PlayerCharacter) {
@@ -137,7 +172,7 @@ export class Playground {
 
     for (const body of this.fanBodies) {
       const pos = body.transformNode.getAbsolutePosition();
-      if (pos.x > 3 && pos.x < 16 && pos.z > -9 && pos.z < 1 && pos.y < 5) {
+      if (pos.x > 16 && pos.x < 30 && pos.z > -22 && pos.z < -10 && pos.y < 5) {
         applyImpulseToBody(body, new BABYLON.Vector3(0.28, 0.08, 0.03));
       }
     }
@@ -154,6 +189,7 @@ export class Playground {
     for (const object of this.objects) {
       const distance = BABYLON.Vector3.Distance(object.mesh.getAbsolutePosition(), mainPlayer.character.getAbsolutePosition());
       object.label.setEnabled(distance < object.InteractDistance + 2);
+      object.originalLabel?.setEnabled(distance >= object.InteractDistance);
       if (distance < object.InteractDistance && distance < closestDistance) {
         closest = object;
         closestDistance = distance;
@@ -168,15 +204,16 @@ export class Playground {
   }
 
   private createBallPit(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const pit = BABYLON.MeshBuilder.CreateBox("ball_pit_box", { width: 7, height: 0.45, depth: 4.8 }, scene);
-    pit.position = new BABYLON.Vector3(-16, 0.35, -10.4);
+    const pitCenter = new BABYLON.Vector3(-28, 0.35, -20);
+    const pit = makeCollidable(BABYLON.MeshBuilder.CreateBox("ball_pit_box", { width: 7, height: 0.45, depth: 4.8 }, scene));
+    pit.position = pitCenter;
     pit.material = mats.purple;
     new BABYLON.PhysicsAggregate(pit, BABYLON.PhysicsShapeType.BOX, { mass: 0 });
     this.addShadowCaster(pit);
 
     for (let index = 0; index < 36; index++) {
-      const ball = BABYLON.MeshBuilder.CreateSphere(`goofy_ball_${index}`, { diameter: 0.55, segments: 16 }, scene);
-      ball.position = new BABYLON.Vector3(-10.9 + (index % 9) * 0.72, 1.1 + Math.floor(index / 18) * 0.6, -6.8 + (Math.floor(index / 9) % 2) * 1.7);
+      const ball = makeCollidable(BABYLON.MeshBuilder.CreateSphere(`goofy_ball_${index}`, { diameter: 0.55, segments: 16 }, scene));
+      ball.position = new BABYLON.Vector3(-30.9 + (index % 9) * 0.72, 1.1 + Math.floor(index / 18) * 0.6, -21.4 + (Math.floor(index / 9) % 2) * 1.7);
       ball.material = createMaterial(`goofy_ball_${index}_mat`, scene, randomColor(), true);
       const aggregate = new BABYLON.PhysicsAggregate(ball, BABYLON.PhysicsShapeType.SPHERE, { mass: 0.22, restitution: 0.82, friction: 0.3 });
       this.dynamicBodies.push(aggregate);
@@ -184,11 +221,11 @@ export class Playground {
       this.addShadowCaster(ball);
     }
 
-    const button = this.createButton("ball_pit_button", "BALL CHAOS", new BABYLON.Vector3(-4.2, 0.8, -5.4), mats.red, scene);
-    this.addObject(button, "Explode balls", 2.8, (_scene) => {
+    const button = this.createButton("ball_pit_button", "BALL CHAOS", new BABYLON.Vector3(-22, 0.8, -20), mats.red, scene);
+    this.addObject("ball-chaos", button, "Explode balls", 2.8, (_scene) => {
       for (const body of this.dynamicBodies) {
         const pos = body.transformNode.getAbsolutePosition();
-        if (BABYLON.Vector3.Distance(pos, new BABYLON.Vector3(-8, 1, -5.4)) < 7) {
+        if (BABYLON.Vector3.Distance(pos, pitCenter) < 8) {
           const impulse = new BABYLON.Vector3((Math.random() - 0.5) * 4, 4 + Math.random() * 4, (Math.random() - 0.5) * 4);
           applyImpulseToBody(body, impulse);
         }
@@ -198,13 +235,13 @@ export class Playground {
   }
 
   private createBowlingAlley(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const lane = BABYLON.MeshBuilder.CreateBox("bowling_lane", { width: 3.5, height: 0.2, depth: 12 }, scene);
-    lane.position = new BABYLON.Vector3(20, 0.25, 16);
+    const lane = makeCollidable(BABYLON.MeshBuilder.CreateBox("bowling_lane", { width: 3.5, height: 0.2, depth: 12 }, scene));
+    lane.position = new BABYLON.Vector3(28, 0.25, 24);
     lane.material = mats.dark;
     new BABYLON.PhysicsAggregate(lane, BABYLON.PhysicsShapeType.BOX, { mass: 0, friction: 0.12 });
 
-    const ball = BABYLON.MeshBuilder.CreateSphere("bowling_boulder", { diameter: 1.1, segments: 24 }, scene);
-    ball.position = new BABYLON.Vector3(20, 1.1, 26);
+    const ball = makeCollidable(BABYLON.MeshBuilder.CreateSphere("bowling_boulder", { diameter: 1.1, segments: 24 }, scene));
+    ball.position = new BABYLON.Vector3(28, 1.1, 34);
     ball.material = mats.orange;
     const ballBody = new BABYLON.PhysicsAggregate(ball, BABYLON.PhysicsShapeType.SPHERE, { mass: 1.4, restitution: 0.55, friction: 0.35 });
     this.dynamicBodies.push(ballBody);
@@ -213,8 +250,8 @@ export class Playground {
     for (let index = 0; index < 10; index++) {
       const row = Math.floor((Math.sqrt(8 * index + 1) - 1) / 2);
       const col = index - (row * (row + 1)) / 2;
-      const pin = BABYLON.MeshBuilder.CreateCylinder(`bowling_pin_${index}`, { height: 1.35, diameterTop: 0.25, diameterBottom: 0.48, tessellation: 16 }, scene);
-      pin.position = new BABYLON.Vector3(9.3 + col * 0.48 - row * 0.24, 0.95, 2.8 + row * 0.55);
+      const pin = makeCollidable(BABYLON.MeshBuilder.CreateCylinder(`bowling_pin_${index}`, { height: 1.35, diameterTop: 0.25, diameterBottom: 0.48, tessellation: 16 }, scene));
+      pin.position = new BABYLON.Vector3(27.3 + col * 0.48 - row * 0.24, 0.95, 18.8 + row * 0.55);
       pin.material = index % 2 ? mats.white : mats.yellow;
       const aggregate = new BABYLON.PhysicsAggregate(pin, BABYLON.PhysicsShapeType.CYLINDER, { mass: 0.35, restitution: 0.45 });
       this.dynamicBodies.push(aggregate);
@@ -224,7 +261,7 @@ export class Playground {
 
     this.addShadowCaster(lane);
     this.addShadowCaster(ball);
-    this.addObject(ball, "Bowl it", 3.2, () => {
+    this.addObject("bowl", ball, "Bowl it", 3.2, () => {
       ballBody.body.setLinearVelocity(BABYLON.Vector3.Zero());
       applyImpulseToBody(ballBody, new BABYLON.Vector3(0, 0.4, -15));
     });
@@ -233,8 +270,8 @@ export class Playground {
   private createBlockStacks(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
     for (let tower = 0; tower < 3; tower++) {
       for (let level = 0; level < 7; level++) {
-        const block = BABYLON.MeshBuilder.CreateBox(`wobble_block_${tower}_${level}`, { width: 1.2, height: 0.42, depth: 0.7 }, scene);
-        block.position = new BABYLON.Vector3(-26 + tower * 5.2, 0.65 + level * 0.45, 13 + (level % 2) * 0.1);
+        const block = makeCollidable(BABYLON.MeshBuilder.CreateBox(`wobble_block_${tower}_${level}`, { width: 1.2, height: 0.42, depth: 0.7 }, scene));
+        block.position = new BABYLON.Vector3(-32 + tower * 5.2, 0.65 + level * 0.45, 24 + (level % 2) * 0.1);
         block.rotation.y = level % 2 ? Math.PI / 2 : 0;
         block.material = [mats.red, mats.blue, mats.green, mats.yellow, mats.purple][(tower + level) % 5];
         const aggregate = new BABYLON.PhysicsAggregate(block, BABYLON.PhysicsShapeType.BOX, { mass: 0.38, restitution: 0.28, friction: 0.7 });
@@ -247,13 +284,13 @@ export class Playground {
 
   private createRampGarden(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
     const rampPositions = [
-      new BABYLON.Vector3(-2, 0.75, 9),
-      new BABYLON.Vector3(2.5, 1.2, 9.6),
-      new BABYLON.Vector3(5.8, 0.8, -8.6),
-      new BABYLON.Vector3(-14, 0.9, -1.5),
+      new BABYLON.Vector3(-8, 0.75, 16),
+      new BABYLON.Vector3(8, 1.2, 22),
+      new BABYLON.Vector3(18, 0.8, -22),
+      new BABYLON.Vector3(-22, 0.9, -4),
     ];
     rampPositions.forEach((position, index) => {
-      const ramp = BABYLON.MeshBuilder.CreateBox(`skate_ramp_${index}`, { width: 4.6, height: 0.35, depth: 2.1 }, scene);
+      const ramp = makeCollidable(BABYLON.MeshBuilder.CreateBox(`skate_ramp_${index}`, { width: 4.6, height: 0.35, depth: 2.1 }, scene));
       ramp.position = position;
       ramp.rotation.x = index % 2 ? -0.35 : 0.35;
       ramp.rotation.y = index * 0.7;
@@ -279,25 +316,25 @@ export class Playground {
   private createLightSwitches(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
     const lightNames = ["MINT", "PINK", "GOLD"];
     lightNames.forEach((name, index) => {
-      const orb = BABYLON.MeshBuilder.CreateSphere(`disco_orb_${index}`, { diameter: 0.65, segments: 18 }, scene);
-      orb.position = new BABYLON.Vector3(-4 + index * 4, 4.4, -4.5);
+      const orb = makeCollidable(BABYLON.MeshBuilder.CreateSphere(`disco_orb_${index}`, { diameter: 0.65, segments: 18 }, scene));
+      orb.position = new BABYLON.Vector3(-6 + index * 6, 4.4, -8);
       orb.material = createMaterial(`disco_orb_${index}_mat`, scene, neonColors[index + 1], true);
       const light = new BABYLON.PointLight(`disco_light_${index}`, orb.position.clone(), scene);
       light.diffuse = neonColors[index + 1];
-      light.intensity = 1.15;
+      light.intensity = 10.15;
       light.range = 13;
       this.discoLights.push(light);
       this.addShadowCaster(orb);
 
-      const button = this.createButton(`light_switch_${index}`, `${name} LIGHT`, new BABYLON.Vector3(-2 + index * 2, 0.85, -1.4), [mats.green, mats.purple, mats.yellow][index], scene);
-      this.addObject(button, `Toggle ${name}`, 2.4, () => {
+      const button = this.createButton(`light_switch_${index}`, `${name} LIGHT`, new BABYLON.Vector3(-6 + index * 6, 0.85, -8), [mats.green, mats.purple, mats.yellow][index], scene);
+      this.addObject(`toggle-light-${index}`, button, `Toggle ${name}`, 2.4, () => {
         light.setEnabled(!light.isEnabled());
         setMeshColor(button, light.isEnabled() ? neonColors[index + 1] : new BABYLON.Color3(0.08, 0.08, 0.1));
       });
     });
 
-    const discoButton = this.createButton("disco_master_switch", "DISCO", new BABYLON.Vector3(4.5, 0.85, -1.4), mats.orange, scene);
-    this.addObject(discoButton, "Toggle disco", 2.6, (_scene) => {
+    const discoButton = this.createButton("disco_master_switch", "DISCO", new BABYLON.Vector3(12, 0.85, -8), mats.orange, scene);
+    this.addObject("toggle-disco", discoButton, "Toggle disco", 2.6, (_scene) => {
       this.discoEnabled = !this.discoEnabled;
       this.discoLights.forEach((light) => light.setEnabled(this.discoEnabled));
       this.burstConfetti(_scene, discoButton.position.add(new BABYLON.Vector3(0, 1, 0)), 90);
@@ -305,22 +342,23 @@ export class Playground {
   }
 
   private createLauncher(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const base = BABYLON.MeshBuilder.CreateCylinder("ball_launcher_base", { height: 0.7, diameter: 1.2, tessellation: 20 }, scene);
-    base.position = new BABYLON.Vector3(0, 0.75, 12.4);
+    const base = makeCollidable(BABYLON.MeshBuilder.CreateCylinder("ball_launcher_base", { height: 0.7, diameter: 1.2, tessellation: 20 }, scene));
+    base.position = new BABYLON.Vector3(0, 0.75, -30);
     base.material = mats.red;
-    const barrel = BABYLON.MeshBuilder.CreateCylinder("ball_launcher_barrel", { height: 2.4, diameter: 0.5, tessellation: 18 }, scene);
-    barrel.position = new BABYLON.Vector3(0, 1.75, 10.7);
+    const barrel = makeCollidable(BABYLON.MeshBuilder.CreateCylinder("ball_launcher_barrel", { height: 2.4, diameter: 0.5, tessellation: 18 }, scene));
+    barrel.position = new BABYLON.Vector3(0, 1.75, -28.3);
     barrel.rotation.x = Math.PI / 2.25;
     barrel.material = mats.dark;
     this.addShadowCaster(base);
     this.addShadowCaster(barrel);
-    this.addObject(base, "Launch balls", 3, (_scene, player) => {
+    this.addObject("launch-ball", base, "Launch balls", 3, (_scene) => {
       this.launchCount += 1;
       const ball = BABYLON.MeshBuilder.CreateSphere(`launched_goof_${this.launchCount}`, { diameter: 0.62, segments: 18 }, _scene);
-      ball.position = player.character.getAbsolutePosition().add(new BABYLON.Vector3(0, 1.2, 0));
+      ball.position = barrel.position.add(new BABYLON.Vector3(0, 0.2, 1.2));
+      makeCollidable(ball);
       ball.material = createMaterial(`launched_goof_${this.launchCount}_mat`, _scene, randomColor(), true);
       const aggregate = new BABYLON.PhysicsAggregate(ball, BABYLON.PhysicsShapeType.SPHERE, { mass: 0.36, restitution: 0.9, friction: 0.22 });
-      const direction = new BABYLON.Vector3(Math.sin(player.rotationY), 0.16, Math.cos(player.rotationY)).normalize();
+      const direction = new BABYLON.Vector3(0, 0.16, 1).normalize();
       applyImpulseToBody(aggregate, direction.scale(13));
       this.dynamicBodies.push(aggregate);
       this.fanBodies.push(aggregate);
@@ -329,38 +367,38 @@ export class Playground {
   }
 
   private createTrampoline(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const trampoline = BABYLON.MeshBuilder.CreateCylinder("trampoline", { height: 0.35, diameter: 3.2, tessellation: 32 }, scene);
-    trampoline.position = new BABYLON.Vector3(-10.5, 0.55, 6.2);
+    const trampoline = makeCollidable(BABYLON.MeshBuilder.CreateCylinder("trampoline", { height: 0.35, diameter: 3.2, tessellation: 32 }, scene));
+    trampoline.position = new BABYLON.Vector3(-18, 0.55, 10);
     trampoline.material = mats.blue;
     new BABYLON.PhysicsAggregate(trampoline, BABYLON.PhysicsShapeType.CYLINDER, { mass: 0, restitution: 1.2, friction: 0.25 });
     this.addShadowCaster(trampoline);
-    this.addObject(trampoline, "Super bounce", 3, (_scene, player) => {
-      player.characterController.setVelocity(new BABYLON.Vector3(0, 16, 0));
+    this.addObject("super-bounce", trampoline, "Super bounce", 3, (_scene, player) => {
+      player?.characterController.setVelocity(new BABYLON.Vector3(0, 16, 0));
       this.burstConfetti(_scene, trampoline.position.add(new BABYLON.Vector3(0, 1, 0)), 70);
     });
   }
 
   private createFan(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const stand = BABYLON.MeshBuilder.CreateCylinder("wind_machine_stand", { height: 2.2, diameter: 0.28 }, scene);
-    stand.position = new BABYLON.Vector3(8, 1.35, -10.6);
+    const stand = makeCollidable(BABYLON.MeshBuilder.CreateCylinder("wind_machine_stand", { height: 2.2, diameter: 0.28 }, scene));
+    stand.position = new BABYLON.Vector3(18, 1.35, -18);
     stand.material = mats.dark;
-    const rotor = BABYLON.MeshBuilder.CreateTorus("wind_machine_rotor", { diameter: 2.2, thickness: 0.12, tessellation: 28 }, scene);
-    rotor.position = new BABYLON.Vector3(8, 2.65, -10.6);
+    const rotor = makeCollidable(BABYLON.MeshBuilder.CreateTorus("wind_machine_rotor", { diameter: 2.2, thickness: 0.12, tessellation: 28 }, scene));
+    rotor.position = new BABYLON.Vector3(18, 2.65, -18);
     rotor.rotation.y = Math.PI / 2;
     rotor.material = mats.yellow;
     this.fanRotor = rotor;
     this.addShadowCaster(stand);
     this.addShadowCaster(rotor);
-    this.addObject(rotor, "Fan blast", 3.8, (_scene, player) => {
+    this.addObject("fan-blast", rotor, "Fan blast", 3.8, (_scene, player) => {
       const direction = new BABYLON.Vector3(1, 0.35, 0.05);
-      player.characterController.setVelocity(direction.scale(12));
+      player?.characterController.setVelocity(direction.scale(12));
       for (const body of this.fanBodies) applyImpulseToBody(body, direction.scale(1.5));
     });
   }
 
   private createGravityButton(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const button = this.createButton("gravity_button", "LOW G", new BABYLON.Vector3(7.3, 0.85, -3.2), mats.purple, scene);
-    this.addObject(button, "Moon gravity", 2.8, (_scene) => {
+    const button = this.createButton("gravity_button", "LOW G", new BABYLON.Vector3(14, 0.85, -6), mats.purple, scene);
+    this.addObject("moon-gravity", button, "Moon gravity", 2.8, (_scene) => {
       _scene.getPhysicsEngine()?.setGravity(new BABYLON.Vector3(0, -2.2, 0));
       this.lowGravityUntil = Date.now() + 9000;
       this.dynamicBodies.forEach((body) => applyImpulseToBody(body, new BABYLON.Vector3(0, 2.5, 0)));
@@ -369,28 +407,28 @@ export class Playground {
   }
 
   private createPaintCannon(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const button = this.createButton("paint_cannon", "PAINT", new BABYLON.Vector3(-1.7, 0.85, 2.9), mats.green, scene);
-    this.addObject(button, "Repaint toys", 2.8, (_scene) => {
+    const button = this.createButton("paint_cannon", "PAINT", new BABYLON.Vector3(-12, 0.85, -14), mats.green, scene);
+    this.addObject("paint-toys", button, "Repaint toys", 2.8, (_scene) => {
       this.dynamicBodies.forEach((body) => setMeshColor(body.transformNode as BABYLON.AbstractMesh, randomColor()));
       this.burstConfetti(_scene, button.position.add(new BABYLON.Vector3(0, 1, 0)), 150);
     });
   }
 
   private createMerryGoRound(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const merry = BABYLON.MeshBuilder.CreateCylinder("merry_go_round", { height: 0.45, diameter: 3.6, tessellation: 36 }, scene);
-    merry.position = new BABYLON.Vector3(10.7, 0.62, 8.4);
+    const merry = makeCollidable(BABYLON.MeshBuilder.CreateCylinder("merry_go_round", { height: 0.45, diameter: 3.6, tessellation: 36 }, scene));
+    merry.position = new BABYLON.Vector3(20, 0.62, 8);
     merry.material = mats.orange;
     new BABYLON.PhysicsAggregate(merry, BABYLON.PhysicsShapeType.CYLINDER, { mass: 0, friction: 0.05 });
     this.merry = merry;
     this.addShadowCaster(merry);
-    this.addObject(merry, "Spin faster", 3, () => {
+    this.addObject("spin-merry", merry, "Spin faster", 3, () => {
       this.merrySpeed = this.merrySpeed > 5 ? 0.9 : this.merrySpeed + 1.15;
     });
   }
 
   private createTeleporter(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const portal = BABYLON.MeshBuilder.CreateTorus("portal_donut", { diameter: 2.2, thickness: 0.18, tessellation: 40 }, scene);
-    portal.position = new BABYLON.Vector3(-24.5, 1.55, -16.3);
+    const portal = makeCollidable(BABYLON.MeshBuilder.CreateTorus("portal_donut", { diameter: 2.2, thickness: 0.18, tessellation: 40 }, scene));
+    portal.position = new BABYLON.Vector3(-32, 1.55, -30);
     portal.rotation.x = Math.PI / 2;
     portal.material = mats.blue;
     const light = new BABYLON.PointLight("portal_light", portal.position.clone(), scene);
@@ -398,11 +436,12 @@ export class Playground {
     light.intensity = 1.1;
     light.range = 8;
     this.addShadowCaster(portal);
-    this.addObject(portal, "Teleport", 3.2, (_scene, player) => {
+    this.addObject("teleport", portal, "Teleport", 3.2, (_scene, player) => {
+      if (!player) return;
       const destinations = [
-        new BABYLON.Vector3(10, 3, 13),
-        new BABYLON.Vector3(-7, 4, -4),
-        new BABYLON.Vector3(5.7, 4, 4.4),
+        new BABYLON.Vector3(28, 3, 34),
+        new BABYLON.Vector3(-28, 4, -20),
+        new BABYLON.Vector3(20, 4, 8),
         new BABYLON.Vector3(0, 5, 0),
       ];
       player.updatePosition(destinations[Math.floor(Math.random() * destinations.length)].clone());
@@ -411,16 +450,16 @@ export class Playground {
   }
 
   private createJukebox(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const box = BABYLON.MeshBuilder.CreateBox("jukebox", { width: 1.4, height: 2.2, depth: 0.7 }, scene);
-    box.position = new BABYLON.Vector3(24.5, 1.35, -8.5);
+    const box = makeCollidable(BABYLON.MeshBuilder.CreateBox("jukebox", { width: 1.4, height: 2.2, depth: 0.7 }, scene));
+    box.position = new BABYLON.Vector3(38, 1.35, -10);
     box.material = mats.red;
-    const halo = BABYLON.MeshBuilder.CreateTorus("jukebox_halo", { diameter: 1.3, thickness: 0.08, tessellation: 24 }, scene);
-    halo.position = new BABYLON.Vector3(24.5, 2.4, -8.1);
+    const halo = makeCollidable(BABYLON.MeshBuilder.CreateTorus("jukebox_halo", { diameter: 1.3, thickness: 0.08, tessellation: 24 }, scene));
+    halo.position = new BABYLON.Vector3(32, 2.4, -9.6);
     halo.material = mats.yellow;
     this.addShadowCaster(box);
     this.addShadowCaster(halo);
-    this.addObject(box, "Dance party", 3, (_scene, player) => {
-      player.dance();
+    this.addObject("dance-party", box, "Dance party", 3, (_scene, player) => {
+      player?.dance();
       this.discoEnabled = true;
       this.discoLights.forEach((light) => light.setEnabled(true));
       this.burstConfetti(_scene, box.position.add(new BABYLON.Vector3(0, 1.2, 0)), 160);
@@ -428,16 +467,16 @@ export class Playground {
   }
 
   private createHammer(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
-    const hammer = BABYLON.MeshBuilder.CreateBox("foam_hammer", { width: 1.2, height: 0.8, depth: 1.2 }, scene);
-    hammer.position = new BABYLON.Vector3(-10.6, 1.3, 16.8);
+    const hammer = makeCollidable(BABYLON.MeshBuilder.CreateBox("foam_hammer", { width: 1.2, height: 0.8, depth: 1.2 }, scene));
+    hammer.position = new BABYLON.Vector3(-20, 1.3, 30);
     hammer.material = mats.yellow;
-    const handle = BABYLON.MeshBuilder.CreateCylinder("foam_hammer_handle", { height: 1.8, diameter: 0.22, tessellation: 16 }, scene);
-    handle.position = new BABYLON.Vector3(-10.6, 0.75, 16.8);
+    const handle = makeCollidable(BABYLON.MeshBuilder.CreateCylinder("foam_hammer_handle", { height: 1.8, diameter: 0.22, tessellation: 16 }, scene));
+    handle.position = new BABYLON.Vector3(-20, 0.75, 30);
     handle.material = mats.dark;
     this.addShadowCaster(hammer);
     this.addShadowCaster(handle);
-    this.addObject(hammer, "Bonk nearby toys", 3.2, (_scene, player) => {
-      const origin = player.character.getAbsolutePosition();
+    this.addObject("bonk-toys", hammer, "Bonk nearby toys", 3.2, (_scene, player) => {
+      const origin = player?.character.getAbsolutePosition() ?? hammer.getAbsolutePosition();
       for (const body of this.dynamicBodies) {
         const pos = body.transformNode.getAbsolutePosition();
         const delta = pos.subtract(origin);
@@ -449,21 +488,21 @@ export class Playground {
 
   private createSillyDecor(scene: BABYLON.Scene, mats: Record<string, BABYLON.StandardMaterial>) {
     for (let index = 0; index < 14; index++) {
-      const cone = BABYLON.MeshBuilder.CreateCylinder(`party_hat_${index}`, { height: 1.1, diameterTop: 0, diameterBottom: 0.7, tessellation: 18 }, scene);
-      cone.position = new BABYLON.Vector3(-30 + index * 2.25, 0.8, -22 + (index % 3) * 0.7);
+      const cone = makeCollidable(BABYLON.MeshBuilder.CreateCylinder(`party_hat_${index}`, { height: 1.1, diameterTop: 0, diameterBottom: 0.7, tessellation: 18 }, scene));
+      cone.position = new BABYLON.Vector3(-36 + index * 2.8, 0.8, -36 + (index % 3) * 0.9);
       cone.material = [mats.red, mats.blue, mats.yellow, mats.green, mats.purple, mats.orange][index % 6];
       new BABYLON.PhysicsAggregate(cone, BABYLON.PhysicsShapeType.CYLINDER, { mass: 0.12, restitution: 0.7 });
       this.addShadowCaster(cone);
     }
 
-    const duckBody = BABYLON.MeshBuilder.CreateSphere("rubber_duck_body", { diameterX: 2.2, diameterY: 1.3, diameterZ: 1.35, segments: 24 }, scene);
-    duckBody.position = new BABYLON.Vector3(28, 1.1, 10.8);
+    const duckBody = makeCollidable(BABYLON.MeshBuilder.CreateSphere("rubber_duck_body", { diameterX: 2.2, diameterY: 1.3, diameterZ: 1.35, segments: 24 }, scene));
+    duckBody.position = new BABYLON.Vector3(36, 1.1, 16);
     duckBody.material = mats.yellow;
-    const duckHead = BABYLON.MeshBuilder.CreateSphere("rubber_duck_head", { diameter: 0.9, segments: 20 }, scene);
-    duckHead.position = new BABYLON.Vector3(28.85, 1.85, 10.8);
+    const duckHead = makeCollidable(BABYLON.MeshBuilder.CreateSphere("rubber_duck_head", { diameter: 0.9, segments: 20 }, scene));
+    duckHead.position = new BABYLON.Vector3(36.85, 1.85, 16);
     duckHead.material = mats.yellow;
-    const beak = BABYLON.MeshBuilder.CreateBox("rubber_duck_beak", { width: 0.65, height: 0.22, depth: 0.35 }, scene);
-    beak.position = new BABYLON.Vector3(30.45, 1.85, 10.8);
+    const beak = makeCollidable(BABYLON.MeshBuilder.CreateBox("rubber_duck_beak", { width: 0.65, height: 0.22, depth: 0.35 }, scene));
+    beak.position = new BABYLON.Vector3(37.45, 1.85, 16);
     beak.material = mats.orange;
     this.addShadowCaster(duckBody);
     this.addShadowCaster(duckHead);
@@ -471,19 +510,21 @@ export class Playground {
   }
 
   private createButton(name: string, text: string, position: BABYLON.Vector3, material: BABYLON.StandardMaterial, scene: BABYLON.Scene) {
-    const button = BABYLON.MeshBuilder.CreateCylinder(name, { height: 0.42, diameter: 1.18, tessellation: 24 }, scene);
+    const button = makeCollidable(BABYLON.MeshBuilder.CreateCylinder(name, { height: 0.42, diameter: 1.18, tessellation: 24 }, scene));
     button.position = position;
     button.material = material;
     new BABYLON.PhysicsAggregate(button, BABYLON.PhysicsShapeType.CYLINDER, { mass: 0 });
     this.addShadowCaster(button);
-    createLabel(`${name}_top_label`, text, position.add(new BABYLON.Vector3(0, 1.55, 0)), scene);
+    const topLabel = createLabel(`${name}_top_label`, text, position.add(new BABYLON.Vector3(0, 1.55, 0)), scene);
+    button.metadata = { ...(button.metadata ?? {}), topLabel };
     return button;
   }
 
-  private addObject(mesh: BABYLON.AbstractMesh, labelText: string, distance: number, action: PlaygroundAction) {
+  private addObject(id: string, mesh: BABYLON.AbstractMesh, labelText: string, distance: number, action: PlaygroundAction) {
     const label = createLabel(`${mesh.name}_interact_label`, labelText, mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1.8, 0)), mesh.getScene());
     label.setEnabled(false);
-    this.objects.push(new PlaygroundInteractable(mesh, label, distance, action));
+    const originalLabel = (mesh.metadata as { topLabel?: BABYLON.AbstractMesh } | undefined)?.topLabel;
+    this.objects.push(new PlaygroundInteractable(id, mesh, label, originalLabel, distance, action, this.publish));
   }
 
   private burstConfetti(scene: BABYLON.Scene, position: BABYLON.Vector3, count: number) {

@@ -10,9 +10,12 @@ import {TV} from "./tv";
 import {MeshCache} from "./cache";
 import {Playground} from "./playground";
 
-export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance";
+export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance" | "playground-interact";
+export interface PlaygroundInteractEventPayload {
+  actionId: string;
+}
 
-export type InteractionSubscriber = (event: InteractEventType) => void;
+export type InteractionSubscriber = (event: InteractEventType, payload?: PlaygroundInteractEventPayload) => void;
 
 
 export class MainScene {
@@ -39,6 +42,7 @@ export class MainScene {
     if (this._scene) this.dispose();
     const scene = new BABYLON.Scene(engine);
     scene.shadowsEnabled = true;
+    scene.collisionsEnabled = true;
     this._scene = scene;
     this._camera = new BABYLON.ArcFollowCamera(
       "camera1",
@@ -75,9 +79,11 @@ export class MainScene {
           BABYLON.PhysicsShapeType.BOX,
           { mass: 0.1 },
         );   
+        mesh.checkCollisions = true;
         this.addShadowCaster(mesh);
       } else if (mesh.name.startsWith("TV") || mesh.name.startsWith("Icosphere") || mesh.name.startsWith("Wall")) {
         new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
+        mesh.checkCollisions = true;
         mesh.isPickable = false;
         mesh.freezeWorldMatrix()
         mesh.doNotSyncBoundingInfo = true;
@@ -85,6 +91,7 @@ export class MainScene {
         this.addShadowCaster(mesh);
       } else if (mesh.name.startsWith("floor") || mesh.name.startsWith("Ground") ||  mesh.name.startsWith("Cube")) {
         new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
+        mesh.checkCollisions = true;
       }
     });
 
@@ -129,11 +136,20 @@ export class MainScene {
   }
 
   public addPlayground(scene: BABYLON.Scene) {
-    this.playground = new Playground((mesh) => this.addShadowCaster(mesh));
+    this.playground = new Playground((mesh) => this.addShadowCaster(mesh), (actionId) => {
+      this.onInteract?.("playground-interact", { actionId });
+    });
     this.playground.init(scene);
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
       this.playground.beforeRender(scene, this.mainPlayer);
     });
+  }
+
+  public interactWithPlayground(actionId: string, playerId: string) {
+    const player = this.mainPlayer?.id === playerId
+      ? this.mainPlayer
+      : this._otherPlayers[playerId];
+    this.playground?.interact(actionId, player);
   }
 
   public addMainPlayer(player: Player) {

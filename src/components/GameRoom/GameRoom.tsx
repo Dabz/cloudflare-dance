@@ -10,7 +10,7 @@ import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
 import type {StreamVideo} from "../../../worker/model/streams";
 import {listStreams} from "../../streams";
-import type {ChatRequest, PlayerDanceRequest, PlayerUpdateRequest, RoomDisplayUrlRequest, WSServerMessage} from "../../../worker/model/gameroom";
+import type {ChatRequest, PlayerDanceRequest, PlaygroundInteractRequest, PlayerUpdateRequest, RoomDisplayUrlRequest, WSServerMessage} from "../../../worker/model/gameroom";
 import type {Chat} from "../../../worker/model/chat";
 
 function getDisplayNameForJoin(displayName: string): string {
@@ -20,6 +20,16 @@ function getDisplayNameForJoin(displayName: string): string {
 
 function getStreamTitle(stream: StreamVideo, index: number): string {
   return stream.meta?.name || stream.meta?.filename || `Video ${index + 1}`;
+}
+
+function parseChatContent(content: string): { content: string; playerNameColor?: string } {
+  const match = content.match(/^\[name:(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})\]\s*/);
+  if (!match) return { content };
+
+  return {
+    content: content.slice(match[0].length),
+    playerNameColor: match[1],
+  };
 }
 
 const GameRoom: FC = () => {
@@ -146,7 +156,7 @@ const GameRoom: FC = () => {
           if (!canvas) return;
 
           console.log("Initiating main scene")
-          mainScene = new MainScene((event) => {
+          mainScene = new MainScene((event, payload) => {
             if (event === "tv-interact") {
               setTvPopupOpen(true)
             }
@@ -157,6 +167,12 @@ const GameRoom: FC = () => {
               if (wsRef.current?.readyState === WebSocket.OPEN) {
                 const payload: PlayerDanceRequest = { type: "dance" };
                 wsRef.current.send(JSON.stringify(payload));
+              }
+            }
+            if (event === "playground-interact" && payload?.actionId) {
+              if (wsRef.current?.readyState === WebSocket.OPEN) {
+                const request: PlaygroundInteractRequest = { type: "playground", actionId: payload.actionId };
+                wsRef.current.send(JSON.stringify(request));
               }
             }
           });
@@ -207,6 +223,11 @@ const GameRoom: FC = () => {
             const payload = JSON.parse(event.data) as WSServerMessage
             if ("type" in payload && payload.type === "dance") {
               mainScene.dancePlayer(payload.playerId);
+              return;
+            }
+
+            if ("type" in payload && payload.type === "playground") {
+              mainScene.interactWithPlayground(payload.actionId, payload.playerId);
               return;
             }
 
@@ -324,19 +345,26 @@ const GameRoom: FC = () => {
       <div className={styles.ChatBody}>
       <div className={styles.ChatMessages} ref={chatListRef}>
       {chats.length === 0 && <p className={styles.ChatEmpty}>No messages</p>}
-      {chats.map((chat) => (
-        <article className={`${styles.ChatMessage} ${chat.isInternal ? styles.ChatMessageInternal : ""}`} key={chat.id}>
-        {!chat.isInternal && chat.playerDisplayName && <span className={styles.ChatPlayerId}>{chat.playerDisplayName}</span>}
-        <p>{chat.content}</p>
-        </article>
-      ))}
+      {chats.map((chat) => {
+        const parsedChat = parseChatContent(chat.content);
+        return (
+          <article className={`${styles.ChatMessage} ${chat.isInternal ? styles.ChatMessageInternal : ""}`} key={chat.id}>
+          {!chat.isInternal && chat.playerDisplayName && (
+            <span className={styles.ChatPlayerId} style={parsedChat.playerNameColor ? { color: parsedChat.playerNameColor } : undefined}>
+            {chat.playerDisplayName}
+            </span>
+          )}
+          <p>{parsedChat.content}</p>
+          </article>
+        );
+      })}
       </div>
       <form className={styles.ChatForm} onSubmit={sendChatMessage}>
       <input
       aria-label="Chat message"
       maxLength={500}
       onChange={(event) => setDraftChatMessage(event.target.value)}
-      placeholder="Say something"
+      placeholder="Say something, or [name:#35f] colored-name"
       type="text"
       value={draftChatMessage}
       />

@@ -1,6 +1,6 @@
 import { DurableObject, env } from "cloudflare:workers";
 import puppeteer from "@cloudflare/puppeteer";
-import type { ChatPayload, ChatRequest, WSClientMessage, PlayerDancePayload, PlayerUpdateRequest, PlayerUpdates, PlayerUpdatesPayload, RoomDisplayUrlRequest, RoomStatePayload } from "../model/gameroom";
+import type { ChatPayload, ChatRequest, WSClientMessage, PlayerDancePayload, PlaygroundInteractPayload, PlaygroundInteractRequest, PlayerUpdateRequest, PlayerUpdates, PlayerUpdatesPayload, RoomDisplayUrlRequest, RoomStatePayload } from "../model/gameroom";
 import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity, getReconnect} from "../auth";
 import Const from "../const"
 import type {Player, PlayerIdentity} from "../model/player";
@@ -291,6 +291,10 @@ export class GameRoom extends DurableObject<Env> {
         return this.handleDanceMessage(ws, session);
       }
 
+      if ("type" in incomingMessage && incomingMessage.type === "playground") {
+        return this.handlePlaygroundMessage(ws, incomingMessage, session);
+      }
+
       if ("type" in incomingMessage && incomingMessage.type === "display-url") {
         return await this.handleDisplayUrlMessage(incomingMessage, session);
       }
@@ -361,6 +365,11 @@ export class GameRoom extends DurableObject<Env> {
     return;
   }
 
+  private handlePlaygroundMessage(ws: WebSocket, incomingMessage: PlaygroundInteractRequest, session: SessionData) {
+    this.broadcastPlayground(ws, incomingMessage.actionId, session.id);
+    return;
+  }
+
   private broadcastDance(sender: WebSocket, playerId: string) {
     const payload: PlayerDancePayload = {
       type: "dance",
@@ -375,6 +384,23 @@ export class GameRoom extends DurableObject<Env> {
       }
     }
   }
+
+  private broadcastPlayground(sender: WebSocket, actionId: string, playerId: string) {
+    const payload: PlaygroundInteractPayload = {
+      type: "playground",
+      actionId,
+      playerId,
+      time: new Date().getTime(),
+    };
+    const payloadString = JSON.stringify(payload);
+
+    for (const client of this.ctx.getWebSockets()) {
+      if (client !== sender) {
+        this.sendWSMessage(client, payloadString);
+      }
+    }
+  }
+
   private broadcastChat(chat: Chat) {
     const payload: ChatPayload = {
       type: "chat",
@@ -495,7 +521,8 @@ export class GameRoom extends DurableObject<Env> {
     }
   }
 
-  async webSocketClose(ws: WebSocket, code: number, reason: string, wasClean: boolean) {
+  async webSocketClose(ws: WebSocket, code: number, reason: string, _wasClean: boolean) {
+    void _wasClean;
     const session = ws.deserializeAttachment() as SessionData;
     delete this.players[session.id];
     try {

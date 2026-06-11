@@ -76,6 +76,9 @@ export class PlayerCharacter {
     const entries = MeshCache.characterY.instantiateModelsToScene((source_name) => `${player.assetPrefix}${source_name}`, true, {})
     player.character = entries.rootNodes[0] as BABYLON.Mesh;
     player.character.scaling = new BABYLON.Vector3(1., 1., 1.);
+    player.character.checkCollisions = true;
+    player.character.ellipsoid = new BABYLON.Vector3(0.45, 0.9, 0.45);
+    player.character.ellipsoidOffset = new BABYLON.Vector3(0, 0.9, 0);
     player.ensureAnimation(scene, "idle");
 
     const h = 1;
@@ -297,7 +300,10 @@ export class PlayerCharacter {
     const support = this.characterController.checkSupport(dt, down);
 
     BABYLON.Quaternion.FromEulerAnglesToRef(0,camera.rotation.y, 0, this.characterOrientation);
-    this.updateRotation(camera.rotation.y, false);
+    if (this.inputDirection.lengthSquared() > 0.001) {
+      const movementDirection = this.inputDirection.normalizeToNew().applyRotationQuaternion(this.characterOrientation);
+      this.updateRotation(Math.atan2(movementDirection.x, movementDirection.z), false);
+    }
     const desiredLinearVelocity = this.getDesiredVelocity(dt, support, this.characterOrientation, this.characterController.getVelocity());
     this.characterController.setVelocity(desiredLinearVelocity);
     this.characterController.integrate(dt, support, this.characterGravity);
@@ -316,17 +322,13 @@ export class PlayerCharacter {
       this.characterController.setPosition(newPosition)
       return;
     }
-    const easingFunction = new BABYLON.CubicEase();
-    easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
-
-    // 2. Trigger the quick animation helper
-    BABYLON.Animation.CreateAndStartAnimation("smoothMove", this.character, "position", 60, 6, this.characterPosition.clone(), newPosition, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT, easingFunction);
-    this.characterPosition = newPosition;
-    this.characterController.setPosition(newPosition.clone())
+    const previousPosition = this.character.position.clone();
+    this.character.moveWithCollisions(newPosition.subtract(previousPosition));
+    this.characterPosition = this.character.position.clone();
+    this.characterController.setPosition(this.characterPosition.clone())
 
     if (this.text) {
-      const newTextPosition = new BABYLON.Vector3(newPosition.x, newPosition.y + 1, newPosition.z)
-      BABYLON.Animation.CreateAndStartAnimation("smoothMove", this.text, "position", 60, 6, this.text.position.clone(), newTextPosition, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT, easingFunction);
+      this.text.position = new BABYLON.Vector3(this.characterPosition.x, this.characterPosition.y + 1, this.characterPosition.z)
     }
   }
 

@@ -22,6 +22,18 @@ export interface PlayerDancePayload {
   time: number;
 }
 
+export interface PlaygroundInteractRequest {
+  type: "playground";
+  actionId: string;
+}
+
+export interface PlaygroundInteractPayload {
+  type: "playground";
+  actionId: string;
+  playerId: string;
+  time: number;
+}
+
 export interface RoomDisplayUrlRequest {
   type: "display-url";
   url: string;
@@ -46,8 +58,8 @@ export interface ChatPayload {
   chat: Chat;
 }
 
-export type WSClientMessage = PlayerUpdateRequest | PlayerDanceRequest | RoomDisplayUrlRequest | ChatRequest;
-export type WSServerMessage = PlayerUpdatesPayload | PlayerDancePayload | RoomStatePayload | ChatPayload;
+export type WSClientMessage = PlayerUpdateRequest | PlayerDanceRequest | PlaygroundInteractRequest | RoomDisplayUrlRequest | ChatRequest;
+export type WSServerMessage = PlayerUpdatesPayload | PlayerDancePayload | PlaygroundInteractPayload | RoomStatePayload | ChatPayload;
 
 export interface PlayerUpdates {
   [key: string]: Player;
