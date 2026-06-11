@@ -7,10 +7,12 @@ import "@babylonjs/loaders/glTF";
 import type { Player } from "../../worker/model/player";
 import { PlayerCharacter } from "./player";
 import {TV} from "./tv";
+import {MeshCache} from "./cache";
 
 export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance";
 
 export type InteractionSubscriber = (event: InteractEventType) => void;
+
 
 export class MainScene {
   mainPlayer: PlayerCharacter;
@@ -29,6 +31,7 @@ export class MainScene {
   constructor(onInteract?: InteractionSubscriber) {
     this.onInteract = onInteract;
   }
+
 
   public async createScene(engine: BABYLON.Engine, mainPlayer?: Player ): Promise<BABYLON.Scene> {
     if (this._scene) this.dispose();
@@ -55,7 +58,10 @@ export class MainScene {
 
     const hk = new BABYLON.HavokPlugin(undefined, havokInterface);
     scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
+    const characterAsset = BABYLON.LoadAssetContainerAsync('/characterY.glb', scene)
     await BABYLON.ImportMeshAsync("/level.glb", scene);
+    MeshCache.characterY = await characterAsset;
+
     if (this._scene !== scene) return scene;
     scene.meshes.forEach((mesh) => this.addShadowReceiver(mesh));
     this.addSky(scene);
@@ -124,6 +130,7 @@ export class MainScene {
       return;
     }
     this.mainPlayer = PlayerCharacter.createPlayer(true, player.id, this._scene);
+    this.mainPlayer.onInteract = this.onInteract;
     this.addShadowCaster(this.mainPlayer.character);
     this._camera.setMeshTarget(this.mainPlayer.character)
     if (player.x != null && player.y != null && player.z != null) {

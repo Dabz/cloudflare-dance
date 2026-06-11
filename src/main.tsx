@@ -7,7 +7,7 @@ import Room from './Room'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '*',
     element: <App />,
   },
   {

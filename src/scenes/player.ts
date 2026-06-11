@@ -1,8 +1,9 @@
-import * as BABYLON from "@babylonjs/core";
+import * as BABYLON from "@babylonjs/core"
 import type {Player} from "../../worker/model/player";
 import earcut from 'earcut';
 import type {UsableObject} from "./object";
 import type {InteractionSubscriber} from "./main";
+import {MeshCache} from "./cache";
 const fontData = await (await fetch("/font.json")).json();
 
 const textColors = [
@@ -56,10 +57,12 @@ export class PlayerCharacter {
   isDancing = false;
   usableObject?: UsableObject = undefined;
 
-  _onInteract?: InteractionSubscriber;
+  onInteract?: InteractionSubscriber;
+  assetPrefix: string;
+  animation: BABYLON.AnimationGroup;
 
   constructor(onInteract?: InteractionSubscriber) {
-    this._onInteract = onInteract;
+    this.onInteract = onInteract;
   }
 
   public static createPlayer(mainPlayer: boolean, id: string, scene: BABYLON.Scene, otherPlayer?: Player): PlayerCharacter {
@@ -69,16 +72,14 @@ export class PlayerCharacter {
     player.characterOrientation = BABYLON.Quaternion.Identity();
     player.characterGravity = new BABYLON.Vector3(0, -18, 0);
 
-    const h = 1.8;
-    const r = 0.6;
-    player.character = BABYLON.MeshBuilder.CreateCapsule("CharacterDisplay", {height: h, radius: r}, scene);
-    player.character.material = new BABYLON.StandardMaterial("capsule", scene);
-    if (mainPlayer) {
-      player.character.material.diffuseColor = new BABYLON.Color3(0.4,0.5,0.8);
-    } else {
-      player.character.material.diffuseColor = new BABYLON.Color3(0.2,0.9,0.8);
-    }
+    player.assetPrefix = `player_${otherPlayer?.id ?? "main"}_`
+    const entries = MeshCache.characterY.instantiateModelsToScene((source_name) => `${player.assetPrefix}${source_name}`, true, {})
+    player.character = entries.rootNodes[0] as BABYLON.Mesh;
+    player.character.scaling = new BABYLON.Vector3(1., 1., 1.);
+    player.ensureAnimation(scene, "idle");
 
+    const h = 1;
+    const r = 0.6;
     player.characterPosition = player.startPosition;
     player.characterController = new BABYLON.PhysicsCharacterController(player.characterPosition, {capsuleHeight: h, capsuleRadius: r}, scene);
 
@@ -88,6 +89,18 @@ export class PlayerCharacter {
     }
 
     return player;
+  }
+
+  private ensureAnimation(scene: BABYLON.Scene, animation: "idle" | "dance1" | "dance2" | "run" | "jump") {
+    const animationName = this.assetPrefix + animation
+    if (this.animation && this.animation.name === animationName) {
+      return;
+    }
+    if (this.animation) {
+      this.animation.stop();
+    }
+    this.animation = scene.getAnimationGroupByName(this.assetPrefix + animation);
+    this.animation.start(true, 1, this.animation.from, this.animation.to, false);
   }
 
   public addListenersToKeyboardAndMouse(scene: BABYLON.Scene, camera: BABYLON.ArcFollowCamera) {
@@ -179,8 +192,15 @@ export class PlayerCharacter {
     });
   }
 
-  public getDesiredVelocity(deltaTime, supportInfo, characterOrientation, currentVelocity) {
+  public getDesiredVelocity(deltaTime, supportInfo, characterOrientation, currentVelocity): BABYLON.Vector3 {
     const nextState = this.getNextState(supportInfo);
+    if (nextState == "START_JUMP") {
+      this.ensureAnimation(this.character.getScene(), "jump")
+      this.animation.onAnimationLoopObservable.add(() => {
+        this.ensureAnimation(this.character.getScene(), "idle");
+      })
+
+    }
     if (nextState != this.state) {
       this.state = nextState;
     }
@@ -282,6 +302,11 @@ export class PlayerCharacter {
     this.characterController.setVelocity(desiredLinearVelocity);
     this.characterController.integrate(dt, support, this.characterGravity);
     this.characterPosition = this.characterController.getPosition();
+    if (BABYLON.Vector3.Distance(this.characterPosition, this.character.position) <= 0.01 && this.animation && this.animation.name.endsWith("run")) {
+      this.ensureAnimation(scene, "idle")
+    } else if (BABYLON.Vector3.Distance(this.characterPosition, this.character.position) > 0.01 && this.state == "ON_GROUND") {
+      this.ensureAnimation(scene, "run")
+    }
   }
 
   updatePosition(newPosition: BABYLON.Vector3) {
@@ -308,7 +333,7 @@ export class PlayerCharacter {
   updateRotation(rotationY: number, animate = true) {
     this.rotationY = rotationY;
     if (this.mainPlayer || !animate) {
-      this.character.rotation.y = rotationY;
+      this.character.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(rotationY, 0, 0)
 
       if (this.interact) {
         this.interact.rotation.y = rotationY;
@@ -342,21 +367,10 @@ export class PlayerCharacter {
 
 
   dance() {
-    if (this._onInteract) {
-      this._onInteract("player-dance");
+    this.ensureAnimation(this.character.getScene(), "dance1");
+    if (this.onInteract) {
+      this.onInteract("player-dance");
     }
-    this.isDancing = true;
-    const spinAnimation = BABYLON.Animation.CreateAndStartAnimation("danceSpin", this.character, "rotation.z", 60, 45, this.character.rotation.z, this.character.rotation.z + Math.PI * 2, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
-    const bounceAnimation = BABYLON.Animation.CreateAndStartAnimation("danceBounce", this.character, "scaling.y", 60, 18, 1, 1.25, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    setTimeout(() => {
-      this.isDancing = false;
-      if (!this.character.isDisposed()) {
-        this.character.scaling.y = 1;
-        this.character.rotation.z = 0;
-        spinAnimation.stop();
-        bounceAnimation.stop();
-      }
-    }, 6000);
   }
 
   dispose() {
