@@ -296,6 +296,10 @@ const GameRoom: FC = () => {
       <dd>Jump</dd>
       </div>
       <div>
+      <dt><kbd>E</kbd></dt>
+      <dd>Use nearby toys</dd>
+      </div>
+      <div>
       <dt><kbd>Q</kbd></dt>
       <dd>Dance</dd>
       </div>

@@ -8,6 +8,7 @@ import type { Player } from "../../worker/model/player";
 import { PlayerCharacter } from "./player";
 import {TV} from "./tv";
 import {MeshCache} from "./cache";
+import {Playground} from "./playground";
 
 export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance";
 
@@ -17,6 +18,7 @@ export type InteractionSubscriber = (event: InteractEventType) => void;
 export class MainScene {
   mainPlayer: PlayerCharacter;
   tv: TV;
+  playground: Playground;
   _otherPlayers: { [key: string]: PlayerCharacter } = {};
   otherPlayers: Player[] = [];
   _shadowGenerator?: BABYLON.ShadowGenerator;
@@ -110,6 +112,7 @@ export class MainScene {
     }
 
     this.addTV(scene);
+    this.addPlayground(scene);
 
     if (mainPlayer) {
       this.addMainPlayer(mainPlayer);
@@ -122,6 +125,14 @@ export class MainScene {
     this.tv.init(scene);
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
       this.tv.beforeRender(scene, this._camera, this.mainPlayer);
+    });
+  }
+
+  public addPlayground(scene: BABYLON.Scene) {
+    this.playground = new Playground((mesh) => this.addShadowCaster(mesh));
+    this.playground.init(scene);
+    this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
+      this.playground.beforeRender(scene, this.mainPlayer);
     });
   }
 
