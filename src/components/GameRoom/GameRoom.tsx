@@ -64,6 +64,8 @@ const GameRoom: FC = () => {
   const [streams, setStreams] = useState<StreamVideo[] | undefined>(undefined);
   const [tvPopupOpen, setTvPopupOpen] = useState(false);
   const [howToPlayOpen, setHowToPlayOpen] = useState(true);
+  const [sceneLoading, setSceneLoading] = useState(true);
+  const [sceneLoadingProgress, setSceneLoadingProgress] = useState(0);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
 
@@ -175,6 +177,8 @@ const GameRoom: FC = () => {
           const { current: canvas } = reactCanvas;
           if (!canvas) return;
 
+          setSceneLoading(true);
+          setSceneLoadingProgress(0);
           console.log("Initiating main scene")
           mainScene = new MainScene((event, payload) => {
             if (event === "tv-interact") {
@@ -198,7 +202,9 @@ const GameRoom: FC = () => {
           });
           mainSceneRef.current = mainScene;
           engine = new BABYLON.Engine(canvas, true);
-          await mainScene.createScene(engine, mainPlayer);
+          await mainScene.createScene(engine, mainPlayer, (progress) => {
+            if (!disposed) setSceneLoadingProgress(Math.max(0, Math.min(100, progress)));
+          });
 
           if (disposed) {
             mainScene.dispose();
@@ -233,6 +239,9 @@ const GameRoom: FC = () => {
             if (!disposed) {
               mainScene?.render();
             }
+          });
+          requestAnimationFrame(() => {
+            if (!disposed) setSceneLoading(false);
           });
 
           window.addEventListener("resize", resizeListener);
@@ -280,6 +289,7 @@ const GameRoom: FC = () => {
         }
 
         console.error("Failed to join game", error);
+        setSceneLoading(false);
         ws?.close(1000, Const.WS_REASON_LEAVING)
         engine?.stopRenderLoop();
         mainScene?.dispose();
@@ -310,6 +320,18 @@ const GameRoom: FC = () => {
   return (
     <>
     <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
+    {sceneLoading && (
+      <section className={styles.LoadingScreen} aria-label="Loading game scene" aria-live="polite">
+      <div className={styles.LoadingCard}>
+      <span className={styles.LoadingKicker}>Loading room</span>
+      <strong>{sceneLoadingProgress}%</strong>
+      <div className={styles.LoadingBar} aria-hidden="true">
+      <span style={{ width: `${sceneLoadingProgress}%` }} />
+      </div>
+      <p>Stealing the spotlight, unpacking the playground...</p>
+      </div>
+      </section>
+    )}
     <section className={styles.ControlsPanel} aria-label="Room controls">
     <div className={styles.PrimaryControls}>
     <button type="button" onClick={() => navigate('/')}>Main Menu</button>
@@ -395,7 +417,7 @@ const GameRoom: FC = () => {
       aria-label="Chat message"
       maxLength={500}
       onChange={(event) => setDraftChatMessage(event.target.value)}
-      placeholder="Say something, or [name:#35f] colored-name"
+      placeholder="Say something"
       type="text"
       value={draftChatMessage}
       />

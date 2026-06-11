@@ -56,6 +56,95 @@
   pointer-events: none;
 }
 
+.LoadingScreen {
+  --loading-black: #070302;
+  --loading-orange: #ff6a00;
+  --loading-hot: #ff2f00;
+  --loading-gold: #ffd24a;
+  --loading-cream: #fff0c2;
+
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 210, 74, 0.28), transparent 24%),
+    linear-gradient(132deg, rgba(255, 47, 0, 0.94) 0 42%, rgba(255, 106, 0, 0.96) 42.3% 67%, var(--loading-black) 67.2% 100%);
+  color: var(--loading-cream);
+}
+
+.LoadingScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(116deg, transparent 0 18px, rgba(7, 3, 2, 0.22) 18px 25px),
+    radial-gradient(circle, rgba(255, 240, 194, 0.22) 0 2px, transparent 2px) 0 0 / 28px 28px;
+  mix-blend-mode: multiply;
+}
+
+.LoadingCard {
+  position: relative;
+  z-index: 1;
+  width: min(560px, calc(100vw - 40px));
+  padding: 28px 30px 26px;
+  background: var(--loading-black);
+  box-shadow:
+    16px 16px 0 var(--loading-gold),
+    28px 28px 0 rgba(255, 47, 0, 0.9);
+  clip-path: polygon(0 10%, 94% 0, 100% 80%, 8% 100%);
+  transform: rotate(-2deg) skewX(-3deg);
+}
+
+.LoadingKicker {
+  display: block;
+  color: var(--loading-gold);
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.LoadingCard strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--loading-orange);
+  font-size: clamp(58px, 14vw, 116px);
+  font-weight: 1000;
+  line-height: 0.86;
+  text-shadow:
+    4px 4px 0 var(--loading-cream),
+    8px 8px 0 var(--loading-hot);
+}
+
+.LoadingBar {
+  height: 20px;
+  margin-top: 24px;
+  border: 4px solid var(--loading-cream);
+  background: #170604;
+  box-shadow: 7px 7px 0 var(--loading-hot);
+  transform: skewX(-18deg);
+  overflow: hidden;
+}
+
+.LoadingBar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--loading-gold), var(--loading-orange), var(--loading-hot));
+  transition: width 180ms ease-out;
+}
+
+.LoadingCard p {
+  margin: 20px 0 0;
+  color: var(--loading-cream);
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .ControlsPanel button,
 .TvDisplayPopup button,
 .ChatPanel button {

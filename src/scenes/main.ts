@@ -16,6 +16,7 @@ export interface PlaygroundInteractEventPayload {
 }
 
 export type InteractionSubscriber = (event: InteractEventType, payload?: PlaygroundInteractEventPayload) => void;
+export type LoadingProgressSubscriber = (progress: number) => void;
 
 
 export class MainScene {
@@ -38,8 +39,9 @@ export class MainScene {
   }
 
 
-  public async createScene(engine: BABYLON.Engine, mainPlayer?: Player ): Promise<BABYLON.Scene> {
+  public async createScene(engine: BABYLON.Engine, mainPlayer?: Player, onLoadingProgress?: LoadingProgressSubscriber ): Promise<BABYLON.Scene> {
     if (this._scene) this.dispose();
+    onLoadingProgress?.(3);
     const scene = new BABYLON.Scene(engine);
     scene.shadowsEnabled = true;
     scene.collisionsEnabled = true;
@@ -61,14 +63,26 @@ export class MainScene {
 
     const havokInterface = await HavokPhysics({ locateFile: () => havokWasmUrl });
     if (this._scene !== scene) return scene;
+    onLoadingProgress?.(12);
 
     const hk = new BABYLON.HavokPlugin(undefined, havokInterface);
     scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), hk);
-    const characterAsset = BABYLON.LoadAssetContainerAsync('/characterY.glb', scene)
-    await BABYLON.ImportMeshAsync("/level.glb", scene);
+    const reportAssetProgress = (start: number, end: number) => (event: { loaded?: number; total?: number; lengthComputable?: boolean }) => {
+      const total = event.total ?? 0;
+      const loaded = event.loaded ?? 0;
+      const ratio = total > 0 ? Math.min(1, loaded / total) : 0;
+      onLoadingProgress?.(Math.round(start + (end - start) * ratio));
+    };
+    const characterAsset = BABYLON.LoadAssetContainerAsync('/characterY.glb', scene, {
+      onProgress: reportAssetProgress(12, 48),
+    })
+    await BABYLON.ImportMeshAsync("/level.glb", scene, {
+      onProgress: reportAssetProgress(48, 92),
+    });
     MeshCache.characterY = await characterAsset;
 
     if (this._scene !== scene) return scene;
+    onLoadingProgress?.(96);
     scene.meshes.forEach((mesh) => this.addShadowReceiver(mesh));
     this.addSky(scene);
 
@@ -124,6 +138,8 @@ export class MainScene {
     if (mainPlayer) {
       this.addMainPlayer(mainPlayer);
     }
+
+    onLoadingProgress?.(100);
 
     return scene;
   }
