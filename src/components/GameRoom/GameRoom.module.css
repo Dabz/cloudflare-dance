@@ -775,6 +775,73 @@
   background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
 }
 
+.MobileJoystickShell {
+  display: none;
+}
+
+.MobileJoystick {
+  --joystick-size: 132px;
+  --joystick-thumb: 56px;
+
+  position: relative;
+  width: var(--joystick-size);
+  height: var(--joystick-size);
+  border: 4px solid #080604;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 196, 71, 0.46) 0 18%, transparent 19%),
+    radial-gradient(circle, rgba(255, 242, 210, 0.86), rgba(255, 122, 22, 0.7));
+  box-shadow:
+    8px 8px 0 rgba(8, 6, 4, 0.88),
+    14px 14px 0 rgba(255, 196, 71, 0.72);
+  touch-action: none;
+  user-select: none;
+}
+
+.MobileJoystick::before,
+.MobileJoystick::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 74%;
+  height: 4px;
+  background: rgba(8, 6, 4, 0.28);
+  transform: translate(-50%, -50%);
+}
+
+.MobileJoystick::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.MobileJoystickThumb {
+  position: absolute;
+  top: calc(50% - var(--joystick-thumb) / 2);
+  left: calc(50% - var(--joystick-thumb) / 2);
+  z-index: 1;
+  width: var(--joystick-thumb);
+  height: var(--joystick-thumb);
+  border: 4px solid #080604;
+  border-radius: 999px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ff2f00, #ff7a16 58%, #ffd24a);
+  box-shadow:
+    4px 4px 0 rgba(8, 6, 4, 0.72),
+    inset 0 0 0 7px rgba(255, 242, 210, 0.3);
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .MobileJoystickShell {
+    position: fixed;
+    left: max(18px, env(safe-area-inset-left));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 7;
+    display: block;
+    padding: 8px;
+    pointer-events: auto;
+  }
+}
+
 @media (max-width: 640px) {
   .ControlsPanel {
     top: 12px;

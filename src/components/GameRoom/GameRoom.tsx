@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FC, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FC, type FormEvent, type PointerEvent as ReactPointerEvent } from "react";
 import styles from "./GameRoom.module.css";
 import * as BABYLON from "@babylonjs/core";
 import { MainScene } from "../../scenes/main";
@@ -57,6 +57,8 @@ const GameRoom: FC = () => {
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
   const wsRef = useRef<WebSocket | undefined>(undefined);
   const chatListRef = useRef<HTMLDivElement | null>(null);
+  const joystickRef = useRef<HTMLDivElement | null>(null);
+  const joystickPointerIdRef = useRef<number | undefined>(undefined);
   const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
   const [draftChatMessage, setDraftChatMessage] = useState("");
   const [chats, setChats] = useState<Chat[]>([]);
@@ -66,6 +68,7 @@ const GameRoom: FC = () => {
   const [howToPlayOpen, setHowToPlayOpen] = useState(true);
   const [sceneLoading, setSceneLoading] = useState(true);
   const [sceneLoadingProgress, setSceneLoadingProgress] = useState(0);
+  const [joystickOffset, setJoystickOffset] = useState({ x: 0, y: 0 });
   const { id: roomId } = useParams()
   const navigate = useNavigate()
 
@@ -102,6 +105,57 @@ const GameRoom: FC = () => {
     wsRef.current.send(JSON.stringify(payload));
     setDraftChatMessage("");
     setChatOpen(true);
+  }
+
+  function updateJoystick(clientX: number, clientY: number) {
+    const joystick = joystickRef.current;
+    if (!joystick) return;
+
+    const rect = joystick.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const maxTravel = Math.max(1, Math.min(rect.width, rect.height) / 2 - 28);
+    const rawX = clientX - centerX;
+    const rawY = clientY - centerY;
+    const distance = Math.hypot(rawX, rawY);
+    const scale = distance > maxTravel ? maxTravel / distance : 1;
+    const x = rawX * scale;
+    const y = rawY * scale;
+    const inputX = Math.abs(x / maxTravel) > 0.12 ? x / maxTravel : 0;
+    const inputZ = Math.abs(y / maxTravel) > 0.12 ? -y / maxTravel : 0;
+
+    setJoystickOffset({ x, y });
+    mainSceneRef.current?.setMainPlayerMoveInput(inputX, inputZ);
+  }
+
+  function releaseJoystick() {
+    joystickPointerIdRef.current = undefined;
+    setJoystickOffset({ x: 0, y: 0 });
+    mainSceneRef.current?.setMainPlayerMoveInput(0, 0);
+  }
+
+  function handleJoystickPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    event.preventDefault();
+    event.stopPropagation();
+    joystickPointerIdRef.current = event.pointerId;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    updateJoystick(event.clientX, event.clientY);
+  }
+
+  function handleJoystickPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    if (joystickPointerIdRef.current !== event.pointerId) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    updateJoystick(event.clientX, event.clientY);
+  }
+
+  function handleJoystickPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+    if (joystickPointerIdRef.current !== event.pointerId) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    releaseJoystick();
   }
 
   useEffect(() => {
@@ -320,6 +374,22 @@ const GameRoom: FC = () => {
   return (
     <>
     <canvas id={styles.renderCanvas} ref={reactCanvas}></canvas>
+    <div className={styles.MobileJoystickShell} aria-label="Move character">
+    <div
+    ref={joystickRef}
+    className={styles.MobileJoystick}
+    onPointerCancel={handleJoystickPointerUp}
+    onPointerDown={handleJoystickPointerDown}
+    onPointerMove={handleJoystickPointerMove}
+    onPointerUp={handleJoystickPointerUp}
+    role="application"
+    >
+    <span
+    className={styles.MobileJoystickThumb}
+    style={{ transform: `translate(${joystickOffset.x}px, ${joystickOffset.y}px)` }}
+    />
+    </div>
+    </div>
     {sceneLoading && (
       <section className={styles.LoadingScreen} aria-label="Loading game scene" aria-live="polite">
       <div className={styles.LoadingCard}>

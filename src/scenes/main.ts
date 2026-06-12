@@ -76,7 +76,7 @@ export class MainScene {
     const characterAsset = BABYLON.LoadAssetContainerAsync('/characterY.glb', scene, {
       onProgress: reportAssetProgress(12, 48),
     })
-    await BABYLON.ImportMeshAsync("/level.glb", scene, {
+    await BABYLON.ImportMeshAsync("/levels/1/level.gltf", scene, {
       onProgress: reportAssetProgress(48, 92),
     });
     MeshCache.characterY = await characterAsset;
@@ -219,6 +219,10 @@ export class MainScene {
 
     this.mainPlayer.resetPosition();
     this._camera.setTarget(this.mainPlayer.characterPosition);
+  }
+
+  public setMainPlayerMoveInput(x: number, z: number) {
+    this.mainPlayer?.setMoveInput(x, z);
   }
 
   public danceMainPlayer() {

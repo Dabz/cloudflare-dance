@@ -30,6 +30,22 @@ function createText(name: string, text: string, scene: BABYLON.Scene, size = 1):
   return mesh;
 }
 
+function hasCoarsePointer() {
+  return typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+}
+
+function clampCameraBeta(beta: number) {
+  return Math.min(Math.PI / 2, Math.max(0.12, beta));
+}
+
+function clampCameraRadius(radius: number) {
+  return Math.min(11, Math.max(4.5, radius));
+}
+
+function getPointerDistance(a: { x: number; y: number }, b: { x: number; y: number }) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
 export class PlayerCharacter {
   mainPlayer: boolean;
   id: string;
@@ -119,19 +135,94 @@ export class PlayerCharacter {
     if (!this.mainPlayer) return;
 
     let keyDowns = 0;
-    let isMouseDown = false;
+    let isPointerDown = false;
+    let pointerDownX = 0;
+    let pointerDownY = 0;
+    let pointerDownTime = 0;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let activePointerId: number | undefined;
+    let activePointerType = "mouse";
+    let pinchDistance: number | undefined;
+    const activePointers = new Map<number, { x: number; y: number }>();
+    const coarsePointer = hasCoarsePointer();
 
-    let mouseDownY = 0;
+    if (coarsePointer) {
+      camera.radius = Math.max(camera.radius, 7.5);
+      camera.beta = clampCameraBeta(Math.max(camera.beta, Math.PI * 0.33));
+    }
+
+    const rotateCamera = (deltaX: number, deltaY: number, sensitivity: number) => {
+      camera.alpha += deltaX * -sensitivity;
+      camera.beta = clampCameraBeta(camera.beta + deltaY * -sensitivity);
+    };
+
+    const zoomCamera = (delta: number) => {
+      camera.radius = clampCameraRadius(camera.radius + delta);
+    };
+
+    const canvas = scene.getEngine().getRenderingCanvas();
+    const onWheel = (event: WheelEvent) => {
+      if (!document.hasFocus()) return;
+
+      event.preventDefault();
+      if (event.ctrlKey) {
+        zoomCamera(event.deltaY * 0.02);
+        return;
+      }
+
+      const deltaModeScale = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : 1;
+      rotateCamera(event.deltaX * deltaModeScale, event.deltaY * deltaModeScale, 0.0045);
+    };
+
+    canvas?.addEventListener("wheel", onWheel, { passive: false });
+    scene.onDisposeObservable.add(() => {
+      canvas?.removeEventListener("wheel", onWheel);
+    });
+
     scene.onPointerObservable.add((pointerInfo) => {
+      const event = pointerInfo.event as PointerEvent;
+      const pointerId = event.pointerId ?? 0;
+      const pointerType = event.pointerType || "mouse";
       switch (pointerInfo.type) {
         case BABYLON.PointerEventTypes.POINTERDOWN: {
-          isMouseDown = true; 
-          mouseDownY = pointerInfo.event.y;
+          activePointers.set(pointerId, { x: event.clientX, y: event.clientY });
+
+          if (!isPointerDown) {
+            isPointerDown = true;
+            activePointerId = pointerId;
+            activePointerType = pointerType;
+            pointerDownX = event.clientX;
+            pointerDownY = event.clientY;
+            lastPointerX = event.clientX;
+            lastPointerY = event.clientY;
+            pointerDownTime = performance.now();
+          }
+
+          if (activePointers.size === 2) {
+            const [first, second] = Array.from(activePointers.values());
+            pinchDistance = getPointerDistance(first, second);
+          }
+
+          event.currentTarget instanceof HTMLElement && event.currentTarget.setPointerCapture?.(pointerId);
           break;
         }
 
         case BABYLON.PointerEventTypes.POINTERUP: {
-          isMouseDown = false;
+          const tapDistance = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
+          const tapDuration = performance.now() - pointerDownTime;
+
+          activePointers.delete(pointerId);
+          if (activePointerId === pointerId) {
+            isPointerDown = false;
+            activePointerId = undefined;
+            pinchDistance = undefined;
+          }
+
+          if ((activePointerType === "touch" || coarsePointer) && tapDistance < 14 && tapDuration < 280 && this.usableObject) {
+            this.usableObject.interact(this.character.getScene(), this);
+          }
+
           if (keyDowns == 0) {
             this.inputDirection.z = 0;
           }
@@ -139,20 +230,29 @@ export class PlayerCharacter {
         }
 
         case BABYLON.PointerEventTypes.POINTERMOVE: {
-          if (isMouseDown) {
-            camera.alpha += pointerInfo.event.movementX * -0.02;
-            const newBeta = camera.beta + pointerInfo.event.movementY * -0.02;
-            if (newBeta >= 0 && newBeta <= Math.PI / 2) {
-              camera.beta = newBeta;
-            }
+          if (activePointers.has(pointerId)) {
+            activePointers.set(pointerId, { x: event.clientX, y: event.clientY });
+          }
 
-            if (!keyDowns)
-              {
-                const deltaY = mouseDownY - pointerInfo.event.y;
-                if (Math.abs(deltaY) > 100) {
-                  this.inputDirection.z = Math.sign(deltaY);
-                }
-              }
+          if (activePointers.size === 2 && pinchDistance != null) {
+            const [first, second] = Array.from(activePointers.values());
+            const nextPinchDistance = getPointerDistance(first, second);
+            zoomCamera((pinchDistance - nextPinchDistance) * 0.018);
+            pinchDistance = nextPinchDistance;
+            break;
+          }
+
+          if (isPointerDown && activePointerId === pointerId) {
+            const deltaX = event.movementX || event.clientX - lastPointerX;
+            const deltaY = event.movementY || event.clientY - lastPointerY;
+            lastPointerX = event.clientX;
+            lastPointerY = event.clientY;
+
+            if (activePointerType === "touch" || coarsePointer) {
+              camera.alpha += deltaX * -0.009;
+            } else {
+              rotateCamera(deltaX, deltaY, 0.012);
+            }
           }
           break;
         }
@@ -201,6 +301,11 @@ export class PlayerCharacter {
         }
       }
     });
+  }
+
+  public setMoveInput(x: number, z: number) {
+    this.inputDirection.x = Math.max(-1, Math.min(1, x));
+    this.inputDirection.z = Math.max(-1, Math.min(1, z));
   }
 
   public getDesiredVelocity(deltaTime, supportInfo, characterOrientation, currentVelocity): BABYLON.Vector3 {
@@ -443,7 +548,7 @@ export class PlayerCharacter {
   }
 
   createInteractHint() {
-    this.interact = createText("hint_interact", "Press E", this.character.getScene(), 0.9);
+    this.interact = createText("hint_interact", hasCoarsePointer() ? "Tap" : "Press E", this.character.getScene(), 0.9);
     this.interact.position = this.character.position.clone();
     this.interact.position.y += 1;
   }
