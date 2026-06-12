@@ -167,12 +167,18 @@ export class PlayerCharacter {
 
       event.preventDefault();
       if (event.ctrlKey) {
-        zoomCamera(event.deltaY * 0.02);
+        zoomCamera(event.deltaY * 0.012);
         return;
       }
 
       const deltaModeScale = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : 1;
-      rotateCamera(event.deltaX * deltaModeScale, event.deltaY * deltaModeScale, 0.0045);
+      const deltaX = event.deltaX * deltaModeScale;
+      const deltaY = event.deltaY * deltaModeScale;
+      if (Math.abs(deltaY) >= Math.abs(deltaX)) {
+        zoomCamera(deltaY * 0.018);
+      } else {
+        rotateCamera(deltaX, 0, 0.0045);
+      }
     };
 
     canvas?.addEventListener("wheel", onWheel, { passive: false });
@@ -237,7 +243,7 @@ export class PlayerCharacter {
           if (activePointers.size === 2 && pinchDistance != null) {
             const [first, second] = Array.from(activePointers.values());
             const nextPinchDistance = getPointerDistance(first, second);
-            zoomCamera((pinchDistance - nextPinchDistance) * 0.018);
+            zoomCamera((pinchDistance - nextPinchDistance) * 0.01);
             pinchDistance = nextPinchDistance;
             break;
           }
@@ -249,7 +255,7 @@ export class PlayerCharacter {
             lastPointerY = event.clientY;
 
             if (activePointerType === "touch" || coarsePointer) {
-              camera.alpha += deltaX * -0.009;
+              rotateCamera(deltaX, deltaY, 0.0038);
             } else {
               rotateCamera(deltaX, deltaY, 0.012);
             }

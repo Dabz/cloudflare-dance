@@ -53,19 +53,24 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"switch.1",
+			"name":"light.switch.001",
 			"rotation":[
 				-0.7071068286895752,
 				0,
 				0,
 				0.7071068286895752
+			],
+			"translation":[
+				0.002453690627589822,
+				-0.00017286118236370385,
+				-0.14225462079048157
 			]
 		},
 		{
 			"children":[
 				0
 			],
-			"name":"Switch",
+			"name":"light.switch.002",
 			"rotation":[
 				-0.49271073937416077,
 				-0.4986180067062378,
@@ -638,7 +643,7 @@
 				39,
 				40
 			],
-			"name":"cannon.1",
+			"name":"cannon..001",
 			"rotation":[
 				0,
 				0.656690239906311,
@@ -754,7 +759,7 @@
 				50,
 				51
 			],
-			"name":"cannon.2",
+			"name":"cannon.002",
 			"rotation":[
 				0,
 				0.7675107717514038,
@@ -1183,7 +1188,7 @@
 	],
 	"meshes":[
 		{
-			"name":"switch.1",
+			"name":"light.switch.001",
 			"primitives":[
 				{
 					"attributes":{

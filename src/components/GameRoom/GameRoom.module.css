@@ -172,6 +172,19 @@
   pointer-events: auto;
 }
 
+.ControlsToggle {
+  display: block;
+  margin-left: auto;
+  margin-bottom: 12px;
+  color: var(--room-black);
+  background: linear-gradient(102deg, var(--room-gold), var(--room-orange) 58%, var(--room-hot));
+  transform: rotate(-3deg);
+}
+
+.ControlsPanelOpen .ControlsToggle {
+  margin-bottom: 10px;
+}
+
 .ControlsPanel button:hover:not(:disabled),
 .TvDisplayPopup button:hover:not(:disabled),
 .ChatPanel button:hover:not(:disabled),
@@ -856,6 +869,11 @@
 
   .PrimaryControls {
     gap: 7px;
+  }
+
+  .ControlsToggle {
+    margin-left: 0;
+    min-width: 132px;
   }
 
   .ControlsPanel button,

@@ -52,6 +52,12 @@ function parseInternalPlayerMessage(content: string): { before: string; playerNa
   };
 }
 
+function isSmallTouchDevice(): boolean {
+  if (typeof window === "undefined") return false;
+
+  return window.matchMedia("(pointer: coarse), (max-width: 640px)").matches;
+}
+
 const GameRoom: FC = () => {
   const reactCanvas = useRef<HTMLCanvasElement | null>(null);
   const mainSceneRef = useRef<MainScene | undefined>(undefined);
@@ -62,10 +68,11 @@ const GameRoom: FC = () => {
   const [draftDisplayUrl, setDraftDisplayUrl] = useState("");
   const [draftChatMessage, setDraftChatMessage] = useState("");
   const [chats, setChats] = useState<Chat[]>([]);
-  const [chatOpen, setChatOpen] = useState(true);
+  const [chatOpen, setChatOpen] = useState(() => !isSmallTouchDevice());
   const [streams, setStreams] = useState<StreamVideo[] | undefined>(undefined);
   const [tvPopupOpen, setTvPopupOpen] = useState(false);
-  const [howToPlayOpen, setHowToPlayOpen] = useState(true);
+  const [controlsOpen, setControlsOpen] = useState(() => !isSmallTouchDevice());
+  const [howToPlayOpen, setHowToPlayOpen] = useState(() => !isSmallTouchDevice());
   const [sceneLoading, setSceneLoading] = useState(true);
   const [sceneLoadingProgress, setSceneLoadingProgress] = useState(0);
   const [joystickOffset, setJoystickOffset] = useState({ x: 0, y: 0 });
@@ -402,7 +409,17 @@ const GameRoom: FC = () => {
       </div>
       </section>
     )}
-    <section className={styles.ControlsPanel} aria-label="Room controls">
+    <section className={`${styles.ControlsPanel} ${controlsOpen ? styles.ControlsPanelOpen : ""}`} aria-label="Room controls">
+    <button
+    type="button"
+    className={styles.ControlsToggle}
+    aria-expanded={controlsOpen}
+    onClick={() => setControlsOpen((open) => !open)}
+    >
+    Controls
+    </button>
+    {controlsOpen && (
+      <>
     <div className={styles.PrimaryControls}>
     <button type="button" onClick={() => navigate('/')}>Main Menu</button>
     <button type="button" onClick={() => mainSceneRef.current?.resetMainPlayerPosition()}>Reset</button>
@@ -443,6 +460,8 @@ const GameRoom: FC = () => {
       </dl>
     )}
     </section>
+      </>
+    )}
     </section>
     <section className={`${styles.ChatPanel} ${chatOpen ? styles.ChatPanelOpen : ""}`} aria-label="Room chat">
     <button
