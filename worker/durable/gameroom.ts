@@ -1,6 +1,6 @@
 import { DurableObject, env } from "cloudflare:workers";
 import puppeteer from "@cloudflare/puppeteer";
-import type { ChatPayload, ChatRequest, WSClientMessage, PlayerDancePayload, PlaygroundInteractPayload, PlaygroundInteractRequest, PlayerUpdateRequest, PlayerUpdates, PlayerUpdatesPayload, RoomDisplayUrlRequest, RoomStatePayload } from "../model/gameroom";
+import type { ChatPayload, ChatRequest, WSClientMessage, PlayerDancePayload, PlaygroundInteractPayload, PlaygroundInteractRequest, PlaygroundObjectStates, PlayerUpdateRequest, PlayerUpdates, PlayerUpdatesPayload, RoomDisplayUrlRequest, RoomStatePayload } from "../model/gameroom";
 import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity, getReconnect} from "../auth";
 import Const from "../const"
 import type {Player, PlayerIdentity} from "../model/player";
@@ -14,6 +14,7 @@ interface SessionData {
 const DISPLAY_URL_STORAGE_KEY = "displayUrl";
 const DISPLAY_IMAGE_STORAGE_KEY = "displayImage";
 const DISPLAY_LAST_UPDATE = "displayLastUpdate";
+const PLAYGROUND_OBJECT_STATES_STORAGE_KEY = "playgroundObjectStates";
 
 function normalizeDisplayUrl(rawUrl: string): string {
   const trimmed = rawUrl.trim();
@@ -292,7 +293,7 @@ export class GameRoom extends DurableObject<Env> {
       }
 
       if ("type" in incomingMessage && incomingMessage.type === "playground") {
-        return this.handlePlaygroundMessage(ws, incomingMessage, session);
+        return await this.handlePlaygroundMessage(ws, incomingMessage, session);
       }
 
       if ("type" in incomingMessage && incomingMessage.type === "display-url") {
@@ -365,8 +366,17 @@ export class GameRoom extends DurableObject<Env> {
     return;
   }
 
-  private handlePlaygroundMessage(ws: WebSocket, incomingMessage: PlaygroundInteractRequest, session: SessionData) {
-    this.broadcastPlayground(ws, incomingMessage.actionId, session.id);
+  private async handlePlaygroundMessage(ws: WebSocket, incomingMessage: PlaygroundInteractRequest, session: SessionData) {
+    let stateChanged = false;
+    if (incomingMessage.objectId && incomingMessage.objectState !== undefined) {
+      const objectStates = await this.getPlaygroundObjectStates();
+      objectStates[incomingMessage.objectId] = incomingMessage.objectState;
+      await this.ctx.storage.put(PLAYGROUND_OBJECT_STATES_STORAGE_KEY, objectStates);
+      stateChanged = true;
+    }
+
+    this.broadcastPlayground(ws, incomingMessage.actionId, session.id, incomingMessage.objectId, incomingMessage.objectState);
+    if (stateChanged) await this.broadcastRoomState();
     return;
   }
 
@@ -385,10 +395,12 @@ export class GameRoom extends DurableObject<Env> {
     }
   }
 
-  private broadcastPlayground(sender: WebSocket, actionId: string, playerId: string) {
+  private broadcastPlayground(sender: WebSocket, actionId: string, playerId: string, objectId?: string, objectState?: unknown) {
     const payload: PlaygroundInteractPayload = {
       type: "playground",
       actionId,
+      objectId,
+      objectState,
       playerId,
       time: new Date().getTime(),
     };
@@ -424,6 +436,10 @@ export class GameRoom extends DurableObject<Env> {
 
   private async getDisplayUrl(): Promise<string> {
     return (await this.ctx.storage.get<string>(DISPLAY_URL_STORAGE_KEY)) ?? "";
+  }
+
+  private async getPlaygroundObjectStates(): Promise<PlaygroundObjectStates> {
+    return (await this.ctx.storage.get<PlaygroundObjectStates>(PLAYGROUND_OBJECT_STATES_STORAGE_KEY)) ?? {};
   }
 
   public async getDisplaySnapshot(): Promise<string> {
@@ -477,6 +493,7 @@ export class GameRoom extends DurableObject<Env> {
       displayUrl: await this.ctx.storage.get(DISPLAY_URL_STORAGE_KEY),
       displaySnapshot: await this.ctx.storage.get(DISPLAY_IMAGE_STORAGE_KEY),
       displayLastUpdate: await this.ctx.storage.get(DISPLAY_LAST_UPDATE),
+      playgroundObjectStates: await this.getPlaygroundObjectStates(),
       time: new Date().getTime(),
     };
   }

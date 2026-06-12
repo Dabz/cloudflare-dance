@@ -1,10 +1,11 @@
 import * as BABYLON from "@babylonjs/core";
 import type { PlayerCharacter } from "./player";
 import { UsableObject } from "./object";
+import { createPlaygroundAction } from "./playground/createAction";
+import type { PlaygroundAction, PlaygroundActionContext } from "./playground/types";
 
 type ShadowCaster = (mesh?: BABYLON.AbstractMesh | null) => void;
-type PlaygroundAction = (scene: BABYLON.Scene, player: PlayerCharacter | undefined, object: PlaygroundInteractable) => void;
-type PlaygroundInteractionPublisher = (actionId: string) => void;
+type PlaygroundInteractionPublisher = (actionId: string, objectId: string, objectState?: unknown) => void;
 type MeshExtras = Record<string, unknown>;
 
 const defaultInteractionLabels: Record<string, string> = {
@@ -23,11 +24,14 @@ const defaultInteractionLabels: Record<string, string> = {
   teleport: "Teleport",
   "dance-party": "Dance party",
   "bonk-toys": "Bonk nearby toys",
+  "sphere-light": "Light sphere",
+  "explode-balls": "Balls?",
 };
 
 const defaultInteractionDistances: Record<string, number> = {
   "ball-chaos": 2.8,
-  bowl: 3.2,
+  "explode-balls": 9,
+  "bowl": 3.2,
   "toggle-light-0": 2.4,
   "toggle-light-1": 2.4,
   "toggle-light-2": 2.4,
@@ -38,9 +42,10 @@ const defaultInteractionDistances: Record<string, number> = {
   "moon-gravity": 2.8,
   "paint-toys": 2.8,
   "spin-merry": 3,
-  teleport: 3.2,
+  "teleport": 3.2,
   "dance-party": 3,
   "bonk-toys": 3.2,
+  "sphere-light": 9,
 };
 
 const neonColors = [
@@ -121,6 +126,17 @@ function getString(extras: MeshExtras, key: string): string | undefined {
   return typeof value === "string" && value.trim() ? value : undefined;
 }
 
+function getInteractionId(extras: MeshExtras): string | undefined {
+  const interactionId = extras.interactionId;
+  if (typeof interactionId === "string" && interactionId.trim()) return interactionId;
+  if (interactionId && typeof interactionId === "object") {
+    const id = (interactionId as MeshExtras).id;
+    if (typeof id === "string" && id.trim()) return id;
+  }
+
+  return getString(extras, "interactiveId");
+}
+
 function getNumber(extras: MeshExtras, key: string): number | undefined {
   const value = extras[key];
   if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -137,6 +153,7 @@ function getBoolean(extras: MeshExtras, key: string): boolean {
 }
 
 function getPhysicsShape(mesh: BABYLON.AbstractMesh, shape?: string) {
+  void mesh;
   switch (shape?.toLowerCase()) {
     case "sphere":
       return BABYLON.PhysicsShapeType.SPHERE;
@@ -159,12 +176,14 @@ export class PlaygroundInteractable extends UsableObject {
   label: BABYLON.AbstractMesh;
   originalLabel?: BABYLON.AbstractMesh;
   id: string;
+  objectId: string;
   private action: PlaygroundAction;
   private publish?: PlaygroundInteractionPublisher;
 
-  constructor(id: string, mesh: BABYLON.AbstractMesh, label: BABYLON.AbstractMesh, originalLabel: BABYLON.AbstractMesh | undefined, distance: number, action: PlaygroundAction, publish?: PlaygroundInteractionPublisher) {
+  constructor(id: string, objectId: string, mesh: BABYLON.AbstractMesh, label: BABYLON.AbstractMesh, originalLabel: BABYLON.AbstractMesh | undefined, distance: number, action: PlaygroundAction, publish?: PlaygroundInteractionPublisher) {
     super();
     this.id = id;
+    this.objectId = objectId;
     this.mesh = mesh;
     this.label = label;
     this.originalLabel = originalLabel;
@@ -178,25 +197,34 @@ export class PlaygroundInteractable extends UsableObject {
   }
 
   public run(scene: BABYLON.Scene, player?: PlayerCharacter, broadcast = false) {
-    this.action(scene, player, this);
-    if (broadcast) this.publish?.(this.id);
+    this.action.run(scene, player, this);
+    if (broadcast) this.publish?.(this.id, this.objectId, this.getState());
+  }
+
+  public getState() {
+    return this.action.getState();
+  }
+
+  public applyState(state: unknown) {
+    this.action.applyState(state, this);
   }
 }
 
-export class Playground {
+export class Playground implements PlaygroundActionContext {
   private objects: PlaygroundInteractable[] = [];
-  private dynamicBodies: BABYLON.PhysicsAggregate[] = [];
-  private fanBodies: BABYLON.PhysicsAggregate[] = [];
+  public dynamicBodies: BABYLON.PhysicsAggregate[] = [];
+  public fanBodies: BABYLON.PhysicsAggregate[] = [];
   private launchCount = 0;
   private discoEnabled = true;
   private merrySpeed = 0.9;
   private lowGravityUntil = 0;
-  private addShadowCaster: ShadowCaster;
-  private discoLights: BABYLON.PointLight[] = [];
+  public addShadowCaster: ShadowCaster;
+  public discoLights: BABYLON.PointLight[] = [];
   private fanRotor?: BABYLON.AbstractMesh;
   private merry?: BABYLON.AbstractMesh;
   private publish?: PlaygroundInteractionPublisher;
   private teleportDestinations: BABYLON.AbstractMesh[] = [];
+  private registeredObjects = new Set<string>();
 
   constructor(addShadowCaster: ShadowCaster, publish?: PlaygroundInteractionPublisher) {
     this.addShadowCaster = addShadowCaster;
@@ -209,6 +237,7 @@ export class Playground {
     this.fanBodies = [];
     this.discoLights = [];
     this.teleportDestinations = [];
+    this.registeredObjects.clear();
 
     for (const mesh of scene.meshes) {
       this.bindImportedMesh(mesh);
@@ -216,18 +245,34 @@ export class Playground {
 
     for (const mesh of scene.meshes) {
       const extras = meshExtras(mesh);
-      const interactionId = getString(extras, "interactionId");
+      const interactionId = getInteractionId(extras);
       if (interactionId) {
         this.addImportedObject(interactionId, mesh, extras);
       }
     }
+
+    for (const node of scene.transformNodes) {
+      const extras = meshExtras(node as BABYLON.AbstractMesh);
+      const interactionId = getInteractionId(extras);
+      if (!interactionId) continue;
+
+      const mesh = node.getChildMeshes(false).find((child) => child.getTotalVertices() > 0);
+      if (mesh) this.addImportedObject(interactionId, mesh, extras);
+    }
   }
 
-  public interact(actionId: string, player?: PlayerCharacter) {
-    const object = this.objects.find((candidate) => candidate.id === actionId);
+  public interact(actionId: string, player?: PlayerCharacter, objectId?: string, objectState?: unknown) {
+    const object = this.findObject(actionId, objectId);
     if (!object) return;
 
     object.run(object.mesh.getScene(), player, false);
+    if (objectState !== undefined) object.applyState(objectState);
+  }
+
+  public applyObjectStates(states: Record<string, unknown> = {}) {
+    for (const object of this.objects) {
+      if (object.objectId in states) object.applyState(states[object.objectId]);
+    }
   }
 
   public beforeRender(scene: BABYLON.Scene, mainPlayer?: PlayerCharacter) {
@@ -281,7 +326,7 @@ export class Playground {
   private bindImportedMesh(mesh: BABYLON.AbstractMesh) {
     const extras = meshExtras(mesh);
     const role = getString(extras, "playgroundRole") ?? getString(extras, "role");
-    const interactionId = getString(extras, "interactionId");
+    const interactionId = getInteractionId(extras);
 
     if (role === "teleport-destination" || getBoolean(extras, "teleportDestination")) {
       this.teleportDestinations.push(mesh);
@@ -308,11 +353,16 @@ export class Playground {
   }
 
   private addImportedObject(id: string, mesh: BABYLON.AbstractMesh, extras: MeshExtras) {
-    const action = this.createAction(id, mesh);
+    const registrationKey = `${id}:${mesh.uniqueId}`;
+    if (this.registeredObjects.has(registrationKey)) return;
+
+    const action = createPlaygroundAction(id, mesh, this);
     if (!action) {
       console.warn(`Unknown playground interactionId: ${id}`);
       return;
     }
+
+    this.registeredObjects.add(registrationKey);
 
     makeCollidable(mesh);
     mesh.isPickable = false;
@@ -328,9 +378,11 @@ export class Playground {
     if (id === "spin-merry") this.merry = mesh;
     if (id === "fan-blast") this.fanRotor = mesh;
 
+    const objectId = this.getObjectId(id, mesh, extras);
+
     const distance = getNumber(extras, "interactionDistance") ?? defaultInteractionDistances[id] ?? 3;
     const labelText = getString(extras, "interactionLabel") ?? defaultInteractionLabels[id] ?? id;
-    const labelOffsetY = getNumber(extras, "interactionLabelOffsetY") ?? 1.8;
+    const labelOffsetY = getNumber(extras, "interactionLabelOffsetY") ?? mesh.getBoundingInfo().boundingBox.extendSize.scale(2).y + 1.8;
     const label = createLabel(`${mesh.name}_interact_label`, labelText, mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, labelOffsetY, 0)), mesh.getScene());
     label.setEnabled(false);
 
@@ -339,121 +391,25 @@ export class Playground {
       ? createLabel(`${mesh.name}_top_label`, topLabelText, mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, getNumber(extras, "topLabelOffsetY") ?? 1.55, 0)), mesh.getScene())
       : undefined;
 
-    this.objects.push(new PlaygroundInteractable(id, mesh, label, topLabel, distance, action, this.publish));
+    this.objects.push(new PlaygroundInteractable(id, objectId, mesh, label, topLabel, distance, action, this.publish));
   }
 
-  private createAction(id: string, mesh: BABYLON.AbstractMesh): PlaygroundAction | undefined {
-    if (id.startsWith("toggle-light-")) return this.createLightToggleAction(id, mesh);
-
-    switch (id) {
-      case "ball-chaos":
-        return (_scene, _player, object) => {
-          const center = object.mesh.getAbsolutePosition();
-          for (const body of this.dynamicBodies) {
-            const pos = body.transformNode.getAbsolutePosition();
-            if (BABYLON.Vector3.Distance(pos, center) < 8) {
-              const impulse = new BABYLON.Vector3((Math.random() - 0.5) * 4, 4 + Math.random() * 4, (Math.random() - 0.5) * 4);
-              applyImpulseToBody(body, impulse);
-            }
-          }
-          this.burstConfetti(_scene, center.add(new BABYLON.Vector3(0, 1, 0)), 120);
-        };
-      case "bowl":
-        return () => {
-          const aggregate = this.ensureDynamicBody(mesh, 1.4, BABYLON.PhysicsShapeType.SPHERE);
-          aggregate.body.setLinearVelocity(BABYLON.Vector3.Zero());
-          const direction = mesh.getDirection(BABYLON.Axis.Z).normalize();
-          applyImpulseToBody(aggregate, direction.scale(-15).add(new BABYLON.Vector3(0, 0.4, 0)));
-        };
-      case "toggle-disco":
-        return (_scene, _player, object) => {
-          this.discoEnabled = !this.discoEnabled;
-          this.discoLights.forEach((light) => light.setEnabled(this.discoEnabled));
-          this.burstConfetti(_scene, object.mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1, 0)), 90);
-        };
-      case "launch-ball":
-        return (_scene, _player, object) => {
-          this.launchCount += 1;
-          const ball = BABYLON.MeshBuilder.CreateSphere(`launched_goof_${this.launchCount}`, { diameter: 0.62, segments: 18 }, _scene);
-          const direction = object.mesh.getDirection(BABYLON.Axis.Z).normalize();
-          ball.position = object.mesh.getAbsolutePosition().add(direction.scale(1.2)).add(new BABYLON.Vector3(0, 0.2, 0));
-          makeCollidable(ball);
-          ball.material = createMaterial(`launched_goof_${this.launchCount}_mat`, _scene, randomColor(), true);
-          const aggregate = new BABYLON.PhysicsAggregate(ball, BABYLON.PhysicsShapeType.SPHERE, { mass: 0.36, restitution: 0.9, friction: 0.22 });
-          applyImpulseToBody(aggregate, direction.add(new BABYLON.Vector3(0, 0.16, 0)).normalize().scale(13));
-          this.dynamicBodies.push(aggregate);
-          this.fanBodies.push(aggregate);
-          this.addShadowCaster(ball);
-        };
-      case "super-bounce":
-        return (_scene, player, object) => {
-          player?.characterController.setVelocity(new BABYLON.Vector3(0, 16, 0));
-          this.burstConfetti(_scene, object.mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1, 0)), 70);
-        };
-      case "fan-blast":
-        return (_scene, player, object) => {
-          const direction = object.mesh.getDirection(BABYLON.Axis.X).normalize().add(new BABYLON.Vector3(0, 0.35, 0));
-          player?.characterController.setVelocity(direction.scale(12));
-          for (const body of this.fanBodies) applyImpulseToBody(body, direction.scale(1.5));
-        };
-      case "moon-gravity":
-        return (_scene, _player, object) => {
-          _scene.getPhysicsEngine()?.setGravity(new BABYLON.Vector3(0, -2.2, 0));
-          this.lowGravityUntil = Date.now() + 9000;
-          this.dynamicBodies.forEach((body) => applyImpulseToBody(body, new BABYLON.Vector3(0, 2.5, 0)));
-          this.burstConfetti(_scene, object.mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1, 0)), 100);
-        };
-      case "paint-toys":
-        return (_scene, _player, object) => {
-          this.dynamicBodies.forEach((body) => setMeshColor(body.transformNode as BABYLON.AbstractMesh, randomColor()));
-          this.burstConfetti(_scene, object.mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1, 0)), 150);
-        };
-      case "spin-merry":
-        return () => {
-          this.merrySpeed = this.merrySpeed > 5 ? 0.9 : this.merrySpeed + 1.15;
-        };
-      case "teleport":
-        return (_scene, player) => {
-          if (!player) return;
-          const destination = this.pickTeleportDestination();
-          player.updatePosition(destination);
-          this.burstConfetti(_scene, player.character.getAbsolutePosition(), 90);
-        };
-      case "dance-party":
-        return (_scene, player, object) => {
-          player?.dance();
-          this.discoEnabled = true;
-          this.discoLights.forEach((light) => light.setEnabled(true));
-          this.burstConfetti(_scene, object.mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1.2, 0)), 160);
-        };
-      case "bonk-toys":
-        return (_scene, player, object) => {
-          const origin = player?.character.getAbsolutePosition() ?? object.mesh.getAbsolutePosition();
-          for (const body of this.dynamicBodies) {
-            const pos = body.transformNode.getAbsolutePosition();
-            const delta = pos.subtract(origin);
-            if (delta.length() < 6) applyImpulseToBody(body, delta.normalize().scale(7).add(new BABYLON.Vector3(0, 3.5, 0)));
-          }
-          this.burstConfetti(_scene, origin.add(new BABYLON.Vector3(0, 1, 0)), 80);
-        };
-      default:
-        return undefined;
+  private findObject(actionId: string, objectId?: string) {
+    if (objectId) {
+      const object = this.objects.find((candidate) => candidate.objectId === objectId);
+      if (object) return object;
     }
+
+    return this.objects.find((candidate) => candidate.id === actionId);
   }
 
-  private createLightToggleAction(id: string, mesh: BABYLON.AbstractMesh): PlaygroundAction {
-    const index = Number(id.replace("toggle-light-", "")) || 0;
-    const color = neonColors[index + 1] ?? neonColors[index % neonColors.length];
-    const light = this.createDiscoLight(mesh, index, color);
-    this.discoLights.push(light);
-
-    return () => {
-      light.setEnabled(!light.isEnabled());
-      setMeshColor(mesh, light.isEnabled() ? color : new BABYLON.Color3(0.04, 0.04, 0.06));
-    };
+  private getObjectId(id: string, mesh: BABYLON.AbstractMesh, extras: MeshExtras) {
+    return getString(extras, "objectId")
+      ?? getString(extras, "stateId")
+      ?? `${id}:${mesh.name}`;
   }
 
-  private createDiscoLight(mesh: BABYLON.AbstractMesh, index: number, color = neonColors[(index + 1) % neonColors.length]) {
+  public createDiscoLight(mesh: BABYLON.AbstractMesh, index: number, color = neonColors[(index + 1) % neonColors.length]) {
     const light = new BABYLON.PointLight(`disco_light_${index}_${mesh.name}`, mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1.2, 0)), mesh.getScene());
     light.diffuse = color;
     light.specular = color;
@@ -476,7 +432,7 @@ export class Playground {
     );
   }
 
-  private ensureDynamicBody(mesh: BABYLON.AbstractMesh, mass: number, shape: BABYLON.PhysicsShapeType) {
+  public ensureDynamicBody(mesh: BABYLON.AbstractMesh, mass: number, shape: BABYLON.PhysicsShapeType) {
     const existing = this.dynamicBodies.find((body) => body.transformNode === mesh);
     if (existing) return existing;
 
@@ -491,7 +447,7 @@ export class Playground {
     return 0;
   }
 
-  private pickTeleportDestination() {
+  public pickTeleportDestination() {
     if (this.teleportDestinations.length > 0) {
       const destination = this.teleportDestinations[Math.floor(Math.random() * this.teleportDestinations.length)];
       return destination.getAbsolutePosition().clone();
@@ -506,7 +462,65 @@ export class Playground {
     return destinations[Math.floor(Math.random() * destinations.length)].clone();
   }
 
-  private burstConfetti(scene: BABYLON.Scene, position: BABYLON.Vector3, count: number) {
+  public createMaterial(name: string, scene: BABYLON.Scene, color: BABYLON.Color3, emissive = false) {
+    return createMaterial(name, scene, color, emissive);
+  }
+
+  public randomColor() {
+    return randomColor();
+  }
+
+  public setMeshColor(mesh: BABYLON.AbstractMesh, color: BABYLON.Color3) {
+    setMeshColor(mesh, color);
+  }
+
+  public applyImpulseToBody(aggregate: BABYLON.PhysicsAggregate, impulse: BABYLON.Vector3) {
+    applyImpulseToBody(aggregate, impulse);
+  }
+
+  public makeCollidable(mesh: BABYLON.AbstractMesh) {
+    return makeCollidable(mesh);
+  }
+
+  public nextLaunchCount() {
+    this.launchCount += 1;
+    return this.launchCount;
+  }
+
+  public toggleDisco() {
+    this.discoEnabled = !this.discoEnabled;
+    return this.discoEnabled;
+  }
+
+  public setDiscoEnabled(enabled: boolean) {
+    this.discoEnabled = enabled;
+  }
+
+  public isDiscoEnabled() {
+    return this.discoEnabled;
+  }
+
+  public enableDisco() {
+    this.discoEnabled = true;
+  }
+
+  public toggleMerrySpeed() {
+    this.merrySpeed = this.merrySpeed > 5 ? 0.9 : this.merrySpeed + 1.15;
+  }
+
+  public setMerrySpeed(speed: number) {
+    this.merrySpeed = speed;
+  }
+
+  public getMerrySpeed() {
+    return this.merrySpeed;
+  }
+
+  public setLowGravityUntil(value: number) {
+    this.lowGravityUntil = value;
+  }
+
+  public burstConfetti(scene: BABYLON.Scene, position: BABYLON.Vector3, count: number) {
     const emitter = BABYLON.MeshBuilder.CreateSphere(`confetti_emitter_${Date.now()}`, { diameter: 0.08, segments: 4 }, scene);
     emitter.position = position;
     emitter.isVisible = false;

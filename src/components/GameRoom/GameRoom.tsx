@@ -256,7 +256,12 @@ const GameRoom: FC = () => {
             }
             if (event === "playground-interact" && payload?.actionId) {
               if (wsRef.current?.readyState === WebSocket.OPEN) {
-                const request: PlaygroundInteractRequest = { type: "playground", actionId: payload.actionId };
+                const request: PlaygroundInteractRequest = {
+                  type: "playground",
+                  actionId: payload.actionId,
+                  objectId: payload.objectId,
+                  objectState: payload.objectState,
+                };
                 wsRef.current.send(JSON.stringify(request));
               }
             }
@@ -317,7 +322,7 @@ const GameRoom: FC = () => {
             }
 
             if ("type" in payload && payload.type === "playground") {
-              mainScene.interactWithPlayground(payload.actionId, payload.playerId);
+              mainScene.interactWithPlayground(payload.actionId, payload.playerId, payload.objectId, payload.objectState);
               return;
             }
 
@@ -329,6 +334,7 @@ const GameRoom: FC = () => {
             if ("type" in payload && payload.type === "room-state") {
               setDraftDisplayUrl(payload.displayUrl);
               mainScene.tv.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
+              mainScene.applyPlaygroundObjectStates(payload.playgroundObjectStates);
               return;
             }
 

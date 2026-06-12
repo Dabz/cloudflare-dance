@@ -25,13 +25,21 @@ export interface PlayerDancePayload {
 export interface PlaygroundInteractRequest {
   type: "playground";
   actionId: string;
+  objectId?: string;
+  objectState?: unknown;
 }
 
 export interface PlaygroundInteractPayload {
   type: "playground";
   actionId: string;
+  objectId?: string;
+  objectState?: unknown;
   playerId: string;
   time: number;
+}
+
+export interface PlaygroundObjectStates {
+  [objectId: string]: unknown;
 }
 
 export interface RoomDisplayUrlRequest {
@@ -44,6 +52,7 @@ export interface RoomStatePayload {
   displayUrl: string;
   displaySnapshot: string;
   displayLastUpdate: number;
+  playgroundObjectStates: PlaygroundObjectStates;
   time: number;
 }
 

@@ -13,6 +13,8 @@ import {Playground} from "./playground";
 export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance" | "playground-interact";
 export interface PlaygroundInteractEventPayload {
   actionId: string;
+  objectId: string;
+  objectState?: unknown;
 }
 
 export type InteractionSubscriber = (event: InteractEventType, payload?: PlaygroundInteractEventPayload) => void;
@@ -32,7 +34,7 @@ export class MainScene {
 
   _scene: BABYLON.Scene;
   _camera: BABYLON.ArcFollowCamera;
-  private onInteract?: (event: InteractEventType) => void;
+  private onInteract?: InteractionSubscriber;
 
   constructor(onInteract?: InteractionSubscriber) {
     this.onInteract = onInteract;
@@ -152,8 +154,8 @@ export class MainScene {
   }
 
   public addPlayground(scene: BABYLON.Scene) {
-    this.playground = new Playground((mesh) => this.addShadowCaster(mesh), (actionId) => {
-      this.onInteract?.("playground-interact", { actionId });
+    this.playground = new Playground((mesh) => this.addShadowCaster(mesh), (actionId, objectId, objectState) => {
+      this.onInteract?.("playground-interact", { actionId, objectId, objectState });
     });
     this.playground.init(scene);
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
@@ -161,11 +163,15 @@ export class MainScene {
     });
   }
 
-  public interactWithPlayground(actionId: string, playerId: string) {
+  public interactWithPlayground(actionId: string, playerId: string, objectId?: string, objectState?: unknown) {
     const player = this.mainPlayer?.id === playerId
       ? this.mainPlayer
       : this._otherPlayers[playerId];
-    this.playground?.interact(actionId, player);
+    this.playground?.interact(actionId, player, objectId, objectState);
+  }
+
+  public applyPlaygroundObjectStates(states: Record<string, unknown> = {}) {
+    this.playground?.applyObjectStates(states);
   }
 
   public addMainPlayer(player: Player) {
