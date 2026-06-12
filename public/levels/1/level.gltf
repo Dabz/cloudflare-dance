@@ -23407,7 +23407,8 @@
 			"nodes":[
 				2,
 				5,
-				7,
+				6,
+				8,
 				9,
 				10,
 				11,
@@ -23433,13 +23434,12 @@
 				31,
 				32,
 				33,
-				34,
-				38,
-				49,
-				60,
+				37,
+				48,
+				59,
+				70,
 				71,
-				72,
-				73
+				72
 			]
 		}
 	],
@@ -24197,383 +24197,10 @@
 			},
 			"mesh":4,
 			"name":"light.switch.001",
-			"rotation":[
-				-0.7071068286895752,
-				0,
-				0,
-				0.7071068286895752
-			],
 			"translation":[
-				0.0028242417611181736,
-				-0.035470493137836456,
-				-0.1422053426504135
-			]
-		},
-		{
-			"children":[
-				6
-			],
-			"extras":{
-				"forestation_settings":{},
-				"blenderkit":{
-					"category":5,
-					"subcategory":6,
-					"license":1,
-					"is_free":1,
-					"name":"Switch",
-					"name_changed":1,
-					"name_old":"Switch",
-					"description":"a beautiful Switch for you",
-					"tags":"Switch, white, home",
-					"thumbnail":"C:\\Users\\yangli\\Downloads\\252932_94e4a24df9d64d1fa09ed348797940ac~mv2.webp",
-					"has_thumbnail":1,
-					"thumbnail_generating_state":"",
-					"pbr":1,
-					"work_hours":1.0,
-					"texture_resolution_max":0,
-					"texture_resolution_min":0,
-					"uv":1,
-					"texture_count":0,
-					"total_megapixels":0,
-					"node_count":0,
-					"materials":"\u6750\u8d28.025, ",
-					"shaders":"",
-					"dimensions":[
-						0.11343717575073242,
-						0.17088286578655243,
-						0.032300692051649094
-					],
-					"bbox_min":[
-						-0.05671900510787964,
-						-0.10959845781326294,
-						-1.583343163247264e-07
-					],
-					"bbox_max":[
-						0.05671817064285278,
-						0.06128440424799919,
-						0.03230053186416626
-					],
-					"face_count":4238,
-					"face_count_render":4238,
-					"mesh_poly_type":1,
-					"manifold":0,
-					"modifiers":"",
-					"object_count":2,
-					"report":"",
-					"asset_base_id":"1602af70-e42d-4b9f-93eb-532182edc936",
-					"id":"340d950c-69fd-4b7c-9547-bea54d53a168",
-					"uploading":0,
-					"is_private":1,
-					"verification_status":2,
-					"manufacturer":"",
-					"designer":"",
-					"design_collection":"",
-					"design_variant":""
-				},
-				"asset_data":{
-					"access":"free",
-					"accessLabel":"Free",
-					"addonVersion":"3.7.0",
-					"assetBaseId":"1602af70-e42d-4b9f-93eb-532182edc936",
-					"assetType":"model",
-					"author":{
-						"aboutMe":"I'm River Yang, the guy behind FreePoly.org.\r\nAs you probably know, I create high quality 3D assets.\r\nI want to lower the barrier of entry for new artists, remove financial barriers, and make it easier for experienced artists to focus on creativity",
-						"aboutMeUrl":"https://www.artstation.com/riveryang",
-						"avatar128":"/avatar-redirect/446f1263-ce66-4fc6-989e-027c10b660ae/128/",
-						"firstName":"Free",
-						"fullName":"Free poly",
-						"gravatarHash":"da874f7c7434437d3f907d4412248629",
-						"id":"275024",
-						"lastName":"poly"
-					},
-					"available_resolutions":[
-						512,
-						1024,
-						2048,
-						4096
-					],
-					"basePrice":"",
-					"bbox_max":[
-						0.0567,
-						0.0613,
-						0.0323
-					],
-					"bbox_min":[
-						-0.0567,
-						-0.1096,
-						0.0
-					],
-					"canDownload":true,
-					"canDownloadError":true,
-					"category":"bedroom",
-					"created":"2023-07-28T11:22:44.524371+02:00",
-					"description":"a beautiful Switch for you",
-					"dictParameters":{
-						"addons":true,
-						"animated":false,
-						"boundBoxMaxX":0.0567,
-						"boundBoxMaxY":0.0613,
-						"boundBoxMaxZ":0.0323,
-						"boundBoxMinX":-0.0567,
-						"boundBoxMinY":-0.1096,
-						"boundBoxMinZ":0,
-						"dimensionX":0.1134,
-						"dimensionY":0.1709,
-						"dimensionZ":0.0323,
-						"engines":[
-							"cycles"
-						],
-						"faceCount":4238,
-						"faceCountRender":4238,
-						"imageAltTextGen4v":"Detailed 3D model of a light switch, designed for Blender rendering, perfect for bedroom scene integration.",
-						"joinBlenderkitDiscounts":true,
-						"manifold":false,
-						"materials":[
-							"\u6750\u8d28.025"
-						],
-						"megapixels":0,
-						"meshPolyType":"quad_dominant",
-						"modelStyle":"realistic",
-						"modifiers":[
-							""
-						],
-						"nodeCount":0,
-						"objectCount":2,
-						"pbrType":"metallic",
-						"platforms":[
-							"windows-x64",
-							"macos-arm64",
-							"linux-x64",
-							"macos-x64",
-							"windows-arm64"
-						],
-						"procedural":true,
-						"productionLevel":"finished",
-						"purePbr":true,
-						"rig":false,
-						"sexualizedContent":false,
-						"shaders":[
-							""
-						],
-						"simulation":false,
-						"textureCount":0,
-						"uv":true
-					},
-					"displayName":"Switch",
-					"downloaded":0,
-					"files":[
-						{
-							"created":"2023-07-28T11:25:37.116980+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/218962/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"blend",
-							"fileUploadSize":64472127,
-							"filename":"assets/340d950c69fd4b7c9547bea54d53a168/files/blend_f28a63c0-7e09-4181-b476-fcf49f54a0c2.blend",
-							"modified":"2023-07-28T11:25:40.670806+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2023-07-29T06:33:56.011588+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/219160/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_0_5K",
-							"fileUploadSize":376048,
-							"filename":"assets/340d950c69fd4b7c9547bea54d53a168/files/resolution_0_5K_36419bbd-2718-4225-929a-dad850456da4.blend",
-							"modified":"2023-12-04T11:18:48.571115+01:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2023-07-29T06:33:54.905738+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/219159/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_1K",
-							"fileUploadSize":633783,
-							"filename":"assets/340d950c69fd4b7c9547bea54d53a168/files/resolution_1K_3492a976-23f4-4010-8f03-381938824a6a.blend",
-							"modified":"2023-12-04T11:22:06.073765+01:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2023-07-29T06:33:52.675227+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/219157/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_2K",
-							"fileUploadSize":1458980,
-							"filename":"assets/340d950c69fd4b7c9547bea54d53a168/files/resolution_2K_aa227efb-9be7-452d-8e97-da8e665ae8c2.blend",
-							"modified":"2023-12-04T11:38:54.154621+01:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":"https://assets.blenderkit.com/assets/340d950c69fd4b7c9547bea54d53a168/files/resolution_2K_aa227efb-9be7-452d-8e97-da8e665ae8c2.blend?verify=1781259515-UzWDNe8ppkUpESX3YUmiTw6KVpSwP6ARdhexsSgVI6k%3D",
-							"file_name":"/Users/gaspar_d/assets/models/switch_340d950c-69fd-4b7c-9547-bea54d53a168/switch_2K_aa227efb-9be7-452d-8e97-da8e665ae8c2.blend"
-						},
-						{
-							"created":"2023-07-29T06:33:51.669196+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/219155/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_4K",
-							"fileUploadSize":4041971,
-							"filename":"assets/340d950c69fd4b7c9547bea54d53a168/files/resolution_4K_1d1b7b2a-85cd-409a-8fe4-88eeb2e2450a.blend",
-							"modified":"2023-12-04T12:18:42.971115+01:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2023-07-28T11:22:54.046949+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/218959/",
-							"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.96x96_q85_crop-%2C.jpg",
-							"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.1024x1024_q85_crop-%2C.jpg",
-							"fileType":"thumbnail",
-							"fileUploadSize":7472,
-							"filename":"assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp",
-							"modified":"2025-12-22T20:13:38.966282+01:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.512x512_q85_crop-%2C.jpg",
-							"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.256x256_q85_crop-%2C.jpg",
-							"url":""
-						}
-					],
-					"filesSize":69326,
-					"id":"340d950c-69fd-4b7c-9547-bea54d53a168",
-					"isForSale":false,
-					"isFree":true,
-					"isPrivate":false,
-					"lastAnimatedThumbnailUpload":null,
-					"lastBlendUpload":"2023-07-28T09:25:37.116980+00:00",
-					"lastGltfGodotUpload":null,
-					"lastGltfUpload":null,
-					"lastPhotoThumbnailUpload":null,
-					"lastResolutionUpload":"2023-07-29T04:33:56.011588+00:00",
-					"lastThumbnailUpload":"2023-07-28T09:22:54.046949+00:00",
-					"lastUserInteraction":"2023-07-28T11:25:37.756240+02:00",
-					"lastVideoUpload":null,
-					"lastZipFileUpload":"",
-					"license":"cc_zero",
-					"max_resolution":4096,
-					"name":"Switch",
-					"pk":60664,
-					"ratingsAverage":{
-						"bookmarks":0.9931506849315068,
-						"quality":9.6,
-						"virtualPrice":null,
-						"workingHours":11.5
-					},
-					"ratingsCount":{
-						"bookmarks":438,
-						"quality":5,
-						"virtualPrice":0,
-						"workingHours":4
-					},
-					"ratingsMedian":{
-						"bookmarks":1,
-						"quality":10,
-						"virtualPrice":null,
-						"workingHours":11.5
-					},
-					"ratingsSum":{
-						"bookmarks":435,
-						"quality":48,
-						"score":1104,
-						"virtualPrice":null,
-						"workingHours":56
-					},
-					"score":1104,
-					"showMarketingLabels":true,
-					"sourceAppName":"blender",
-					"sourceAppVersion":"3.6.0",
-					"tags":[
-						"Switch",
-						"white",
-						"home"
-					],
-					"thumbnail":"thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.512x512_q85_crop-%2C.jpg.webp",
-					"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.1024x1024_q85_crop-%2C.jpg",
-					"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.1024x1024_q85.jpg",
-					"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.1024x1024_q85.jpg.webp?webp_generated=1766488748",
-					"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.1024x1024_q85_crop-%2C.jpg.webp?webp_generated=1766488748",
-					"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.512x512_q85_crop-%2C.jpg",
-					"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.512x512_q85.jpg",
-					"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.512x512_q85.jpg.webp?webp_generated=1766488748",
-					"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.512x512_q85_crop-%2C.jpg.webp?webp_generated=1766488748",
-					"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.256x256_q85_crop-%2C.jpg",
-					"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.256x256_q85.jpg",
-					"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.256x256_q85.jpg.webp?webp_generated=1766488748",
-					"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.256x256_q85_crop-%2C.jpg.webp?webp_generated=1766488748",
-					"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.2048x2048_q85_crop-%2C.jpg",
-					"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.2048x2048_q85.jpg",
-					"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.2048x2048_q85.jpg.webp?webp_generated=1766488748",
-					"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/340d950c69fd4b7c9547bea54d53a168/files/thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.2048x2048_q85_crop-%2C.jpg.webp?webp_generated=1766488748",
-					"thumbnail_small":"thumbnail_bd35410f-3c82-4a9b-8dc0-30043346c27e.webp.256x256_q85_crop-%2C.jpg.webp",
-					"tooltip_data":{
-						"aname":"Switch",
-						"author_text":"by Free poly",
-						"base_price_bg_color":[
-							0.7,
-							0.7,
-							0.7,
-							0.6
-						],
-						"base_price_color":[
-							1.0,
-							1.0,
-							1.0,
-							0.9
-						],
-						"base_price_text":"",
-						"quality":"10",
-						"user_price_bg_color":[
-							0.7,
-							0.7,
-							0.7,
-							0.6
-						],
-						"user_price_color":[
-							1.0,
-							1.0,
-							1.0,
-							0.9
-						],
-						"user_price_text":""
-					},
-					"url":"https://www.blenderkit.com/api/v1/assets/340d950c-69fd-4b7c-9547-bea54d53a168/",
-					"verificationStatus":"validated",
-					"versionNumber":1,
-					"videoLink":"",
-					"webpGeneratedTimestamp":1766488748,
-					"resolution":"resolution_2K"
-				}
-			},
-			"name":"light.switch.002",
-			"rotation":[
-				-0.49271073937416077,
-				-0.4986180067062378,
-				-0.506585419178009,
-				0.5019835233688354
-			],
-			"scale":[
-				8.786352157592773,
-				8.786354064941406,
-				8.786354064941406
-			],
-			"translation":[
-				-23.384187698364258,
-				3.132733106613159,
-				-5.539587020874023
+				-0.4279457628726959,
+				0.16636234521865845,
+				-0.05162068083882332
 			]
 		},
 		{
@@ -24599,7 +24226,7 @@
 		},
 		{
 			"children":[
-				8
+				7
 			],
 			"extras":{
 				"forestation_settings":{},
@@ -25422,9 +25049,9 @@
 		},
 		{
 			"children":[
+				34,
 				35,
-				36,
-				37
+				36
 			],
 			"extras":{
 				"asset_data":{
@@ -25959,6 +25586,7 @@
 		},
 		{
 			"children":[
+				38,
 				39,
 				40,
 				41,
@@ -25967,8 +25595,7 @@
 				44,
 				45,
 				46,
-				47,
-				48
+				47
 			],
 			"extras":{
 				"asset_data":{
@@ -26415,6 +26042,7 @@
 		},
 		{
 			"children":[
+				49,
 				50,
 				51,
 				52,
@@ -26423,8 +26051,7 @@
 				55,
 				56,
 				57,
-				58,
-				59
+				58
 			],
 			"extras":{
 				"asset_data":{
@@ -26868,6 +26495,7 @@
 		},
 		{
 			"children":[
+				60,
 				61,
 				62,
 				63,
@@ -26876,8 +26504,7 @@
 				66,
 				67,
 				68,
-				69,
-				70
+				69
 			],
 			"extras":{
 				"asset_data":{

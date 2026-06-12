@@ -410,7 +410,10 @@ export class Playground implements PlaygroundActionContext {
   }
 
   public createDiscoLight(mesh: BABYLON.AbstractMesh, index: number, color = neonColors[(index + 1) % neonColors.length]) {
-    const light = new BABYLON.PointLight(`disco_light_${index}_${mesh.name}`, mesh.getAbsolutePosition().add(new BABYLON.Vector3(0, 1.2, 0)), mesh.getScene());
+    const light = new BABYLON.DirectionalLight(`disco_light_${index}_${mesh.name}`, BABYLON.Vector3.Zero(), mesh.getScene());
+    light.position = new BABYLON.Vector3(28, 44, -24);
+    light.setDirectionToTarget(new BABYLON.Vector3(0, 0, 0));
+
     light.diffuse = color;
     light.specular = color;
     light.intensity = 11;
