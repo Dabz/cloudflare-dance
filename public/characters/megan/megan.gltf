@@ -4,7 +4,11 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
+		"EXT_texture_webp",
 		"KHR_materials_specular"
+	],
+	"extensionsRequired":[
+		"EXT_texture_webp"
 	],
 	"scene":0,
 	"scenes":[
@@ -13343,60 +13347,84 @@
 	],
 	"textures":[
 		{
-			"sampler":0,
-			"source":0
+			"extensions":{
+				"EXT_texture_webp":{
+					"source":0
+				}
+			},
+			"sampler":0
 		},
 		{
-			"sampler":0,
-			"source":1
+			"extensions":{
+				"EXT_texture_webp":{
+					"source":1
+				}
+			},
+			"sampler":0
 		},
 		{
-			"sampler":0,
-			"source":2
+			"extensions":{
+				"EXT_texture_webp":{
+					"source":2
+				}
+			},
+			"sampler":0
 		},
 		{
-			"sampler":0,
-			"source":3
+			"extensions":{
+				"EXT_texture_webp":{
+					"source":3
+				}
+			},
+			"sampler":0
 		},
 		{
-			"sampler":0,
-			"source":4
+			"extensions":{
+				"EXT_texture_webp":{
+					"source":4
+				}
+			},
+			"sampler":0
 		},
 		{
-			"sampler":0,
-			"source":5
+			"extensions":{
+				"EXT_texture_webp":{
+					"source":5
+				}
+			},
+			"sampler":0
 		}
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/webp",
 			"name":"Ch22_1001_Specular",
-			"uri":"Ch22_1001_Specular.png"
+			"uri":"Ch22_1001_Specular.webp"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/webp",
 			"name":"Ch22_1001_Normal",
-			"uri":"Ch22_1001_Normal.png"
+			"uri":"Ch22_1001_Normal.webp"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/webp",
 			"name":"Ch22_1001_Diffuse",
-			"uri":"Ch22_1001_Diffuse.png"
+			"uri":"Ch22_1001_Diffuse.webp"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/webp",
 			"name":"Ch22_1001_Glossiness",
-			"uri":"Ch22_1001_Glossiness.png"
+			"uri":"Ch22_1001_Glossiness.webp"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/webp",
 			"name":"Ch22_1002_Normal",
-			"uri":"Ch22_1002_Normal.png"
+			"uri":"Ch22_1002_Normal.webp"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/webp",
 			"name":"Ch22_1002_Diffuse",
-			"uri":"Ch22_1002_Diffuse.png"
+			"uri":"Ch22_1002_Diffuse.webp"
 		}
 	],
 	"skins":[
