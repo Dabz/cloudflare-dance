@@ -11,6 +11,13 @@ jobs:
     name: Deploy
     steps:
       - uses: actions/checkout@v6
+      - name: Use Node.js $
+        uses: actions/setup-node@v6
+        with:
+          cache: 'npm'
+          node-version: 26
+      - run: npm install
+      - run: npm run build
       - name: Deploy
         uses: cloudflare/wrangler-action@v4
         with:
