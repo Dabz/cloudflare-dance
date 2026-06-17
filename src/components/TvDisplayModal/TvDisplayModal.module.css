@@ -1,0 +1,13 @@
+.TvUrlForm { display: grid; gap: 12px; }
+.TvUrlForm h2 { margin: 0; color: var(--room-black); font-size: clamp(2rem, 6vw, 4rem); font-weight: 950; line-height: 0.84; letter-spacing: -0.08em; text-transform: uppercase; text-shadow: 4px 4px 0 rgba(255, 122, 22, 0.58); }
+.TvUrlForm p, .TvVideoPicker p { margin: 0; color: rgba(22, 11, 4, 0.7); font-size: 13px; font-weight: 700; line-height: 1.45; }
+.TvUrlForm label { color: var(--room-black); font-size: 12px; font-weight: 950; letter-spacing: 0.08em; text-transform: uppercase; }
+.TvUrlRow { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+.TvUrlRow input { min-width: 0; border: 4px solid var(--room-black); background: #fff9e9; box-shadow: 7px 7px 0 var(--room-orange); box-sizing: border-box; color: var(--room-ink); font: 900 13px/1 var(--sans, system-ui, sans-serif); padding: 12px 14px; }
+.TvUrlRow button { color: var(--room-cream); background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold)); }
+.TvVideoPicker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.TvVideoPickerTitle, .TvVideoPicker p { grid-column: 1 / -1; color: #9b2d07; font-size: 11px; font-weight: 950; letter-spacing: 0.14em; text-transform: uppercase; }
+.TvVideoPicker button { display: grid; grid-template-columns: 92px 1fr; align-items: center; gap: 10px; border: 4px solid var(--room-black); background: #fff6dd; box-shadow: 7px 7px 0 var(--room-gold); padding: 8px; text-align: left; }
+.TvVideoPicker img { width: 92px; height: 52px; border: 3px solid var(--room-black); box-sizing: border-box; object-fit: cover; }
+.TvVideoPicker button span { overflow: hidden; color: var(--room-black); font-weight: 950; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 640px) { .TvUrlRow, .TvVideoPicker, .TvVideoPicker button { grid-template-columns: 1fr; } .TvVideoPicker img { width: 100%; height: auto; aspect-ratio: 16 / 9; } }

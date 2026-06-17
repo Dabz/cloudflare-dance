@@ -1,0 +1,10 @@
+.MenuDisplayPopup { width: min(620px, 100%); }
+.MenuPopupIntro { display: grid; gap: 10px; }
+.MenuPopupIntro h2 { margin: 0; color: var(--room-black); font-size: clamp(2.2rem, 7vw, 4.6rem); font-weight: 1000; line-height: 0.84; letter-spacing: -0.08em; text-transform: uppercase; text-shadow: 4px 4px 0 rgba(255, 122, 22, 0.58), 8px 8px 0 rgba(255, 196, 71, 0.36); }
+.MenuPopupIntro p { margin: 0; color: rgba(22, 11, 4, 0.7); font-size: 13px; font-weight: 800; line-height: 1.45; }
+.MenuActions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.MenuActions button, .StartMinigameButton { min-height: 76px; border: 4px solid var(--room-black); color: var(--room-black); background: linear-gradient(145deg, #fff7df, var(--room-gold), var(--room-orange)); box-shadow: 8px 8px 0 var(--room-black), 14px 14px 0 rgba(255, 122, 22, 0.84); font-size: 15px; }
+.MenuActions button:last-child, .StartMinigameButton { color: var(--room-cream); background: linear-gradient(135deg, var(--room-black), #9b2d07 62%, var(--room-hot)); }
+.MinigameToggle { display: flex; align-items: center; gap: 12px; border: 4px solid var(--room-black); padding: 12px 14px; color: var(--room-black); background: #fff7df; box-shadow: 7px 7px 0 var(--room-orange); font-size: 12px; font-weight: 950; letter-spacing: 0.06em; text-transform: uppercase; }
+.MinigameToggle input { width: 22px; height: 22px; accent-color: var(--room-hot); }
+@media (max-width: 640px) { .MenuActions { grid-template-columns: 1fr; } }

@@ -1,0 +1,68 @@
+.Banner {
+  --room-black: #080604;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  z-index: 12;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  width: min(720px, calc(100vw - 36px));
+  padding: 14px 16px;
+  color: var(--room-cream);
+  background: linear-gradient(112deg, var(--room-black), #5b1006 62%, var(--room-hot));
+  box-shadow: 10px 10px 0 var(--room-gold), 18px 18px 0 rgba(255, 122, 22, 0.76);
+  clip-path: polygon(0 12%, 98% 0, 100% 86%, 4% 100%);
+  transform: translateX(-50%) rotate(-1deg);
+}
+
+.Banner span {
+  color: var(--room-gold);
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.Banner p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.Banner strong {
+  display: grid;
+  min-width: 44px;
+  min-height: 34px;
+  border: 3px solid var(--room-gold);
+  place-items: center;
+  color: var(--room-gold);
+  background: rgba(8, 6, 4, 0.46);
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 0.04em;
+}
+
+.Banner button {
+  border: 0;
+  color: var(--room-black);
+  background: var(--room-cream);
+  box-shadow: 4px 4px 0 var(--room-orange);
+  cursor: pointer;
+  font: 950 11px/1 var(--sans, system-ui, sans-serif);
+  padding: 9px 10px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .Banner {
+    grid-template-columns: auto 1fr;
+  }
+}

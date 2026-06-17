@@ -1,0 +1,85 @@
+.RoomControls {
+  --room-black: #080604;
+  --room-orange: #ff7a16;
+  --room-hot: #ff3f0a;
+  --room-gold: #ffc447;
+  --room-cream: #fff2d2;
+  --room-paper: rgba(255, 242, 210, 0.94);
+
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  width: min(360px, calc(100vw - 36px));
+  color: var(--room-cream);
+  pointer-events: none;
+}
+
+.RoomControls::before {
+  content: "";
+  position: absolute;
+  inset: -6px -10px auto auto;
+  z-index: -1;
+  width: min(380px, 86vw);
+  height: 60px;
+  background:
+    linear-gradient(112deg, transparent 0 12%, var(--room-black) 12.5% 78%, transparent 78.5% 100%),
+    radial-gradient(circle, rgba(255, 196, 71, 0.9) 0 2px, transparent 2px) 0 0 / 22px 22px;
+  filter: drop-shadow(12px 14px 0 rgba(255, 122, 22, 0.72));
+  opacity: 0.9;
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.PrimaryControls {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 9px;
+  transform: rotate(-2deg);
+}
+
+.RoomControls button {
+  border: 0;
+  border-radius: 0;
+  color: var(--room-black);
+  background: var(--room-paper);
+  box-shadow: 6px 6px 0 var(--room-black), 10px 10px 0 rgba(255, 122, 22, 0.9);
+  clip-path: polygon(0 12%, 96% 0, 100% 84%, 6% 100%);
+  cursor: pointer;
+  font: 950 12px/1 var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.06em;
+  padding: 10px 13px;
+  pointer-events: auto;
+  text-transform: uppercase;
+}
+
+.PrimaryControls button:first-child {
+  color: var(--room-cream);
+  background: linear-gradient(102deg, var(--room-hot), var(--room-orange) 58%, var(--room-gold));
+}
+
+.CharacterOpenButton {
+  color: var(--room-cream);
+  background: linear-gradient(102deg, #171343, var(--room-hot) 58%, var(--room-orange));
+  transform: rotate(1deg);
+}
+
+.ControlsToggle {
+  margin-left: 0;
+  color: var(--room-black);
+  background: linear-gradient(102deg, var(--room-gold), var(--room-orange) 58%, var(--room-hot));
+  transform: rotate(-3deg);
+}
+
+@media (max-width: 640px) {
+  .RoomControls {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+
+  .RoomControls::before {
+    width: 94vw;
+  }
+}

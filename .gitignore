@@ -32,3 +32,11 @@ dist-ssr
 
 *storybook.log
 storybook-static
+
+# Vibe coding
+.opencode/*
+.cursor/*
+.claude/*
+
+# Storybooks
+.storybook/*
