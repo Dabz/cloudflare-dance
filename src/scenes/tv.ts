@@ -19,7 +19,7 @@ export class TV extends UsableObject {
 
   init(scene: BABYLON.Scene) {
     this._scene = scene;
-    const screenFrame = scene.getMeshByName("TV_primitive1");
+    const screenFrame = scene.getMeshByName("TV");
     if (!screenFrame) return;
 
     this._tvMesh = screenFrame;

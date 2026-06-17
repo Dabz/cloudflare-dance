@@ -30,11 +30,11 @@ const MINIGAME_STATE_STORAGE_KEY = "ddosMinigameState";
 const FIX_POP_STATE_STORAGE_KEY = "fixPopMinigameState";
 const DDOS_DURATION_MS = 75_000;
 const DDOS_START_DELAY_MS = 25_000;
-const DDOS_COOLDOWN_MS = 120_000;
+const DDOS_COOLDOWN_MS = 600_000;
 const DDOS_BOT_COUNT = 18;
 const FIX_POP_DURATION_MS = 90_000;
 const FIX_POP_START_DELAY_MS = 45_000;
-const FIX_POP_COOLDOWN_MS = 150_000;
+const FIX_POP_COOLDOWN_MS = 900_000;
 const FIX_POP_QUESTION_COUNT = 5;
 
 function normalizeDisplayUrl(rawUrl: string): string {

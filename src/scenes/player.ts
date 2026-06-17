@@ -35,7 +35,7 @@ function hasCoarsePointer() {
 }
 
 function clampCameraBeta(beta: number) {
-  return Math.min(Math.PI / 2, Math.max(0.12, beta));
+  return Math.min(Math.PI / 2, Math.max(0, beta));
 }
 
 function clampCameraRadius(radius: number) {
