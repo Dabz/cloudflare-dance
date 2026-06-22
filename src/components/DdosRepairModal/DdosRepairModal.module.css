@@ -1,0 +1,6 @@
+.DdosRepairModal { width: min(620px, 100%); }
+.Content { display: grid; gap: 18px; }
+.Content h2 { margin: 0; color: var(--room-black); font-size: clamp(2.6rem, 8vw, 5.4rem); font-weight: 1000; line-height: 0.82; letter-spacing: -0.09em; text-transform: uppercase; text-shadow: 4px 4px 0 rgba(255, 65, 22, 0.58), 8px 8px 0 rgba(255, 196, 71, 0.46); }
+.Content p { margin: 0; color: rgba(22, 11, 4, 0.76); font-size: 15px; font-weight: 850; line-height: 1.45; }
+.Content kbd { display: inline-grid; place-items: center; min-width: 34px; min-height: 34px; margin: 0 4px; border: 3px solid var(--room-black); background: #fff7df; box-shadow: 4px 4px 0 var(--room-gold); color: var(--room-hot); font: inherit; font-weight: 1000; }
+.RepairButton { min-height: 64px; color: var(--room-cream); background: linear-gradient(102deg, #18110c, var(--room-hot) 48%, var(--room-orange)); font-size: 16px; }

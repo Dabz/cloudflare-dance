@@ -55,6 +55,9 @@ export interface DdosMinigameState {
   endsAt?: number;
   nextStartAt?: number;
   remainingBots: string[];
+  breachedBots: string[];
+  totalBots: number;
+  tvOnFire: boolean;
   scores: Record<string, number>;
   playerNames: Record<string, string>;
   winnerId?: string;
@@ -147,6 +150,17 @@ export interface MinigameHitRequest {
   botId: string;
 }
 
+export interface MinigameBreachRequest {
+  type: "minigame-breach";
+  name: "ddos";
+  botId: string;
+}
+
+export interface MinigameRepairRequest {
+  type: "minigame-repair";
+  name: "ddos";
+}
+
 export interface MinigameAnswerRequest {
   type: "minigame-answer";
   name: "fix-pop";
@@ -188,7 +202,7 @@ export interface RoomAnnouncementPayload {
   time: number;
 }
 
-export type WSClientMessage = PlayerUpdateRequest | PlayerDanceRequest | PlaygroundInteractRequest | RoomDisplayUrlRequest | ChatRequest | MinigameControlRequest | MinigameHitRequest | MinigameAnswerRequest;
+export type WSClientMessage = PlayerUpdateRequest | PlayerDanceRequest | PlaygroundInteractRequest | RoomDisplayUrlRequest | ChatRequest | MinigameControlRequest | MinigameHitRequest | MinigameBreachRequest | MinigameRepairRequest | MinigameAnswerRequest;
 export type WSServerMessage = PlayerUpdatesPayload | PlayerDancePayload | PlaygroundInteractPayload | RoomStatePayload | ChatPayload | MinigamePayload | RoomAnnouncementPayload;
 
 export interface PlayerUpdates {

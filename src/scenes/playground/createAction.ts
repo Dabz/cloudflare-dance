@@ -15,13 +15,15 @@ import {Teleport} from "./Teleport";
 import { ToggleDisco } from "./ToggleDisco";
 import { ToggleLight } from "./ToggleLight";
 import { ExplodeBalls } from "./ExplodeBalls";
+import { TV } from "./TV";
 
-export function createPlaygroundAction(id: string, mesh: BABYLON.AbstractMesh, context: PlaygroundActionContext): PlaygroundAction | undefined {
+export function createPlaygroundAction(id: string, mesh: BABYLON.AbstractMesh, context: PlaygroundActionContext, extras?: Record<string, unknown>): PlaygroundAction | undefined {
   if (id.startsWith("toggle-light-") && id.match(/^toggle-light-[0-9]+/)) {
     return new ToggleLight(context, id, mesh);
   }
 
   switch (id) {
+    case "tv": return new TV(context, mesh, extras);
     case "ball-chaos": return new BallChaos(context);
     case "bowl": return new Bowl(context);
     case "toggle-disco": return new ToggleDisco(context);

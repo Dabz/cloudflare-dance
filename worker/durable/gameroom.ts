@@ -1,6 +1,6 @@
 import { DurableObject, env } from "cloudflare:workers";
 import puppeteer from "@cloudflare/puppeteer";
-import { CLOUDFLARE_TRIVIA_QUESTIONS, type ChatPayload, type ChatRequest, type DdosMinigameState, type FixPopMinigameState, type MinigameAnswerRequest, type MinigameControlRequest, type MinigameHitRequest, type MinigamePayload, type RoomAnnouncementPayload, type WSClientMessage, type PlayerDancePayload, type PlaygroundInteractPayload, type PlaygroundInteractRequest, type PlaygroundObjectStates, type PlayerUpdateRequest, type PlayerUpdates, type PlayerUpdatesPayload, type RoomDisplayUrlRequest, type RoomStatePayload } from "../model/gameroom";
+import { CLOUDFLARE_TRIVIA_QUESTIONS, type ChatPayload, type ChatRequest, type DdosMinigameState, type FixPopMinigameState, type MinigameAnswerRequest, type MinigameBreachRequest, type MinigameControlRequest, type MinigameHitRequest, type MinigamePayload, type MinigameRepairRequest, type RoomAnnouncementPayload, type WSClientMessage, type PlayerDancePayload, type PlaygroundInteractPayload, type PlaygroundInteractRequest, type PlaygroundObjectStates, type PlayerUpdateRequest, type PlayerUpdates, type PlayerUpdatesPayload, type RoomDisplayUrlRequest, type RoomStatePayload } from "../model/gameroom";
 import {createPlayerIdCookie, getDisplayNameOverride, getPlayerId, getPlayerIdentity, getReconnect} from "../auth";
 import Const from "../const"
 import type {Player, PlayerIdentity} from "../model/player";
@@ -342,6 +342,14 @@ export class GameRoom extends DurableObject<Env> {
         return await this.handleMinigameHitMessage(incomingMessage, session);
       }
 
+      if ("type" in incomingMessage && incomingMessage.type === "minigame-breach") {
+        return await this.handleMinigameBreachMessage(incomingMessage, session);
+      }
+
+      if ("type" in incomingMessage && incomingMessage.type === "minigame-repair") {
+        return await this.handleMinigameRepairMessage(incomingMessage, session);
+      }
+
       if ("type" in incomingMessage && incomingMessage.type === "minigame-answer") {
         return await this.handleMinigameAnswerMessage(incomingMessage, session);
       }
@@ -462,6 +470,49 @@ export class GameRoom extends DurableObject<Env> {
     this.broadcastMinigame("score", state);
   }
 
+  private async handleMinigameBreachMessage(incomingMessage: MinigameBreachRequest, session: SessionData) {
+    if (incomingMessage.name !== "ddos") return;
+
+    const state = await this.getMinigameState();
+    if (!state.enabled || !state.active || state.tvOnFire) return;
+    if (!state.remainingBots.includes(incomingMessage.botId)) return;
+
+    state.remainingBots = state.remainingBots.filter((botId) => botId !== incomingMessage.botId);
+    if (!state.breachedBots.includes(incomingMessage.botId)) state.breachedBots.push(incomingMessage.botId);
+
+    if (state.breachedBots.length > state.totalBots * 0.5) {
+      state.active = false;
+      state.startedAt = undefined;
+      state.endsAt = undefined;
+      state.nextStartAt = Date.now() + DDOS_COOLDOWN_MS;
+      state.remainingBots = [];
+      state.winnerId = undefined;
+      state.winnerName = "Attackers";
+      state.tvOnFire = true;
+      await this.setMinigameState(state);
+      this.broadcastMinigame("ended", state);
+      this.broadcastRoomAnnouncement(`DDoS attack overwhelmed the TV. ${session.displayName} can repair it by interacting with the TV.`);
+      await this.broadcastRoomState();
+      return;
+    }
+
+    await this.setMinigameState(state);
+    this.broadcastMinigame("score", state);
+  }
+
+  private async handleMinigameRepairMessage(incomingMessage: MinigameRepairRequest, session: SessionData) {
+    if (incomingMessage.name !== "ddos") return;
+
+    const state = await this.getMinigameState();
+    if (!state.tvOnFire) return;
+
+    state.tvOnFire = false;
+    await this.setMinigameState(state);
+    this.broadcastMinigame("state", state);
+    this.broadcastRoomAnnouncement(`${session.displayName} repaired the TV.`);
+    await this.broadcastRoomState();
+  }
+
   private async handleMinigameControlMessage(incomingMessage: MinigameControlRequest) {
     if ((incomingMessage.name ?? "ddos") === "fix-pop") {
       return await this.handleFixPopControlMessage(incomingMessage);
@@ -470,6 +521,11 @@ export class GameRoom extends DurableObject<Env> {
     const state = await this.getMinigameState();
     if (incomingMessage.startNow && (incomingMessage.name ?? "ddos") === "ddos") {
       state.enabled = true;
+      if (state.tvOnFire) {
+        await this.setMinigameState(state);
+        this.broadcastMinigame("state", state);
+        return;
+      }
       await this.startDdosMinigame(state, Date.now());
       return;
     }
@@ -614,10 +670,16 @@ export class GameRoom extends DurableObject<Env> {
       active: false,
       nextStartAt: Date.now() + DDOS_START_DELAY_MS,
       remainingBots: [],
+      breachedBots: [],
+      totalBots: DDOS_BOT_COUNT,
+      tvOnFire: false,
       scores: {},
       playerNames: {},
     };
     this.minigameState.remainingBots ??= [];
+    this.minigameState.breachedBots ??= [];
+    this.minigameState.totalBots ??= DDOS_BOT_COUNT;
+    this.minigameState.tvOnFire ??= false;
     this.minigameState.scores ??= {};
     this.minigameState.playerNames ??= {};
     return this.minigameState;
@@ -711,7 +773,7 @@ export class GameRoom extends DurableObject<Env> {
     };
   }
 
-  private broadcastMinigame(event: MinigamePayload["event"], state: DdosMinigameState) {
+  private broadcastMinigame(event: MinigamePayload["event"], state: DdosMinigameState | FixPopMinigameState) {
     const payload: MinigamePayload = {
       type: "minigame",
       event,
@@ -728,7 +790,7 @@ export class GameRoom extends DurableObject<Env> {
     const state = await this.getMinigameState();
     const now = Date.now();
 
-    if (!state.enabled) return;
+    if (!state.enabled || state.tvOnFire) return;
 
     if (state.active && state.endsAt && now >= state.endsAt) {
       await this.endDdosMinigame(state, now);
@@ -773,6 +835,9 @@ export class GameRoom extends DurableObject<Env> {
     state.endsAt = now + DDOS_DURATION_MS;
     state.nextStartAt = undefined;
     state.remainingBots = Array.from({ length: DDOS_BOT_COUNT }, (_, index) => `bot-${index}`);
+    state.breachedBots = [];
+    state.totalBots = DDOS_BOT_COUNT;
+    state.tvOnFire = false;
     state.scores = {};
     state.playerNames = {};
     state.winnerId = undefined;
@@ -798,6 +863,7 @@ export class GameRoom extends DurableObject<Env> {
     state.remainingBots = [];
     state.winnerId = winnerId;
     state.winnerName = winnerId ? state.playerNames[winnerId] ?? winnerId : "No defender";
+    state.tvOnFire = false;
     await this.setMinigameState(state);
     this.broadcastMinigame("ended", state);
     await this.broadcastRoomState();

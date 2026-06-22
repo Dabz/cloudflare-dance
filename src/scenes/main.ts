@@ -6,14 +6,14 @@ import havokWasmUrl from "../../node_modules/@babylonjs/havok/lib/esm/HavokPhysi
 import "@babylonjs/loaders/glTF";
 import type { Player } from "../../worker/model/player";
 import { type CharacterName, PlayerCharacter } from "./player";
-import {TV} from "./tv";
 import {MeshCache} from "./cache";
 import {Playground} from "./playground";
+import type { TV } from "./playground/TV";
 import { DdosMinigame } from "./minigames/DdosMinigame";
 import { FixPopMinigame } from "./minigames/FixPopMinigame";
 import type { DdosMinigameState, FixPopMinigameState } from "../../worker/model/gameroom";
 
-export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance" | "playground-interact" | "minigame-hit";
+export type InteractEventType = "none" | "tv-interact" | "tv-leave" | "player-dance" | "playground-interact" | "minigame-hit" | "minigame-breach";
 export interface PlaygroundInteractEventPayload {
   actionId?: string;
   objectId?: string;
@@ -27,16 +27,13 @@ export type LoadingProgressSubscriber = (progress: number) => void;
 
 export class MainScene {
   mainPlayer: PlayerCharacter;
-  tv: TV;
+  tv?: TV;
   playground: Playground;
   ddosMinigame?: DdosMinigame;
   fixPopMinigame?: FixPopMinigame;
   _otherPlayers: { [key: string]: PlayerCharacter } = {};
   otherPlayers: Player[] = [];
   _shadowGenerator?: BABYLON.ShadowGenerator;
-  _sunLight?: BABYLON.DirectionalLight;
-  _sunFillLight?: BABYLON.HemisphericLight;
-  _sunLightSphere?: BABYLON.Mesh;
 
   _scene: BABYLON.Scene;
   _camera: BABYLON.ArcFollowCamera;
@@ -58,16 +55,11 @@ export class MainScene {
       "camera1",
       0,
       Math.PI * 0.3,
-      6,
+      3,
       null,
       scene,
     );
-
-    const light = this.addSunLight(scene);
-    this._shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
-    this._shadowGenerator.usePercentageCloserFiltering = true;
-    this._shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH;
-    this._shadowGenerator.darkness = 0.35;
+    this._camera.fov = 1.0;
 
     const havokInterface = await HavokPhysics({ locateFile: () => havokWasmUrl });
     if (this._scene !== scene) return scene;
@@ -99,14 +91,19 @@ export class MainScene {
       })
       i += 1;
     }
-    await BABYLON.ImportMeshAsync("/levels/1/level.gltf", scene, {
+    await BABYLON.ImportMeshAsync("/levels/entry/entry.gltf", scene, {
       onProgress: reportAssetProgress(50, 92),
     });
 
     if (this._scene !== scene) return scene;
     onLoadingProgress?.(96);
+
+    scene.imageProcessingConfiguration.toneMappingEnabled = true;
+    scene.imageProcessingConfiguration.toneMappingType = BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES;
+    scene.imageProcessingConfiguration.exposure = 1.0;
+
+    this._shadowGenerator = new BABYLON.ShadowGenerator(1024, scene.getLightById("area") as BABYLON.IShadowLight);
     scene.meshes.forEach((mesh) => this.addShadowReceiver(mesh));
-    this.addSky(scene);
 
     this._scene.meshes.forEach((mesh) => {
       if (mesh.name.startsWith("Cube") || mesh.name.startsWith("Sphere")) {
@@ -116,15 +113,13 @@ export class MainScene {
           { mass: 0.1 },
         );   
         mesh.checkCollisions = true;
-        this.addShadowCaster(mesh);
-      } else if (mesh.name.startsWith("TV") || mesh.name.startsWith("Icosphere") || mesh.name.startsWith("Wall")) {
+      } else if (mesh.name.startsWith("TV") || mesh.name.toLowerCase().startsWith("icosphere") || mesh.name.toLowerCase().startsWith("wall")) {
         new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
         mesh.checkCollisions = true;
         mesh.isPickable = false;
         mesh.freezeWorldMatrix()
         mesh.doNotSyncBoundingInfo = true;
 
-        this.addShadowCaster(mesh);
       } else if (mesh.name.startsWith("floor") || mesh.name.startsWith("Ground") ||  mesh.name.startsWith("Cube")) {
         new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH);
         mesh.checkCollisions = true;
@@ -154,9 +149,10 @@ export class MainScene {
       fixedMass.body.addConstraint(plane.body, joint);
     }
 
-    this.addTV(scene);
     this.ddosMinigame = new DdosMinigame(scene, (botId) => {
       this.onInteract?.("minigame-hit", { botId });
+    }, (botId) => {
+      this.onInteract?.("minigame-breach", { botId });
     });
     this.fixPopMinigame = new FixPopMinigame(scene);
     this.addPlayground(scene);
@@ -169,14 +165,6 @@ export class MainScene {
 
     return scene;
   }
-  public addTV(scene: BABYLON.Scene) {
-    this.tv = new TV(this.onInteract);
-    this.tv.init(scene);
-    this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
-      this.tv.beforeRender(scene, this._camera, this.mainPlayer);
-    });
-  }
-
   public addPlayground(scene: BABYLON.Scene) {
     this.playground = new Playground((mesh) => this.addShadowCaster(mesh), (actionId, objectId, objectState) => {
       this.onInteract?.("playground-interact", { actionId, objectId, objectState });
@@ -190,8 +178,13 @@ export class MainScene {
       if (!this.mainPlayer) return;
       this._camera.setMeshTarget(this.mainPlayer.character);
       this._camera.setTarget(this.mainPlayer.characterPosition);
+    }, () => {
+      this.onInteract?.("tv-interact");
+    }, () => {
+      this.onInteract?.("tv-leave");
     });
     this.playground.init(scene);
+    this.tv = this.playground.tv;
     this._scene.onBeforeRenderObservable.add((scene: BABYLON.Scene) => {
       this.playground.beforeRender(scene, this.mainPlayer);
       this.ddosMinigame?.beforeRender();
@@ -260,10 +253,6 @@ export class MainScene {
     this.ddosMinigame = undefined;
     this.fixPopMinigame?.dispose();
     this.fixPopMinigame = undefined;
-
-    this._sunLight = undefined;
-    this._sunFillLight = undefined;
-    this._sunLightSphere = undefined;
   }
 
   public resize() {
@@ -353,91 +342,6 @@ export class MainScene {
     this._scene?.render();
   }
 
-  private addSunLight(scene: BABYLON.Scene) {
-    const light = new BABYLON.DirectionalLight("sunLight", BABYLON.Vector3.Zero(), scene);
-    light.position = new BABYLON.Vector3(28, 44, -24);
-    light.setDirectionToTarget(new BABYLON.Vector3(0, 0, 0));
-    light.intensity = 0.75;
-    light.shadowMinZ = 1;
-    light.shadowMaxZ = 120;
-    light.orthoTop = 48;
-    light.orthoBottom = -48;
-    light.orthoLeft = -48;
-    light.orthoRight = 48;
-    this._sunLight = light;
-
-    const fillLight = new BABYLON.HemisphericLight(
-      "sunFillLight",
-      new BABYLON.Vector3(0, 1, 0),
-      scene,
-    );
-    fillLight.intensity = 0.14;
-    fillLight.diffuse = new BABYLON.Color3(0.85, 0.9, 1);
-    fillLight.groundColor = new BABYLON.Color3(0.22, 0.18, 0.14);
-    this._sunFillLight = fillLight;
-
-    const lightSphere = BABYLON.Mesh.CreateSphere("sunLightDisplay", 10, 2, scene);
-    lightSphere.position = light.position;
-    lightSphere.isPickable = false;
-    const lightMaterial = new BABYLON.StandardMaterial("sunLightDisplayMaterial", scene);
-    lightMaterial.emissiveColor = new BABYLON.Color3(1, 0.92, 0.45);
-    lightSphere.material = lightMaterial;
-    this._sunLightSphere = lightSphere;
-
-    return light;
-  }
-
-
-  private addSky(scene: BABYLON.Scene) {
-    const skyName = "blueSky";
-    scene.clearColor = new BABYLON.Color4(0.62, 0.82, 1, 1);
-
-    const skyDome = BABYLON.MeshBuilder.CreateSphere(
-      skyName,
-      {
-        diameter: 500,
-        segments: 48,
-        sideOrientation: BABYLON.Mesh.BACKSIDE,
-      },
-      scene,
-    );
-    skyDome.infiniteDistance = true;
-    skyDome.isPickable = false;
-
-    const skyTexture = new BABYLON.DynamicTexture(`${skyName}Texture`, { width: 1024, height: 512 }, scene);
-    const context = skyTexture.getContext() as CanvasRenderingContext2D;
-    const gradient = context.createLinearGradient(0, 0, 0, 512);
-    gradient.addColorStop(0, "#2f7eea");
-    gradient.addColorStop(0.45, "#7fc9ff");
-    gradient.addColorStop(0.78, "#d8f3ff");
-    gradient.addColorStop(1, "#f6fbff");
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, 1024, 512);
-
-    context.fillStyle = "rgba(255, 255, 255, 0.74)";
-    for (const [x, y, scale] of [[140, 150, 1.05], [330, 105, 0.72], [570, 165, 0.9], [850, 125, 0.82]] as const) {
-      context.beginPath();
-      context.ellipse(x, y, 70 * scale, 24 * scale, 0, 0, Math.PI * 2);
-      context.ellipse(x + 48 * scale, y + 8 * scale, 58 * scale, 20 * scale, 0, 0, Math.PI * 2);
-      context.ellipse(x - 45 * scale, y + 9 * scale, 46 * scale, 16 * scale, 0, 0, Math.PI * 2);
-      context.fill();
-    }
-    skyTexture.update();
-    skyTexture.coordinatesMode = BABYLON.Texture.SPHERICAL_MODE;
-    skyTexture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
-    skyTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
-
-    const skyMaterial = new BABYLON.StandardMaterial(`${skyName}Material`, scene);
-    skyMaterial.diffuseTexture = skyTexture;
-    skyMaterial.emissiveTexture = skyTexture;
-    skyMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-    skyMaterial.specularColor = BABYLON.Color3.Black();
-    skyMaterial.disableLighting = true;
-    skyMaterial.backFaceCulling = false;
-
-    skyDome.material = skyMaterial;
-  }
-
   private addShadowCaster(mesh?: BABYLON.AbstractMesh | null) {
     if (!mesh || !this._shadowGenerator) return;
 
@@ -445,7 +349,7 @@ export class MainScene {
   }
 
   private addShadowReceiver(mesh?: BABYLON.AbstractMesh | null) {
-    if (!mesh) return;
+    if (!mesh || !this._shadowGenerator) return;
 
     mesh.receiveShadows = true;
     this._shadowGenerator.addShadowCaster(mesh);

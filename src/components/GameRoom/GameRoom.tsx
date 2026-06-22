@@ -11,7 +11,7 @@ import {useNavigate} from 'react-router';
 import { getDisplayNameCookie, UNKNOWN_DISPLAY_NAME } from "../../security/displayName";
 import type {StreamVideo} from "../../../worker/model/streams";
 import {listStreams} from "../../streams";
-import type { ChatRequest, FixPopMinigameState, MinigameAnswerRequest, MinigameControlRequest, MinigameHitRequest, PlayerDanceRequest, PlaygroundInteractRequest, PlayerUpdateRequest, RoomDisplayUrlRequest, WSServerMessage } from "../../../worker/model/gameroom";
+import type { ChatRequest, DdosMinigameState, FixPopMinigameState, MinigameAnswerRequest, MinigameBreachRequest, MinigameControlRequest, MinigameHitRequest, MinigameRepairRequest, PlayerDanceRequest, PlaygroundInteractRequest, PlayerUpdateRequest, RoomDisplayUrlRequest, WSServerMessage } from "../../../worker/model/gameroom";
 import type {Chat} from "../../../worker/model/chat";
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
 import MobileJoystick from "../MobileJoystick/MobileJoystick";
@@ -20,6 +20,7 @@ import RoomControls from "../RoomControls/RoomControls";
 import HowToPlayPanel from "../HowToPlayPanel/HowToPlayPanel";
 import RoomMenuModal from "../RoomMenuModal/RoomMenuModal";
 import FixPopTriviaModal from "../FixPopTriviaModal/FixPopTriviaModal";
+import DdosRepairModal from "../DdosRepairModal/DdosRepairModal";
 import CharacterPickerModal from "../CharacterPickerModal/CharacterPickerModal";
 import ChatPanel from "../ChatPanel/ChatPanel";
 import TvDisplayModal from "../TvDisplayModal/TvDisplayModal";
@@ -56,9 +57,13 @@ const GameRoom: FC = () => {
   const [roomAnnouncement, setRoomAnnouncement] = useState("");
   const [roomAnnouncementSeconds, setRoomAnnouncementSeconds] = useState(0);
   const [roomAnnouncementVersion, setRoomAnnouncementVersion] = useState(0);
+  const [ddosState, setDdosState] = useState<DdosMinigameState | undefined>(undefined);
   const [fixPopState, setFixPopState] = useState<FixPopMinigameState | undefined>(undefined);
   const [fixPopPopupOpen, setFixPopPopupOpen] = useState(false);
+  const [ddosRepairPopupOpen, setDdosRepairPopupOpen] = useState(false);
   const [fixPopAnswers, setFixPopAnswers] = useState<Record<string, number>>({});
+  const ddosStateRef = useRef<DdosMinigameState | undefined>(undefined);
+  const fixPopStateRef = useRef<FixPopMinigameState | undefined>(undefined);
   const { id: roomId } = useParams()
   const navigate = useNavigate()
 
@@ -116,6 +121,14 @@ const GameRoom: FC = () => {
     setFixPopPopupOpen(false);
   }
 
+  function repairDdosTv() {
+    if (!ddosStateRef.current?.tvOnFire || wsRef.current?.readyState !== WebSocket.OPEN) return;
+
+    const request: MinigameRepairRequest = { type: "minigame-repair", name: "ddos" };
+    wsRef.current.send(JSON.stringify(request));
+    setDdosRepairPopupOpen(false);
+  }
+
   function saveDisplayUrl(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     shareDisplayUrl(draftDisplayUrl);
@@ -139,6 +152,18 @@ const GameRoom: FC = () => {
   function moveJoystick(x: number, z: number) {
     mainSceneRef.current?.setMainPlayerMoveInput(x, z);
   }
+
+  useEffect(() => {
+    ddosStateRef.current = ddosState;
+  }, [ddosState]);
+
+  useEffect(() => {
+    fixPopStateRef.current = fixPopState;
+  }, [fixPopState]);
+
+  useEffect(() => {
+    if (!ddosState?.tvOnFire) setDdosRepairPopupOpen(false);
+  }, [ddosState?.tvOnFire]);
 
   useEffect(() => {
     if (!roomAnnouncement) return;
@@ -228,7 +253,11 @@ const GameRoom: FC = () => {
           console.log("Initiating main scene")
           mainScene = new MainScene((event, payload) => {
             if (event === "tv-interact") {
-              if (fixPopState?.active) {
+              if (ddosStateRef.current?.tvOnFire) {
+                setDdosRepairPopupOpen(true);
+                return;
+              }
+              if (fixPopStateRef.current?.active) {
                 setFixPopPopupOpen(true);
                 return;
               }
@@ -236,6 +265,7 @@ const GameRoom: FC = () => {
             }
             if (event === "tv-leave") {
               setTvPopupOpen(false);
+              setDdosRepairPopupOpen(false);
             }
             if (event === "player-dance") {
               if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -260,9 +290,17 @@ const GameRoom: FC = () => {
                 wsRef.current.send(JSON.stringify(request));
               }
             }
+            if (event === "minigame-breach" && payload?.botId) {
+              if (wsRef.current?.readyState === WebSocket.OPEN) {
+                const request: MinigameBreachRequest = { type: "minigame-breach", name: "ddos", botId: payload.botId };
+                wsRef.current.send(JSON.stringify(request));
+              }
+            }
           });
           mainSceneRef.current = mainScene;
-          engine = new BABYLON.Engine(canvas, true);
+          engine = new BABYLON.Engine(canvas, true, {
+            useLargeWorldRendering: true
+          });
           await mainScene.createScene(engine, mainPlayer, (progress) => {
             if (!disposed) setSceneLoadingProgress(Math.max(0, Math.min(100, progress)));
           });
@@ -336,9 +374,10 @@ const GameRoom: FC = () => {
             if ("type" in payload && payload.type === "minigame") {
               if (payload.state.name === "ddos") {
                 mainScene.applyMinigameState(payload.state);
+                setDdosState(payload.state);
                 setMinigameEnabled(payload.state.enabled);
                 if (payload.event === "started") setMinigameNotice("DDoS attack started. Defend the TV with cannon fire!");
-                if (payload.event === "ended") setMinigameNotice(payload.state.winnerName ? `DDoS defended. Top defender: ${payload.state.winnerName}` : "DDoS defended.");
+                if (payload.event === "ended") setMinigameNotice(payload.state.tvOnFire ? "DDoS breached the TV. Interact with the TV and press E to repair it." : payload.state.winnerName ? `DDoS defended. Top defender: ${payload.state.winnerName}` : "DDoS defended.");
                 if (payload.event === "state" && !payload.state.enabled) setMinigameNotice("DDoS minigame disabled for this room.");
               } else {
                 mainScene.applyFixPopMinigameState(payload.state);
@@ -351,11 +390,12 @@ const GameRoom: FC = () => {
 
             if ("type" in payload && payload.type === "room-state") {
               setDraftDisplayUrl(payload.displayUrl);
-              mainScene.tv.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
+              mainScene.tv?.setLaptopUrl(payload.displayUrl, payload.displaySnapshot, payload.displayLastUpdate);
               mainScene.applyPlaygroundObjectStates(payload.playgroundObjectStates);
               mainScene.applyMinigameState(payload.minigame);
               mainScene.applyFixPopMinigameState(payload.fixPopMinigame);
               setMinigameEnabled(payload.minigame.enabled);
+              setDdosState(payload.minigame);
               setFixPopState(payload.fixPopMinigame);
               return;
             }
@@ -439,6 +479,9 @@ const GameRoom: FC = () => {
       onSubmit={submitFixPopAnswers}
       onClose={() => setFixPopPopupOpen(false)}
       />
+    )}
+    {ddosRepairPopupOpen && ddosState?.tvOnFire && (
+      <DdosRepairModal onRepair={repairDdosTv} onClose={() => setDdosRepairPopupOpen(false)} />
     )}
     {characterPopupOpen && (
       <CharacterPickerModal selectedCharacter={selectedCharacter} onSelect={changeCharacter} onClose={() => setCharacterPopupOpen(false)} />

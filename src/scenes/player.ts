@@ -39,7 +39,7 @@ function clampCameraBeta(beta: number) {
 }
 
 function clampCameraRadius(radius: number) {
-  return Math.min(11, Math.max(4.5, radius));
+  return Math.min(6, Math.max(2, radius));
 }
 
 function getPointerDistance(a: { x: number; y: number }, b: { x: number; y: number }) {
@@ -79,7 +79,7 @@ export class PlayerCharacter {
   jumpHeight = 1.5;
 
   forwardLocalSpace = new BABYLON.Vector3(0, 0, 1);
-  startPosition = new BABYLON.Vector3(0., 5, 0.);
+  startPosition = new BABYLON.Vector3(0., 0, 0.);
 
   isDancing = false;
   isAiming = false;

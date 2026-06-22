@@ -9,6 +9,7 @@ export interface PlaygroundActionObject {
 
 export class PlaygroundAction {
   context: PlaygroundActionContext;
+  shouldBroadcast = true;
 
   constructor(context: PlaygroundActionContext) {
     this.context = context;
@@ -44,6 +45,8 @@ export interface PlaygroundActionContext {
   addShadowCaster(mesh?: BABYLON.AbstractMesh | null): void;
   registerProjectile(mesh: BABYLON.AbstractMesh, ownerId?: string): void;
   publishInteraction(actionId: string, objectId: string, objectState?: unknown): void;
+  openTV(): void;
+  closeTV(): void;
   updateAimCamera(position: BABYLON.Vector3, target: BABYLON.Vector3): void;
   clearAimCamera(): void;
   burstConfetti(scene: BABYLON.Scene, position: BABYLON.Vector3, count: number): void;

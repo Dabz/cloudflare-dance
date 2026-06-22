@@ -3,11 +3,13 @@ import type { PlayerCharacter } from "./player";
 import { UsableObject } from "./object";
 import { createPlaygroundAction } from "./playground/createAction";
 import type { PlaygroundAction, PlaygroundActionContext } from "./playground/types";
+import type { TV } from "./playground/TV";
 
 type ShadowCaster = (mesh?: BABYLON.AbstractMesh | null) => void;
 type PlaygroundInteractionPublisher = (actionId: string, objectId: string, objectState?: unknown) => void;
 type ProjectileRegistrar = (mesh: BABYLON.AbstractMesh, ownerId?: string) => void;
 type AimCameraUpdater = (position: BABYLON.Vector3, target: BABYLON.Vector3) => void;
+type TvInteractionHandler = () => void;
 type MeshExtras = Record<string, unknown>;
 
 const defaultInteractionLabels: Record<string, string> = {
@@ -28,6 +30,7 @@ const defaultInteractionLabels: Record<string, string> = {
   "bonk-toys": "Bonk nearby toys",
   "sphere-light": "Light sphere",
   "explode-balls": "Balls?",
+  "tv": "Use TV",
 };
 
 const defaultInteractionDistances: Record<string, number> = {
@@ -48,6 +51,7 @@ const defaultInteractionDistances: Record<string, number> = {
   "dance-party": 3,
   "bonk-toys": 3.2,
   "sphere-light": 9,
+  "tv": 9,
 };
 
 const neonColors = [
@@ -200,7 +204,7 @@ export class PlaygroundInteractable extends UsableObject {
 
   public run(scene: BABYLON.Scene, player?: PlayerCharacter, broadcast = false) {
     this.action.run(scene, player, this);
-    if (broadcast) this.publish?.(this.id, this.objectId, this.getState());
+    if (broadcast && this.action.shouldBroadcast) this.publish?.(this.id, this.objectId, this.getState());
   }
 
   public getState() {
@@ -228,15 +232,20 @@ export class Playground implements PlaygroundActionContext {
   private fanRotor?: BABYLON.AbstractMesh;
   private merry?: BABYLON.AbstractMesh;
   private publish?: PlaygroundInteractionPublisher;
+  private openTvCallback?: TvInteractionHandler;
+  private closeTvCallback?: TvInteractionHandler;
   private teleportDestinations: BABYLON.AbstractMesh[] = [];
   private registeredObjects = new Set<string>();
+  public tv?: TV;
 
-  constructor(addShadowCaster: ShadowCaster, publish?: PlaygroundInteractionPublisher, registerProjectile?: ProjectileRegistrar, updateAimCamera?: AimCameraUpdater, clearAimCamera?: () => void) {
+  constructor(addShadowCaster: ShadowCaster, publish?: PlaygroundInteractionPublisher, registerProjectile?: ProjectileRegistrar, updateAimCamera?: AimCameraUpdater, clearAimCamera?: () => void, openTV?: TvInteractionHandler, closeTV?: TvInteractionHandler) {
     this.addShadowCaster = addShadowCaster;
     this.publish = publish;
     this.registerProjectileCallback = registerProjectile;
     this.updateAimCameraCallback = updateAimCamera;
     this.clearAimCameraCallback = clearAimCamera;
+    this.openTvCallback = openTV;
+    this.closeTvCallback = closeTV;
   }
 
   public init(scene: BABYLON.Scene) {
@@ -269,7 +278,7 @@ export class Playground implements PlaygroundActionContext {
     }
 
     for (let i = 0; i < neonColors.length; i++) {
-      this.discoLights.push(this.createDiscoLight(scene, i));
+      // this.discoLights.push(this.createDiscoLight(scene, i));
     }
   }
 
@@ -299,10 +308,10 @@ export class Playground implements PlaygroundActionContext {
     if (this.merry) this.merry.rotation.y += delta * this.merrySpeed;
 
     if (this.discoEnabled) {
-      this.discoLights.forEach((light, index) => {
-        light.diffuse = BABYLON.Color3.FromHSV((time * 100 + index * 90) % 360, 0.9, 1);
-        light.intensity = 11 + Math.sin(time * 5 + index) * 4;
-      });
+      // this.discoLights.forEach((light, index) => {
+      //   light.diffuse = BABYLON.Color3.FromHSV((time * 100 + index * 90) % 360, 0.9, 1);
+      //   light.intensity = 11 + Math.sin(time * 5 + index) * 4;
+      // });
     }
 
     for (const body of this.fanBodies) {
@@ -332,9 +341,15 @@ export class Playground implements PlaygroundActionContext {
       }
     }
 
+    const previousObject = mainPlayer.usableObject;
+
     if (closest) {
+      if (previousObject instanceof PlaygroundInteractable && previousObject !== closest && previousObject.id === "tv") {
+        this.closeTV();
+      }
       mainPlayer.usableObject = closest;
-    } else if (mainPlayer.usableObject instanceof PlaygroundInteractable) {
+    } else if (previousObject instanceof PlaygroundInteractable) {
+      if (previousObject.id === "tv") this.closeTV();
       mainPlayer.usableObject = null;
     }
   }
@@ -368,13 +383,14 @@ export class Playground implements PlaygroundActionContext {
     const registrationKey = `${id}:${mesh.uniqueId}`;
     if (this.registeredObjects.has(registrationKey)) return;
 
-    const action = createPlaygroundAction(id, mesh, this);
+    const action = createPlaygroundAction(id, mesh, this, extras);
     if (!action) {
       console.warn(`Unknown playground interactionId: ${id}`);
       return;
     }
 
     this.registeredObjects.add(registrationKey);
+    if (id === "tv" && "setLaptopUrl" in action) this.tv = action as TV;
 
     makeCollidable(mesh);
     mesh.isPickable = false;
@@ -504,6 +520,14 @@ export class Playground implements PlaygroundActionContext {
 
   public publishInteraction(actionId: string, objectId: string, objectState?: unknown) {
     this.publish?.(actionId, objectId, objectState);
+  }
+
+  public openTV() {
+    this.openTvCallback?.();
+  }
+
+  public closeTV() {
+    this.closeTvCallback?.();
   }
 
   public updateAimCamera(position: BABYLON.Vector3, target: BABYLON.Vector3) {

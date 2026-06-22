@@ -5,7 +5,6 @@
 	},
 	"extensionsUsed":[
 		"KHR_materials_clearcoat",
-		"KHR_materials_transmission",
 		"KHR_materials_emissive_strength",
 		"KHR_materials_specular",
 		"KHR_materials_anisotropy",
@@ -18649,6 +18648,10 @@
 						"resolution":"resolution_2K"
 					},
 					"add3057c-d80d-42bc-9e45-42e1c6115772":{
+						"thumbnail":"thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.512x512_q85_crop-%2C.png.webp",
+						"thumbnail_small":"thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.256x256_q85_crop-%2C.png.webp",
+						"downloaded":100,
+						"texture_size_meters":1,
 						"access":"free",
 						"accessLabel":"Free",
 						"addonVersion":"3.11.0",
@@ -18664,7 +18667,6 @@
 							"id":"674996",
 							"lastName":"Dad"
 						},
-						"available_resolutions":[],
 						"basePrice":"",
 						"canDownload":true,
 						"canDownloadError":true,
@@ -18699,7 +18701,6 @@
 							"uv":false
 						},
 						"displayName":"Wall pattern",
-						"downloaded":0,
 						"files":[
 							{
 								"created":"2024-05-09T20:36:12.086119+02:00",
@@ -18707,13 +18708,13 @@
 								"fileThumbnail":"",
 								"fileThumbnailLarge":"",
 								"fileType":"blend",
-								"fileUploadSize":79067,
-								"filename":"assets/4664da0a40a8403c8c3fac86d0437a64/files/blend_2f86e30d-57cf-4aef-8e32-c0a27a912acc.blend",
 								"modified":"2024-05-09T20:36:12.086154+02:00",
 								"resolution":0,
-								"thumbnailMiddleUrl":"",
-								"thumbnailSmallUrl":"",
+								"fileUploadSize":79067,
 								"url":"https://assets.blenderkit.com/assets/4664da0a40a8403c8c3fac86d0437a64/files/blend_2f86e30d-57cf-4aef-8e32-c0a27a912acc.blend?verify=1781022360-Z1h1B4Wyx09RmQz0Xk8mzOcd1y%2BOqDDCAOB9tfct6M4%3D",
+								"filename":"assets/4664da0a40a8403c8c3fac86d0437a64/files/blend_2f86e30d-57cf-4aef-8e32-c0a27a912acc.blend",
+								"thumbnailSmallUrl":"",
+								"thumbnailMiddleUrl":"",
 								"file_name":"/Users/gaspar_d/assets/materials/wall-pattern_4664da0a-40a8-403c-8c3f-ac86d0437a64/wall-pattern_2f86e30d-57cf-4aef-8e32-c0a27a912acc.blend"
 							},
 							{
@@ -18722,18 +18723,18 @@
 								"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.96x96_q85_crop-%2C.png",
 								"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.1024x1024_q85_crop-%2C.png",
 								"fileType":"thumbnail",
-								"fileUploadSize":2775006,
-								"filename":"assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png",
 								"modified":"2025-12-22T22:33:21.027030+01:00",
 								"resolution":0,
-								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.512x512_q85_crop-%2C.png",
+								"fileUploadSize":2775006,
+								"url":"",
+								"filename":"assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png",
 								"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.256x256_q85_crop-%2C.png",
-								"url":""
+								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.512x512_q85_crop-%2C.png"
 							}
 						],
 						"id":"4664da0a-40a8-403c-8c3f-ac86d0437a64",
-						"isForSale":false,
 						"isFree":true,
+						"isForSale":false,
 						"isPrivate":false,
 						"lastAnimatedThumbnailUpload":null,
 						"lastBlendUpload":"2024-05-09T18:36:12.086119+00:00",
@@ -18746,7 +18747,6 @@
 						"lastVideoUpload":null,
 						"lastZipFileUpload":"",
 						"license":"royalty_free",
-						"max_resolution":0,
 						"name":"Wall pattern",
 						"pk":91604,
 						"ratingsAverage":{
@@ -18787,8 +18787,6 @@
 							"Stripes",
 							"tiles"
 						],
-						"texture_size_meters":1,
-						"thumbnail":"thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.512x512_q85_crop-%2C.png.webp",
 						"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.1024x1024_q85_crop-%2C.png",
 						"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.1024x1024_q85.png",
 						"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.1024x1024_q85.png.webp?webp_generated=1766535142",
@@ -18805,15 +18803,24 @@
 						"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.2048x2048_q85.png",
 						"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.2048x2048_q85.png.webp?webp_generated=1766535142",
 						"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/4664da0a40a8403c8c3fac86d0437a64/files/thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766535142",
-						"thumbnail_small":"thumbnail_4df6745e-b5e4-4b25-9e10-1f9639b90af7.png.256x256_q85_crop-%2C.png.webp",
+						"url":"https://www.blenderkit.com/api/v1/assets/4664da0a-40a8-403c-8c3f-ac86d0437a64/",
+						"verificationStatus":"validated",
+						"versionNumber":1,
+						"videoLink":"",
+						"webpGeneratedTimestamp":1766535142,
+						"available_resolutions":[],
+						"max_resolution":0,
 						"tooltip_data":{
 							"aname":"Wall pattern",
 							"author_text":"by Waldemar Dad",
-							"base_price_bg_color":[
-								0.7,
-								0.7,
-								0.7,
-								0.6
+							"quality":"8",
+							"user_price_text":"",
+							"base_price_text":"",
+							"user_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
 							],
 							"base_price_color":[
 								1.0,
@@ -18821,27 +18828,19 @@
 								1.0,
 								0.9
 							],
-							"base_price_text":"",
-							"quality":"8",
 							"user_price_bg_color":[
 								0.7,
 								0.7,
 								0.7,
 								0.6
 							],
-							"user_price_color":[
-								1.0,
-								1.0,
-								1.0,
-								0.9
-							],
-							"user_price_text":""
+							"base_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							]
 						},
-						"url":"https://www.blenderkit.com/api/v1/assets/4664da0a-40a8-403c-8c3f-ac86d0437a64/",
-						"verificationStatus":"validated",
-						"versionNumber":1,
-						"videoLink":"",
-						"webpGeneratedTimestamp":1766535142,
 						"resolution":"resolution_2K"
 					},
 					"dbd69bbf-6606-40e2-8b8f-08d6c51b6715":{
@@ -26665,6 +26664,1238 @@
 						"videoLink":"",
 						"webpGeneratedTimestamp":1766542789,
 						"resolution":"resolution_2K"
+					},
+					"30a4167d-1bbc-4b9b-886c-be7e47692f96":{
+						"access":"free",
+						"accessLabel":"Free",
+						"addonVersion":"3.18.0",
+						"assetBaseId":"30a4167d-1bbc-4b9b-886c-be7e47692f96",
+						"assetType":"material",
+						"author":{
+							"aboutMe":"3D artist and generalist.",
+							"aboutMeUrl":"https://www.patreon.com/Sillet",
+							"avatar128":"/avatar-redirect/c3b8d54b-249d-4922-be68-e4fc5a4f40fd/128/",
+							"firstName":"Julio",
+							"fullName":"Julio Sillet",
+							"gravatarHash":"775143b46896be593570fa04745731da",
+							"id":"10533",
+							"lastName":"Sillet"
+						},
+						"available_resolutions":[
+							512,
+							1024,
+							2048,
+							4096
+						],
+						"basePrice":"",
+						"canDownload":true,
+						"canDownloadError":true,
+						"category":"metal",
+						"created":"2025-11-29T21:35:24.197945+01:00",
+						"description":"Metallic security Wall/Fence",
+						"dictParameters":{
+							"addons":true,
+							"animated":false,
+							"engine":"cycles",
+							"joinBlenderkitDiscounts":true,
+							"materialStyle":"realistic",
+							"megapixels":0,
+							"nodeCount":0,
+							"pbrType":"metallic",
+							"platforms":[
+								"windows-x64",
+								"macos-arm64",
+								"linux-x64",
+								"macos-x64",
+								"windows-arm64"
+							],
+							"procedural":true,
+							"purePbr":true,
+							"sexualizedContent":false,
+							"shaders":[
+								"[]"
+							],
+							"textureCount":0,
+							"textureSizeMeters":1,
+							"uv":true
+						},
+						"displayName":"Metallic Security Wall",
+						"downloaded":0,
+						"files":[
+							{
+								"created":"2025-11-29T21:35:33.077064+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/900500/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"blend",
+								"fileUploadSize":22359461,
+								"filename":"assets/d5673a461a864c05918c0f7c1354875f/files/blend_652dfb7d-b78a-491d-827e-c867a4ea5ebd.blend",
+								"modified":"2025-11-29T21:35:33.077078+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-12-01T12:34:48.734637+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/901345/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_0_5K",
+								"fileUploadSize":519254,
+								"filename":"assets/d5673a461a864c05918c0f7c1354875f/files/resolution_0_5K_de38aba1-91c4-444b-8c1b-75c701bda13a.blend",
+								"modified":"2025-12-01T12:34:48.734652+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-12-01T12:34:47.613031+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/901344/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_1K",
+								"fileUploadSize":1980345,
+								"filename":"assets/d5673a461a864c05918c0f7c1354875f/files/resolution_1K_9cbbd953-2bc9-4b1d-b484-1a2fee965cb4.blend",
+								"modified":"2025-12-01T12:34:47.613042+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-12-01T12:34:46.265013+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/901343/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_2K",
+								"fileUploadSize":7081275,
+								"filename":"assets/d5673a461a864c05918c0f7c1354875f/files/resolution_2K_dafe049e-ca44-4606-b363-2da2ea39d0a3.blend",
+								"modified":"2025-12-01T12:34:46.265026+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":"https://assets.blenderkit.com/assets/d5673a461a864c05918c0f7c1354875f/files/resolution_2K_dafe049e-ca44-4606-b363-2da2ea39d0a3.blend?verify=1781688239-RQN0GxfFWW79C0kWye6tZItXR0WcwZQ6OK9%2Bb4TyVkA%3D",
+								"file_name":"/Users/gaspar_d/assets/materials/metallic-securit_d5673a46-1a86-4c05-918c-0f7c1354875f/metallic-security-wall_2K_dafe049e-ca44-4606-b363-2da2ea39d0a3.blend"
+							},
+							{
+								"created":"2025-12-01T12:34:44.808239+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/901342/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_4K",
+								"fileUploadSize":17001118,
+								"filename":"assets/d5673a461a864c05918c0f7c1354875f/files/resolution_4K_7176d5cf-2f30-43c0-a360-6c4096623dae.blend",
+								"modified":"2025-12-01T12:34:44.808256+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-11-29T21:35:28.580357+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/900499/",
+								"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.96x96_q85_crop-%2C.png",
+								"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.1024x1024_q85_crop-%2C.png",
+								"fileType":"thumbnail",
+								"fileUploadSize":6238152,
+								"filename":"assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png",
+								"modified":"2025-12-23T05:57:43.474779+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.512x512_q85_crop-%2C.png",
+								"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.256x256_q85_crop-%2C.png",
+								"url":""
+							}
+						],
+						"id":"d5673a46-1a86-4c05-918c-0f7c1354875f",
+						"isForSale":false,
+						"isFree":true,
+						"isPrivate":false,
+						"lastAnimatedThumbnailUpload":null,
+						"lastBlendUpload":"2025-11-29T20:35:33.077064+00:00",
+						"lastGltfGodotUpload":null,
+						"lastGltfUpload":null,
+						"lastPhotoThumbnailUpload":null,
+						"lastResolutionUpload":"2025-12-01T11:34:48.734637+00:00",
+						"lastThumbnailUpload":"2025-11-29T20:35:28.580357+00:00",
+						"lastUserInteraction":"2025-11-29T21:35:33.503533+01:00",
+						"lastVideoUpload":null,
+						"lastZipFileUpload":"",
+						"license":"royalty_free",
+						"max_resolution":4096,
+						"name":"Metallic Security Wall",
+						"pk":191739,
+						"ratingsAverage":{
+							"bookmarks":1,
+							"quality":10,
+							"virtualPrice":null,
+							"workingHours":3.5
+						},
+						"ratingsCount":{
+							"bookmarks":54,
+							"quality":2,
+							"virtualPrice":0,
+							"workingHours":2
+						},
+						"ratingsMedian":{
+							"bookmarks":1,
+							"quality":10,
+							"virtualPrice":null,
+							"workingHours":3.5
+						},
+						"ratingsSum":{
+							"bookmarks":54,
+							"quality":20,
+							"score":350,
+							"virtualPrice":null,
+							"workingHours":7
+						},
+						"score":350,
+						"showMarketingLabels":true,
+						"sourceAppName":"blender",
+						"sourceAppVersion":"4.5.4",
+						"tags":[
+							"fence",
+							"wall",
+							"metal",
+							"mesh",
+							"grid",
+							"steel",
+							"iron"
+						],
+						"texture_size_meters":1,
+						"thumbnail":"thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.512x512_q85_crop-%2C.png.webp",
+						"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.1024x1024_q85_crop-%2C.png",
+						"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.1024x1024_q85.png",
+						"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.1024x1024_q85.png.webp?webp_generated=1766717296",
+						"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1766717296",
+						"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.512x512_q85_crop-%2C.png",
+						"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.512x512_q85.png",
+						"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.512x512_q85.png.webp?webp_generated=1766717296",
+						"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.512x512_q85_crop-%2C.png.webp?webp_generated=1766717296",
+						"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.256x256_q85_crop-%2C.png",
+						"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.256x256_q85.png",
+						"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.256x256_q85.png.webp?webp_generated=1766717296",
+						"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.256x256_q85_crop-%2C.png.webp?webp_generated=1766717296",
+						"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.2048x2048_q85_crop-%2C.png",
+						"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.2048x2048_q85.png",
+						"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.2048x2048_q85.png.webp?webp_generated=1766717296",
+						"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d5673a461a864c05918c0f7c1354875f/files/thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766717296",
+						"thumbnail_small":"thumbnail_5391139e-e001-435d-8253-150b7994a8e3.png.256x256_q85_crop-%2C.png.webp",
+						"tooltip_data":{
+							"aname":"Metallic Security Wall",
+							"author_text":"by Julio Sillet",
+							"base_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"base_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"base_price_text":"",
+							"quality":"10",
+							"user_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"user_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"user_price_text":""
+						},
+						"url":"https://www.blenderkit.com/api/v1/assets/d5673a46-1a86-4c05-918c-0f7c1354875f/",
+						"verificationStatus":"validated",
+						"versionNumber":1,
+						"videoLink":"",
+						"webpGeneratedTimestamp":1766717296,
+						"resolution":"resolution_2K"
+					},
+					"a2009632-0ad2-4d42-8b47-3fc83b2a7dd6":{
+						"access":"free",
+						"accessLabel":"Free",
+						"addonVersion":"3.12.0",
+						"assetBaseId":"a2009632-0ad2-4d42-8b47-3fc83b2a7dd6",
+						"assetType":"material",
+						"author":{
+							"aboutMe":"Hi! I'm 3d Artist from Ukraine. \r\nI have classic Art background. \r\nFelt in love with 3d Art in all different aspects: from transferring 2d art practics into 3d world up to 3d printing.",
+							"aboutMeUrl":"https://www.artstation.com/lindelini",
+							"avatar128":"/avatar-redirect/b61fbe36-0c1f-483d-aadd-101f397ec19b/128/",
+							"firstName":"Anna",
+							"fullName":"Anna C",
+							"gravatarHash":"9922ccf4e3e46434a485f4fa31996071",
+							"id":"938217",
+							"lastName":"C"
+						},
+						"available_resolutions":[
+							512,
+							1024,
+							2048
+						],
+						"basePrice":"",
+						"canDownload":true,
+						"canDownloadError":true,
+						"category":"tech",
+						"created":"2024-06-08T19:18:31.933988+02:00",
+						"description":"Rusty modul sci-fi tech wall. \r\n\r\nLike the material? Drop a rating! Lots of thanks!!!",
+						"dictParameters":{
+							"addons":true,
+							"condition":"new",
+							"engine":"cycles",
+							"joinBlenderkitDiscounts":true,
+							"materialStyle":"realistic",
+							"megapixels":0,
+							"nodeCount":0,
+							"pbrType":"metallic",
+							"platforms":[
+								"windows-x64",
+								"macos-arm64",
+								"linux-x64",
+								"macos-x64",
+								"windows-arm64"
+							],
+							"procedural":true,
+							"purePbr":true,
+							"sexualizedContent":false,
+							"shaders":[
+								"[]"
+							],
+							"textureCount":0,
+							"textureSizeMeters":1.5,
+							"uv":false
+						},
+						"displayName":"Wall",
+						"downloaded":0,
+						"files":[
+							{
+								"created":"2024-06-08T19:18:45.419986+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/401643/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"blend",
+								"fileUploadSize":14847237,
+								"filename":"assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/blend_b9b20b75-1a12-4906-847b-7c26d26e9caf.blend",
+								"modified":"2025-02-26T11:21:32.980461+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2024-06-10T06:47:34.392652+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/402404/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_0_5K",
+								"fileUploadSize":1598120,
+								"filename":"assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/resolution_0_5K_b85ac26f-2505-4949-b40e-f2420f5f86a6.blend",
+								"modified":"2025-02-26T11:21:32.999485+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2024-06-10T06:47:33.656205+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/402403/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_1K",
+								"fileUploadSize":4962608,
+								"filename":"assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/resolution_1K_aa112e62-ac90-4e8f-b752-4bd3ad5faa52.blend",
+								"modified":"2025-02-26T11:21:33.017579+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2024-06-10T06:47:33.093631+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/402402/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_2K",
+								"fileUploadSize":14850829,
+								"filename":"assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/resolution_2K_176bf8e1-d952-453b-9201-96ad718c3037.blend",
+								"modified":"2025-02-26T11:21:33.033737+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":"https://assets.blenderkit.com/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/resolution_2K_176bf8e1-d952-453b-9201-96ad718c3037.blend?verify=1781688263-sludZrvBnPo713leXmnKEEkL0AbpQ4jxxGdEPxJu3Ag%3D",
+								"file_name":"/Users/gaspar_d/assets/materials/rusty-modul-sci-_e0f951c4-0c6e-4932-b066-0c84c6f0e2b5/rusty-modul-sci-fi-tech-wall_2K_176bf8e1-d952-453b-9201-96ad718c3037.blend"
+							},
+							{
+								"created":"2024-06-08T19:18:41.754309+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/401642/",
+								"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.96x96_q85_crop-%2C.png",
+								"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.1024x1024_q85_crop-%2C.png",
+								"fileType":"thumbnail",
+								"fileUploadSize":3987733,
+								"filename":"assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png",
+								"modified":"2025-12-22T22:49:20.975474+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.512x512_q85_crop-%2C.png",
+								"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.256x256_q85_crop-%2C.png",
+								"url":""
+							}
+						],
+						"id":"e0f951c4-0c6e-4932-b066-0c84c6f0e2b5",
+						"isForSale":false,
+						"isFree":true,
+						"isPrivate":false,
+						"lastAnimatedThumbnailUpload":null,
+						"lastBlendUpload":"2024-06-08T17:18:45.419986+00:00",
+						"lastGltfGodotUpload":null,
+						"lastGltfUpload":null,
+						"lastPhotoThumbnailUpload":null,
+						"lastResolutionUpload":"2024-06-10T04:47:34.392652+00:00",
+						"lastThumbnailUpload":"2024-06-08T17:18:41.754309+00:00",
+						"lastUserInteraction":"2024-06-08T19:18:45.798106+02:00",
+						"lastVideoUpload":null,
+						"lastZipFileUpload":"",
+						"license":"royalty_free",
+						"max_resolution":2048,
+						"name":"Rusty modul sci-fi tech wall",
+						"pk":95302,
+						"ratingsAverage":{
+							"bookmarks":0.9423076923076923,
+							"quality":8.5,
+							"virtualPrice":null,
+							"workingHours":3
+						},
+						"ratingsCount":{
+							"bookmarks":52,
+							"quality":2,
+							"virtualPrice":0,
+							"workingHours":2
+						},
+						"ratingsMedian":{
+							"bookmarks":1,
+							"quality":8.5,
+							"virtualPrice":null,
+							"workingHours":3
+						},
+						"ratingsSum":{
+							"bookmarks":49,
+							"quality":17,
+							"score":255,
+							"virtualPrice":null,
+							"workingHours":6
+						},
+						"score":255,
+						"showMarketingLabels":true,
+						"sourceAppName":"blender",
+						"sourceAppVersion":"3.4.1",
+						"tags":[
+							"scifi",
+							"modul",
+							"tech",
+							"wall",
+							"iron",
+							"surface",
+							"hardsurf",
+							"old",
+							"used"
+						],
+						"texture_size_meters":1.5,
+						"thumbnail":"thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.512x512_q85_crop-%2C.png.webp",
+						"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.1024x1024_q85_crop-%2C.png",
+						"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.1024x1024_q85.png",
+						"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.1024x1024_q85.png.webp?webp_generated=1766541369",
+						"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1766541369",
+						"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.512x512_q85_crop-%2C.png",
+						"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.512x512_q85.png",
+						"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.512x512_q85.png.webp?webp_generated=1766541369",
+						"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.512x512_q85_crop-%2C.png.webp?webp_generated=1766541369",
+						"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.256x256_q85_crop-%2C.png",
+						"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.256x256_q85.png",
+						"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.256x256_q85.png.webp?webp_generated=1766541369",
+						"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.256x256_q85_crop-%2C.png.webp?webp_generated=1766541369",
+						"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.2048x2048_q85_crop-%2C.png",
+						"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.2048x2048_q85.png",
+						"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.2048x2048_q85.png.webp?webp_generated=1766541369",
+						"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/e0f951c40c6e4932b0660c84c6f0e2b5/files/thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766541369",
+						"thumbnail_small":"thumbnail_f6f5d61c-8665-432b-81fc-510714246700.png.256x256_q85_crop-%2C.png.webp",
+						"tooltip_data":{
+							"aname":"Wall",
+							"author_text":"by Anna C",
+							"base_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"base_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"base_price_text":"",
+							"quality":"8",
+							"user_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"user_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"user_price_text":""
+						},
+						"url":"https://www.blenderkit.com/api/v1/assets/e0f951c4-0c6e-4932-b066-0c84c6f0e2b5/",
+						"verificationStatus":"validated",
+						"versionNumber":1,
+						"videoLink":"",
+						"webpGeneratedTimestamp":1766541369,
+						"resolution":"resolution_2K"
+					},
+					"edff3f1e-096c-49e8-a1c1-e77f5ef01f1d":{
+						"access":"free",
+						"accessLabel":"Free",
+						"addonVersion":"3.16.1",
+						"assetBaseId":"edff3f1e-096c-49e8-a1c1-e77f5ef01f1d",
+						"assetType":"material",
+						"author":{
+							"aboutMe":"Passionate 3D artist.\r\nI love creating models in Blender. Blender is my hobby, not full time job.",
+							"aboutMeUrl":"",
+							"avatar128":"/avatar-redirect/ac731900-5dc5-4a69-9a4f-ab897cc007ba/128/",
+							"firstName":"ydd",
+							"fullName":"ydd 3D",
+							"gravatarHash":"d53d719bf329b8bc9a0370a905d13613",
+							"id":"298039",
+							"lastName":"3D"
+						},
+						"available_resolutions":[
+							512,
+							1024,
+							2048,
+							4096
+						],
+						"basePrice":"",
+						"canDownload":true,
+						"canDownloadError":true,
+						"category":"plastic",
+						"created":"2025-11-28T13:05:38.076114+01:00",
+						"description":"Simple black wall plastic panels for your interior or exterior scenes",
+						"dictParameters":{
+							"addons":true,
+							"animated":false,
+							"engine":"cycles",
+							"joinBlenderkitDiscounts":true,
+							"materialStyle":"realistic",
+							"megapixels":64,
+							"nodeCount":13,
+							"pbrType":"metallic",
+							"platforms":[
+								"windows-x64",
+								"macos-arm64",
+								"linux-x64",
+								"macos-x64",
+								"windows-arm64"
+							],
+							"procedural":false,
+							"purePbr":true,
+							"sexualizedContent":false,
+							"shaders":[
+								"[principled]"
+							],
+							"textureCount":4,
+							"textureResolutionMax":4096,
+							"textureResolutionMin":4096,
+							"textureSizeMeters":1,
+							"uv":false
+						},
+						"displayName":"Wall plastic black panels",
+						"downloaded":0,
+						"files":[
+							{
+								"created":"2025-11-28T13:05:58.386560+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/899726/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"blend",
+								"fileUploadSize":41019058,
+								"filename":"assets/8344d99495b54f01ad2a5279fc6a9742/files/blend_f4691e7b-ccc8-4648-99e8-1598450d9699.blend",
+								"modified":"2025-11-28T13:05:58.386580+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-11-29T19:44:21.924984+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/900392/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_0_5K",
+								"fileUploadSize":188187,
+								"filename":"assets/8344d99495b54f01ad2a5279fc6a9742/files/resolution_0_5K_4adeb8e2-4d43-4e74-9ede-1a57bb2d9ab3.blend",
+								"modified":"2025-11-29T19:44:21.924999+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-11-29T19:44:20.910368+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/900391/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_1K",
+								"fileUploadSize":557788,
+								"filename":"assets/8344d99495b54f01ad2a5279fc6a9742/files/resolution_1K_1f242d86-59a3-458f-a436-c1f0d6fd0fd0.blend",
+								"modified":"2025-11-29T19:44:20.910381+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-11-29T19:44:20.076296+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/900390/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_2K",
+								"fileUploadSize":2321052,
+								"filename":"assets/8344d99495b54f01ad2a5279fc6a9742/files/resolution_2K_c3160c7c-cdcc-475e-982f-2c197729c3b0.blend",
+								"modified":"2025-11-29T19:44:20.076308+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":"https://assets.blenderkit.com/assets/8344d99495b54f01ad2a5279fc6a9742/files/resolution_2K_c3160c7c-cdcc-475e-982f-2c197729c3b0.blend?verify=1781688275-iDPNh3fz4JCxW5h4ZdkEoAmX7UV4pJ0OQaX80DWEh6g%3D",
+								"file_name":"/Users/gaspar_d/assets/materials/wall-plastic-bla_8344d994-95b5-4f01-ad2a-5279fc6a9742/wall-plastic-black-panels_2K_c3160c7c-cdcc-475e-982f-2c197729c3b0.blend"
+							},
+							{
+								"created":"2025-11-29T19:44:18.642911+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/900389/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_4K",
+								"fileUploadSize":11471745,
+								"filename":"assets/8344d99495b54f01ad2a5279fc6a9742/files/resolution_4K_cdc0980d-5daf-42cf-b44f-1e848e55b48e.blend",
+								"modified":"2025-11-29T19:44:18.642925+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2025-11-28T13:05:40.959911+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/899725/",
+								"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.96x96_q85_crop-%2C.png",
+								"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.1024x1024_q85_crop-%2C.png",
+								"fileType":"thumbnail",
+								"fileUploadSize":503103,
+								"filename":"assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png",
+								"modified":"2025-12-23T05:56:54.484810+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.512x512_q85_crop-%2C.png",
+								"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.256x256_q85_crop-%2C.png",
+								"url":""
+							}
+						],
+						"id":"8344d994-95b5-4f01-ad2a-5279fc6a9742",
+						"isForSale":false,
+						"isFree":true,
+						"isPrivate":false,
+						"lastAnimatedThumbnailUpload":null,
+						"lastBlendUpload":"2025-11-28T12:05:58.386560+00:00",
+						"lastGltfGodotUpload":null,
+						"lastGltfUpload":null,
+						"lastPhotoThumbnailUpload":null,
+						"lastResolutionUpload":"2025-11-29T18:44:21.924984+00:00",
+						"lastThumbnailUpload":"2025-11-28T12:05:40.959911+00:00",
+						"lastUserInteraction":"2025-11-28T13:05:58.819320+01:00",
+						"lastVideoUpload":null,
+						"lastZipFileUpload":"",
+						"license":"royalty_free",
+						"max_resolution":4096,
+						"name":"Wall plastic black panels",
+						"pk":191522,
+						"ratingsAverage":{
+							"bookmarks":0.9696969696969697,
+							"quality":9.5,
+							"virtualPrice":null,
+							"workingHours":3
+						},
+						"ratingsCount":{
+							"bookmarks":33,
+							"quality":2,
+							"virtualPrice":0,
+							"workingHours":2
+						},
+						"ratingsMedian":{
+							"bookmarks":1,
+							"quality":9.5,
+							"virtualPrice":null,
+							"workingHours":3
+						},
+						"ratingsSum":{
+							"bookmarks":32,
+							"quality":19,
+							"score":285,
+							"virtualPrice":null,
+							"workingHours":6
+						},
+						"score":285,
+						"showMarketingLabels":true,
+						"sourceAppName":"blender",
+						"sourceAppVersion":"4.4.1",
+						"tags":[
+							"wall",
+							"plastic",
+							"panels",
+							"decor",
+							"interior",
+							"exterior"
+						],
+						"texture_size_meters":1,
+						"thumbnail":"thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.512x512_q85_crop-%2C.png.webp",
+						"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.1024x1024_q85_crop-%2C.png",
+						"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.1024x1024_q85.png",
+						"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.1024x1024_q85.png.webp?webp_generated=1766716906",
+						"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1766716906",
+						"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.512x512_q85_crop-%2C.png",
+						"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.512x512_q85.png",
+						"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.512x512_q85.png.webp?webp_generated=1766716906",
+						"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.512x512_q85_crop-%2C.png.webp?webp_generated=1766716906",
+						"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.256x256_q85_crop-%2C.png",
+						"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.256x256_q85.png",
+						"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.256x256_q85.png.webp?webp_generated=1766716906",
+						"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.256x256_q85_crop-%2C.png.webp?webp_generated=1766716906",
+						"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.2048x2048_q85_crop-%2C.png",
+						"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.2048x2048_q85.png",
+						"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.2048x2048_q85.png.webp?webp_generated=1766716906",
+						"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/8344d99495b54f01ad2a5279fc6a9742/files/thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766716906",
+						"thumbnail_small":"thumbnail_613126f7-2c66-4497-933f-7edae615d435.png.256x256_q85_crop-%2C.png.webp",
+						"tooltip_data":{
+							"aname":"Wall plastic black panels",
+							"author_text":"by ydd 3D",
+							"base_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"base_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"base_price_text":"",
+							"quality":"10",
+							"user_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"user_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"user_price_text":""
+						},
+						"url":"https://www.blenderkit.com/api/v1/assets/8344d994-95b5-4f01-ad2a-5279fc6a9742/",
+						"verificationStatus":"validated",
+						"versionNumber":1,
+						"videoLink":"",
+						"webpGeneratedTimestamp":1766716906,
+						"resolution":"resolution_2K"
+					},
+					"34b64880-c077-4c11-833a-45649e99490e":{
+						"access":"free",
+						"accessLabel":"Free",
+						"addonVersion":"3.12.3",
+						"assetBaseId":"34b64880-c077-4c11-833a-45649e99490e",
+						"assetType":"material",
+						"author":{
+							"aboutMe":"Hello, i'm Vasilis from Greece, an individual 3d modeler since 2019. I'm using blender at my free time and have some fun creating models and materials. If you like to support me please consider to rate my assets. Thank you very much.",
+							"aboutMeUrl":"https://www.artstation.com/chroma3d",
+							"avatar128":"/avatar-redirect/23a55d33-1f80-42d9-ae43-50d9d0551206/128/",
+							"firstName":"chroma",
+							"fullName":"chroma 3D",
+							"gravatarHash":"d093202b38f3007b1a6d5ae96364bdae",
+							"id":"8575",
+							"lastName":"3D"
+						},
+						"available_resolutions":[
+							512,
+							1024,
+							2048
+						],
+						"basePrice":"",
+						"canDownload":true,
+						"canDownloadError":true,
+						"category":"plaster",
+						"created":"2024-09-18T19:14:47.120109+02:00",
+						"description":"A painted plaster wall material with 4K PBR textures.",
+						"dictParameters":{
+							"addons":true,
+							"animated":false,
+							"engine":"cycles",
+							"joinBlenderkitDiscounts":true,
+							"materialStyle":"realistic",
+							"megapixels":64,
+							"nodeCount":16,
+							"pbrType":"metallic",
+							"platforms":[
+								"windows-x64",
+								"macos-arm64",
+								"linux-x64",
+								"macos-x64",
+								"windows-arm64"
+							],
+							"procedural":false,
+							"purePbr":true,
+							"sexualizedContent":false,
+							"shaders":[
+								"[principled]"
+							],
+							"textureCount":4,
+							"textureResolutionMax":4096,
+							"textureResolutionMin":4096,
+							"textureSizeMeters":0.800000011920929,
+							"uv":true
+						},
+						"displayName":"Painted Plaster Wall",
+						"downloaded":0,
+						"files":[
+							{
+								"created":"2024-09-21T10:39:54.320731+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/463393/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"blend",
+								"fileUploadSize":4961381,
+								"filename":"assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/blend_017c9f7e-a680-473d-97f2-cb707df00ac1.blend",
+								"modified":"2024-09-21T10:39:54.320744+02:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2024-09-24T00:55:21.325244+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/465048/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_0_5K",
+								"fileUploadSize":330862,
+								"filename":"assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/resolution_0_5K_397f40d2-fc63-44da-bb52-67562c5428fb.blend",
+								"modified":"2024-09-24T00:55:21.325254+02:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2024-09-24T00:55:17.598828+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/465044/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_1K",
+								"fileUploadSize":1055798,
+								"filename":"assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/resolution_1K_bbca3a34-5757-4067-b650-ea41e6b16081.blend",
+								"modified":"2024-09-24T00:55:17.598840+02:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2024-09-24T00:55:14.874130+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/465043/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_2K",
+								"fileUploadSize":2996653,
+								"filename":"assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/resolution_2K_6e2a0b66-b5ff-41c0-9ad2-89ca99d2e32f.blend",
+								"modified":"2024-09-24T00:55:14.874145+02:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":"https://assets.blenderkit.com/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/resolution_2K_6e2a0b66-b5ff-41c0-9ad2-89ca99d2e32f.blend?verify=1781688316-qxEGx9Mn5CBDRy6JaGZHEzWVzF6fSGwi6pjyBcqyQCc%3D",
+								"file_name":"/Users/gaspar_d/assets/materials/painted-plaster-_5d73c80d-1eda-4f68-b9d3-4e0c7e5f694d/painted-plaster-wall_2K_6e2a0b66-b5ff-41c0-9ad2-89ca99d2e32f.blend"
+							},
+							{
+								"created":"2024-09-21T10:39:03.038731+02:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/463392/",
+								"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.96x96_q85_crop-%2C.png",
+								"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.1024x1024_q85_crop-%2C.png",
+								"fileType":"thumbnail",
+								"fileUploadSize":3030891,
+								"filename":"assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png",
+								"modified":"2025-12-22T23:53:30.696424+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.512x512_q85_crop-%2C.png",
+								"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.256x256_q85_crop-%2C.png",
+								"url":""
+							}
+						],
+						"id":"5d73c80d-1eda-4f68-b9d3-4e0c7e5f694d",
+						"isForSale":false,
+						"isFree":true,
+						"isPrivate":false,
+						"lastAnimatedThumbnailUpload":null,
+						"lastBlendUpload":"2024-09-21T08:39:54.320731+00:00",
+						"lastGltfGodotUpload":null,
+						"lastGltfUpload":null,
+						"lastPhotoThumbnailUpload":null,
+						"lastResolutionUpload":"2024-09-23T22:55:21.325244+00:00",
+						"lastThumbnailUpload":"2024-09-21T08:39:03.038731+00:00",
+						"lastUserInteraction":"2024-09-21T10:39:54.770528+02:00",
+						"lastVideoUpload":null,
+						"lastZipFileUpload":"",
+						"license":"royalty_free",
+						"max_resolution":2048,
+						"name":"Painted Plaster Wall",
+						"pk":109383,
+						"ratingsAverage":{
+							"bookmarks":0.9951456310679612,
+							"quality":8,
+							"virtualPrice":null,
+							"workingHours":1
+						},
+						"ratingsCount":{
+							"bookmarks":206,
+							"quality":2,
+							"virtualPrice":0,
+							"workingHours":1
+						},
+						"ratingsMedian":{
+							"bookmarks":1,
+							"quality":8,
+							"virtualPrice":null,
+							"workingHours":1
+						},
+						"ratingsSum":{
+							"bookmarks":205,
+							"quality":16,
+							"score":80,
+							"virtualPrice":null,
+							"workingHours":1
+						},
+						"score":80,
+						"showMarketingLabels":true,
+						"sourceAppName":"blender",
+						"sourceAppVersion":"4.2.1",
+						"tags":[
+							"painted",
+							"plaster",
+							"wall",
+							"house",
+							"paint",
+							"white",
+							"roof",
+							"ground",
+							"4K",
+							"PBR"
+						],
+						"texture_size_meters":0.800000011920929,
+						"thumbnail":"thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.512x512_q85_crop-%2C.png.webp",
+						"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.1024x1024_q85_crop-%2C.png",
+						"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.1024x1024_q85.png",
+						"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.1024x1024_q85.png.webp?webp_generated=1766565597",
+						"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1766565597",
+						"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.512x512_q85_crop-%2C.png",
+						"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.512x512_q85.png",
+						"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.512x512_q85.png.webp?webp_generated=1766565597",
+						"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.512x512_q85_crop-%2C.png.webp?webp_generated=1766565597",
+						"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.256x256_q85_crop-%2C.png",
+						"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.256x256_q85.png",
+						"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.256x256_q85.png.webp?webp_generated=1766565597",
+						"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.256x256_q85_crop-%2C.png.webp?webp_generated=1766565597",
+						"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.2048x2048_q85_crop-%2C.png",
+						"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.2048x2048_q85.png",
+						"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.2048x2048_q85.png.webp?webp_generated=1766565597",
+						"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/5d73c80d1eda4f68b9d34e0c7e5f694d/files/thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766565597",
+						"thumbnail_small":"thumbnail_60d2fa6c-b936-4a1e-b9ee-6beeed8b3f3e.png.256x256_q85_crop-%2C.png.webp",
+						"tooltip_data":{
+							"aname":"Painted Plaster Wall",
+							"author_text":"by chroma 3D",
+							"base_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"base_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"base_price_text":"",
+							"quality":"8",
+							"user_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"user_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"user_price_text":""
+						},
+						"url":"https://www.blenderkit.com/api/v1/assets/5d73c80d-1eda-4f68-b9d3-4e0c7e5f694d/",
+						"verificationStatus":"validated",
+						"versionNumber":1,
+						"videoLink":"",
+						"webpGeneratedTimestamp":1766565597,
+						"resolution":"resolution_2K"
+					},
+					"bbc0451c-f775-402b-8a29-d4d1dd1d0ee2":{
+						"access":"free",
+						"accessLabel":"Free",
+						"addonVersion":"3.18.1",
+						"assetBaseId":"bbc0451c-f775-402b-8a29-d4d1dd1d0ee2",
+						"assetType":"material",
+						"author":{
+							"aboutMe":"3d models for architectural visualization.",
+							"aboutMeUrl":"https://www.felipedemelo.com.br/",
+							"avatar128":"/avatar-redirect/39977263-b880-4061-a68b-5f02b6934827/128/",
+							"firstName":"Felipe",
+							"fullName":"Felipe de Melo",
+							"gravatarHash":"a2a4b0567825ec80bdc594fafa35b555",
+							"id":"84806",
+							"lastName":"de Melo"
+						},
+						"available_resolutions":[
+							512,
+							1024
+						],
+						"basePrice":"",
+						"canDownload":true,
+						"canDownloadError":true,
+						"category":"concrete",
+						"created":"2026-01-28T23:07:33.734932+01:00",
+						"description":"Detailed concrete wall panels with industrial texture, suitable for architectural and urban scenes.",
+						"dictParameters":{
+							"addons":true,
+							"animated":false,
+							"engine":"cycles",
+							"joinBlenderkitDiscounts":true,
+							"materialStyle":"realistic",
+							"megapixels":0,
+							"nodeCount":0,
+							"platforms":[
+								"windows-x64",
+								"macos-arm64",
+								"linux-x64",
+								"macos-x64",
+								"windows-arm64"
+							],
+							"procedural":true,
+							"purePbr":false,
+							"sexualizedContent":false,
+							"shaders":[
+								"[]"
+							],
+							"textureCount":0,
+							"textureSizeMeters":1,
+							"uv":false,
+							"validatedManufacturer":true,
+							"validatedManufacturerDate":"2026-02-09T00:00:00Z"
+						},
+						"displayName":"Concrete Wall Panels",
+						"downloaded":0,
+						"files":[
+							{
+								"created":"2026-01-28T23:07:43.998574+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/956688/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"blend",
+								"fileUploadSize":810333,
+								"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/blend_d5aaaac2-f6cb-4f2b-a152-41bf81d8d87e.blend",
+								"modified":"2026-01-28T23:07:43.998619+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2026-01-29T12:47:40.399971+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/957604/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_0_5K",
+								"fileUploadSize":212307,
+								"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/resolution_0_5K_5f654c41-d05e-4248-a8c0-0cff9c23d2db.blend",
+								"modified":"2026-01-29T12:47:40.399988+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":""
+							},
+							{
+								"created":"2026-01-29T12:47:39.478645+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/957603/",
+								"fileThumbnail":"",
+								"fileThumbnailLarge":"",
+								"fileType":"resolution_1K",
+								"fileUploadSize":518648,
+								"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/resolution_1K_1eb6876f-1d55-44a3-b852-2e24e92e85a6.blend",
+								"modified":"2026-01-29T12:47:39.478657+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"",
+								"thumbnailSmallUrl":"",
+								"url":"https://assets.blenderkit.com/assets/f52e2790398a4a47aec51fdfce55d563/files/resolution_1K_1eb6876f-1d55-44a3-b852-2e24e92e85a6.blend?verify=1781688339-S%2BoBWLW9xF0Vaop2jw64jA%2BTdLormqS9Hj2tSmbzKWg%3D",
+								"file_name":"/Users/gaspar_d/assets/materials/concrete-wall-pa_f52e2790-398a-4a47-aec5-1fdfce55d563/concrete-wall-panels_1K_1eb6876f-1d55-44a3-b852-2e24e92e85a6.blend"
+							},
+							{
+								"created":"2026-01-28T23:07:41.523676+01:00",
+								"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/956687/",
+								"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.96x96_q85_crop-%2C.png",
+								"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85_crop-%2C.png",
+								"fileType":"thumbnail",
+								"fileUploadSize":769387,
+								"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png",
+								"modified":"2026-01-28T23:07:41.523688+01:00",
+								"resolution":0,
+								"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png",
+								"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png",
+								"url":""
+							}
+						],
+						"id":"f52e2790-398a-4a47-aec5-1fdfce55d563",
+						"isForSale":false,
+						"isFree":true,
+						"isPrivate":false,
+						"lastAnimatedThumbnailUpload":null,
+						"lastBlendUpload":"2026-01-28T22:07:43.998574+00:00",
+						"lastGltfGodotUpload":null,
+						"lastGltfUpload":null,
+						"lastPhotoThumbnailUpload":null,
+						"lastResolutionUpload":"2026-01-29T11:47:40.399971+00:00",
+						"lastThumbnailUpload":"2026-01-28T22:07:41.523676+00:00",
+						"lastUserInteraction":"2026-01-28T23:07:44.449214+01:00",
+						"lastVideoUpload":null,
+						"lastZipFileUpload":"",
+						"license":"royalty_free",
+						"max_resolution":1024,
+						"name":"Concrete Wall Panels",
+						"pk":202391,
+						"ratingsAverage":{
+							"bookmarks":1,
+							"quality":8,
+							"virtualPrice":null,
+							"workingHours":2
+						},
+						"ratingsCount":{
+							"bookmarks":18,
+							"quality":1,
+							"virtualPrice":0,
+							"workingHours":1
+						},
+						"ratingsMedian":{
+							"bookmarks":1,
+							"quality":8,
+							"virtualPrice":null,
+							"workingHours":2
+						},
+						"ratingsSum":{
+							"bookmarks":18,
+							"quality":8,
+							"score":160,
+							"virtualPrice":null,
+							"workingHours":2
+						},
+						"score":160,
+						"showMarketingLabels":true,
+						"sourceAppName":"blender",
+						"sourceAppVersion":"4.5.4",
+						"tags":[
+							"concrete",
+							"wall",
+							"architecture",
+							"industrial",
+							"brutalist",
+							"cement",
+							"facade",
+							"modern",
+							"texture",
+							"building"
+						],
+						"texture_size_meters":1,
+						"thumbnail":"thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png.webp",
+						"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85_crop-%2C.png",
+						"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85.png",
+						"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85.png.webp?webp_generated=1769687462",
+						"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1769687462",
+						"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png",
+						"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85.png",
+						"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85.png.webp?webp_generated=1769687462",
+						"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png.webp?webp_generated=1769687462",
+						"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png",
+						"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85.png",
+						"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85.png.webp?webp_generated=1769687462",
+						"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png.webp?webp_generated=1769687462",
+						"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85_crop-%2C.png",
+						"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85.png",
+						"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85.png.webp?webp_generated=1769687462",
+						"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1769687462",
+						"thumbnail_small":"thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png.webp",
+						"tooltip_data":{
+							"aname":"Concrete Wall Panels",
+							"author_text":"by Felipe de Melo",
+							"base_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"base_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"base_price_text":"",
+							"quality":"8",
+							"user_price_bg_color":[
+								0.7,
+								0.7,
+								0.7,
+								0.6
+							],
+							"user_price_color":[
+								1.0,
+								1.0,
+								1.0,
+								0.9
+							],
+							"user_price_text":""
+						},
+						"url":"https://www.blenderkit.com/api/v1/assets/f52e2790-398a-4a47-aec5-1fdfce55d563/",
+						"verificationStatus":"validated",
+						"versionNumber":1,
+						"videoLink":"",
+						"webpGeneratedTimestamp":1769687462,
+						"resolution":"resolution_2K"
 					}
 				},
 				"uuid":"73fbe66c-9a1e-4f44-bcc4-f8d5a5a45011",
@@ -26722,8 +27953,7 @@
 				110,
 				111,
 				112,
-				113,
-				140
+				113
 			]
 		}
 	],
@@ -26737,7 +27967,7 @@
 			"name":"Seat part",
 			"translation":[
 				0,
-				-0.22923290729522705,
+				-0.4582776427268982,
 				0
 			]
 		},
@@ -27119,7 +28349,7 @@
 			"name":"Seat part.001",
 			"translation":[
 				0,
-				-0.22923287749290466,
+				-0.4582776427268982,
 				-3.0994415283203125e-06
 			]
 		},
@@ -28583,7 +29813,8 @@
 						"quality":"10"
 					},
 					"resolution":"resolution_2K"
-				}
+				},
+				"interactionId":"tv"
 			},
 			"mesh":44,
 			"name":"Futuristic Server Room with Displays",
@@ -28903,7 +30134,8 @@
 						"quality":"10"
 					},
 					"resolution":"resolution_2K"
-				}
+				},
+				"interactionId":"tv"
 			},
 			"mesh":45,
 			"name":"Futuristic Server Room with Displays.001",
@@ -29223,7 +30455,8 @@
 						"quality":"10"
 					},
 					"resolution":"resolution_2K"
-				}
+				},
+				"interactionId":"tv"
 			},
 			"mesh":46,
 			"name":"Futuristic Server Room with Displays.002",
@@ -32453,738 +33686,10 @@
 				84.85022735595703
 			],
 			"translation":[
-				193.98394775390625,
+				146.98394775390625,
 				28.025455474853516,
 				-61.092430114746094
 			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":106,
-			"name":"Circle",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":107,
-			"name":"Circle.001",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":108,
-			"name":"Circle.002",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":109,
-			"name":"Circle.003",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":110,
-			"name":"Circle.004",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":111,
-			"name":"Circle.005",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":112,
-			"name":"Circle.006",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":113,
-			"name":"Circle.007",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":114,
-			"name":"Circle.008",
-			"translation":[
-				0.052672430872917175,
-				0.03410772979259491,
-				0.07769963890314102
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":115,
-			"name":"Circle.009",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":116,
-			"name":"Circle.010",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":117,
-			"name":"Circle.011",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":118,
-			"name":"Circle.012",
-			"translation":[
-				-0.05533624440431595,
-				0.1920238733291626,
-				0.07816333323717117
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":119,
-			"name":"Circle.013",
-			"translation":[
-				-0.05533625930547714,
-				0.1920238733291626,
-				0.07715100795030594
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":120,
-			"name":"Circle.014",
-			"translation":[
-				0,
-				0.007088383659720421,
-				0
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":121,
-			"name":"Circle.015",
-			"translation":[
-				0,
-				0.007088383659720421,
-				0
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":122,
-			"name":"Cube",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":123,
-			"name":"Cube.014",
-			"translation":[
-				0,
-				-0.000866444781422615,
-				0
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":124,
-			"name":"Cube.015",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.022528862580657005
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":125,
-			"name":"Cube.016",
-			"translation":[
-				-0.006854824721813202,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":126,
-			"name":"Cube.017",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":127,
-			"name":"Cube.018",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":128,
-			"name":"Cube.019",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":129,
-			"name":"Cube.020",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":130,
-			"name":"Cylinder",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"extras":{
-				"ant_landscape":{}
-			},
-			"mesh":131,
-			"name":"Cylinder.001",
-			"translation":[
-				0,
-				0.106900654733181,
-				-0.021925365552306175
-			]
-		},
-		{
-			"children":[
-				114,
-				115,
-				116,
-				117,
-				118,
-				119,
-				120,
-				121,
-				122,
-				123,
-				124,
-				125,
-				126,
-				127,
-				128,
-				129,
-				130,
-				131,
-				132,
-				133,
-				134,
-				135,
-				136,
-				137,
-				138,
-				139
-			],
-			"extras":{
-				"ant_landscape":{},
-				"blenderkit":{
-					"category":12,
-					"subcategory":2,
-					"subcategory1":6,
-					"tags":"screen, monitor, computer, pc, desktop, tech, cyberpunk, device",
-					"is_free":1,
-					"name":"Computer",
-					"name_changed":1,
-					"name_old":"Computer",
-					"description":"A tough all-in-one computer with a metal frame and metal handles. I saw it in Cyberpunk 2077 in a car.",
-					"thumbnail":"F:\\Blender\\Cyberpunk\\3.png",
-					"has_thumbnail":1,
-					"thumbnail_generating_state":"",
-					"condition":3,
-					"pbr":1,
-					"work_hours":6.0,
-					"texture_resolution_max":4096,
-					"texture_resolution_min":128,
-					"uv":1,
-					"texture_count":15,
-					"total_megapixels":58,
-					"node_count":96,
-					"engine":0,
-					"is_procedural":0,
-					"materials":"Material, Material.003, rubber strip, Orange.002, Handles, Screen, Material.002, Material.007, light emission, Buttons, ",
-					"shaders":"principled, mix shader, ",
-					"dimensions":[
-						0.20330455899238586,
-						0.15542230010032654,
-						0.21502524614334106
-					],
-					"bbox_min":[
-						-0.10165227949619293,
-						-0.07963254302740097,
-						-1.5878118574619293e-05
-					],
-					"bbox_max":[
-						0.10165227949619293,
-						0.07578976452350616,
-						0.21500936150550842
-					],
-					"face_count":32103,
-					"face_count_render":378445,
-					"mesh_poly_type":1,
-					"manifold":0,
-					"modifiers":"subsurf,mirror,",
-					"object_count":27,
-					"report":"",
-					"asset_base_id":"d83ebb2f-fcca-4230-b6e9-b14b33b5d813",
-					"id":"297a49f8-7475-49f8-ab7b-20701448c83d",
-					"uploading":0,
-					"is_private":1,
-					"verification_status":2,
-					"manufacturer":"",
-					"designer":"",
-					"design_collection":"",
-					"design_variant":""
-				},
-				"asset_data":{
-					"access":"free",
-					"accessLabel":"Free",
-					"addonVersion":"3.15.1",
-					"assetBaseId":"d83ebb2f-fcca-4230-b6e9-b14b33b5d813",
-					"assetType":"model",
-					"author":{
-						"aboutMe":"For all we know life's just a dream; who the hell knows what it means. Buy me a coffee: PayPal - seatlamorake@gmail.com",
-						"aboutMeUrl":"https://www.artstation.com/heavendevourer",
-						"avatar128":"/avatar-redirect/6a9d4b6a-e884-4d09-9d62-d8abf411dd54/128/",
-						"firstName":"Seatla",
-						"fullName":"Seatla Morake",
-						"gravatarHash":"085c4b65fe33d3a0287c1cb8f0ba3531",
-						"id":"155705",
-						"lastName":"Morake"
-					},
-					"available_resolutions":[
-						512,
-						1024,
-						2048,
-						4096
-					],
-					"basePrice":"",
-					"bbox_max":[
-						0.1017,
-						0.0758,
-						0.215
-					],
-					"bbox_min":[
-						-0.1017,
-						-0.0796,
-						0.0
-					],
-					"canDownload":true,
-					"canDownloadError":true,
-					"category":"monitor",
-					"created":"2025-08-10T14:43:30.761468+02:00",
-					"description":"A tough all-in-one computer with a metal frame and metal handles. I saw it in Cyberpunk 2077 in a car.",
-					"dictParameters":{
-						"addons":true,
-						"animated":false,
-						"boundBoxMaxX":0.1017,
-						"boundBoxMaxY":0.0758,
-						"boundBoxMaxZ":0.215,
-						"boundBoxMinX":-0.1017,
-						"boundBoxMinY":-0.0796,
-						"boundBoxMinZ":0,
-						"condition":"old",
-						"dimensionX":0.2033,
-						"dimensionY":0.1554,
-						"dimensionZ":0.215,
-						"engines":[
-							"[cycles]"
-						],
-						"faceCount":32103,
-						"faceCountRender":378445,
-						"gltfGeneratedDate":"2025-08-14",
-						"gltfGodotGeneratedDate":"2025-08-14",
-						"joinBlenderkitDiscounts":true,
-						"manifold":false,
-						"materials":[
-							"[Material Material.003 rubber strip Orange.002 Handles Screen Material.002 Material.007 light emission Buttons]"
-						],
-						"megapixels":58,
-						"meshPolyType":"quad_dominant",
-						"modelStyle":"realistic",
-						"modifiers":[
-							"[subsurf mirror]"
-						],
-						"nodeCount":96,
-						"objectCount":27,
-						"pbrType":"metallic",
-						"platforms":[
-							"windows-x64",
-							"macos-arm64",
-							"linux-x64",
-							"macos-x64",
-							"windows-arm64"
-						],
-						"procedural":false,
-						"productionLevel":"finished",
-						"purePbr":true,
-						"rig":false,
-						"sexualizedContent":false,
-						"shaders":[
-							"[principled mix shader]"
-						],
-						"simulation":false,
-						"textureCount":15,
-						"textureResolutionMax":4096,
-						"textureResolutionMin":128,
-						"uv":true
-					},
-					"displayName":"Computer",
-					"downloaded":0,
-					"files":[
-						{
-							"created":"2025-08-10T14:43:56.060034+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/775927/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"blend",
-							"fileUploadSize":39114347,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/blend_f06daa77-ae5e-4eda-97d7-b4b24691e298.blend",
-							"modified":"2025-08-10T14:43:56.060047+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2025-08-14T11:29:20.156565+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/780255/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"gltf",
-							"fileUploadSize":44829252,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/gltf_634b3da9-00d5-4189-8ad4-54aeb19d6111.glb",
-							"modified":"2025-08-14T11:29:20.156584+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2025-08-14T11:29:11.365986+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/780254/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"gltf_godot",
-							"fileUploadSize":46425804,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/gltf_godot_5fa2179f-c38b-4271-8f5d-2aeb42e60487.glb",
-							"modified":"2025-08-14T11:29:11.365997+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2025-08-14T11:27:28.475635+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/780253/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_0_5K",
-							"fileUploadSize":1184587,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/resolution_0_5K_65d2798c-1484-4f12-9e12-b8de564b595a.blend",
-							"modified":"2025-08-14T11:27:28.475650+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2025-08-14T11:27:26.835794+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/780252/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_1K",
-							"fileUploadSize":1604272,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/resolution_1K_14d6af5a-9bb4-48c2-a427-720955319e0a.blend",
-							"modified":"2025-08-14T11:27:26.835809+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2025-08-14T11:27:25.264835+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/780251/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_2K",
-							"fileUploadSize":3251505,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/resolution_2K_6d1de84e-63b9-4f9e-b9a5-f10075c8bfae.blend",
-							"modified":"2025-08-14T11:27:25.264855+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":"https://assets.blenderkit.com/assets/297a49f8747549f8ab7b20701448c83d/files/resolution_2K_6d1de84e-63b9-4f9e-b9a5-f10075c8bfae.blend?verify=1781627669-PUyWzvLSBjGMBWGtcSBa6hGIf2yhmYKv%2FihVInkOCps%3D",
-							"file_name":"/Users/gaspar_d/assets/models/computer_297a49f8-7475-49f8-ab7b-20701448c83d/computer_2K_6d1de84e-63b9-4f9e-b9a5-f10075c8bfae.blend"
-						},
-						{
-							"created":"2025-08-14T11:27:23.768905+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/780250/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_4K",
-							"fileUploadSize":12669686,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/resolution_4K_5b7669df-6648-40e6-9ebb-6a89d06e7a17.blend",
-							"modified":"2025-08-14T11:27:23.768922+02:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"",
-							"thumbnailSmallUrl":"",
-							"url":""
-						},
-						{
-							"created":"2025-08-10T14:43:40.243466+02:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/775926/",
-							"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.96x96_q85_crop-%2C.png",
-							"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.1024x1024_q85_crop-%2C.png",
-							"fileType":"thumbnail",
-							"fileUploadSize":6948858,
-							"filename":"assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png",
-							"modified":"2025-12-23T04:21:58.251900+01:00",
-							"resolution":0,
-							"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.512x512_q85_crop-%2C.png",
-							"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.256x256_q85_crop-%2C.png",
-							"url":""
-						}
-					],
-					"filesSize":152371,
-					"id":"297a49f8-7475-49f8-ab7b-20701448c83d",
-					"isForSale":false,
-					"isFree":true,
-					"isPrivate":false,
-					"lastAnimatedThumbnailUpload":null,
-					"lastBlendUpload":"2025-08-10T12:43:56.060034+00:00",
-					"lastGltfGodotUpload":"2025-08-14T09:29:11.365986+00:00",
-					"lastGltfUpload":"2025-08-14T09:29:20.156565+00:00",
-					"lastPhotoThumbnailUpload":null,
-					"lastResolutionUpload":"2025-08-14T09:27:28.475635+00:00",
-					"lastThumbnailUpload":"2025-08-10T12:43:40.243466+00:00",
-					"lastUserInteraction":"2025-08-10T14:43:56.703783+02:00",
-					"lastVideoUpload":null,
-					"lastZipFileUpload":"",
-					"license":"royalty_free",
-					"max_resolution":4096,
-					"name":"Computer",
-					"pk":167549,
-					"ratingsAverage":{
-						"bookmarks":0.9629629629629629,
-						"quality":7,
-						"virtualPrice":null,
-						"workingHours":6
-					},
-					"ratingsCount":{
-						"bookmarks":27,
-						"quality":1,
-						"virtualPrice":0,
-						"workingHours":1
-					},
-					"ratingsMedian":{
-						"bookmarks":1,
-						"quality":7,
-						"virtualPrice":null,
-						"workingHours":6
-					},
-					"ratingsSum":{
-						"bookmarks":26,
-						"quality":7,
-						"score":420,
-						"virtualPrice":null,
-						"workingHours":6
-					},
-					"score":420,
-					"showMarketingLabels":true,
-					"sourceAppName":"blender",
-					"sourceAppVersion":"4.5.0",
-					"tags":[
-						"screen",
-						"monitor",
-						"computer",
-						"pc",
-						"desktop",
-						"tech",
-						"cyberpunk",
-						"device"
-					],
-					"thumbnail":"thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.512x512_q85_crop-%2C.png.webp",
-					"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.1024x1024_q85_crop-%2C.png",
-					"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.1024x1024_q85.png",
-					"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.1024x1024_q85.png.webp?webp_generated=1766673740",
-					"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1766673740",
-					"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.512x512_q85_crop-%2C.png",
-					"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.512x512_q85.png",
-					"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.512x512_q85.png.webp?webp_generated=1766673740",
-					"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.512x512_q85_crop-%2C.png.webp?webp_generated=1766673740",
-					"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.256x256_q85_crop-%2C.png",
-					"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.256x256_q85.png",
-					"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.256x256_q85.png.webp?webp_generated=1766673740",
-					"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.256x256_q85_crop-%2C.png.webp?webp_generated=1766673740",
-					"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.2048x2048_q85_crop-%2C.png",
-					"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.2048x2048_q85.png",
-					"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.2048x2048_q85.png.webp?webp_generated=1766673740",
-					"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/297a49f8747549f8ab7b20701448c83d/files/thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766673740",
-					"thumbnail_small":"thumbnail_6691cbc3-4001-4866-9335-5920f8193e34.png.256x256_q85_crop-%2C.png.webp",
-					"tooltip_data":{
-						"aname":"Computer",
-						"author_text":"by Seatla Morake",
-						"base_price_bg_color":[
-							0.7,
-							0.7,
-							0.7,
-							0.6
-						],
-						"base_price_color":[
-							1.0,
-							1.0,
-							1.0,
-							0.9
-						],
-						"base_price_text":"",
-						"quality":"7",
-						"user_price_bg_color":[
-							0.7,
-							0.7,
-							0.7,
-							0.6
-						],
-						"user_price_color":[
-							1.0,
-							1.0,
-							1.0,
-							0.9
-						],
-						"user_price_text":""
-					},
-					"url":"https://www.blenderkit.com/api/v1/assets/297a49f8-7475-49f8-ab7b-20701448c83d/",
-					"verificationStatus":"validated",
-					"versionNumber":1,
-					"videoLink":"",
-					"webpGeneratedTimestamp":1766673740,
-					"resolution":"resolution_2K"
-				}
-			},
-			"name":"Computer"
 		}
 	],
 	"materials":[
@@ -36947,85 +37452,67 @@
 		},
 		{
 			"doubleSided":true,
-			"emissiveFactor":[
-				1,
-				1,
-				1
-			],
-			"emissiveTexture":{
-				"index":113,
-				"texCoord":1
-			},
-			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":2
-				}
-			},
 			"extras":{
 				"blenderkit":{
-					"description":"Sci-Fi Panel Material made in Substance Designer / Rendered in Blender using Cycles / Quality : 4K",
-					"tags":"Scifi, Metal, Panel, Hardsurface, Tech, Sci-fi, hexagon, cells, spaceship",
-					"name":"Sci-Fi Panel 18",
+					"name_old":"Concrete Wall Panels",
+					"name":"Concrete Wall Panels",
+					"category":5,
 					"name_changed":1,
-					"name_old":"Sci-Fi Panel 18",
-					"thumbnail":"C:\\Users\\Abdelrahman\\Desktop\\Sci_Fi_Panel_18_render.png",
+					"tags":"concrete, wall, architecture, industrial, brutalist, cement, facade, modern, texture, building",
+					"description":"Detailed concrete wall panels with industrial texture, suitable for architectural and urban scenes.",
+					"thumbnail_scale":2.0,
+					"thumbnail":"//concrete-wall-panels.png",
 					"has_thumbnail":1,
 					"thumbnail_generating_state":"",
-					"texture_size_meters":4.0,
-					"pbr":1,
-					"uv":1,
-					"category":33,
-					"texture_resolution_max":4096,
-					"texture_resolution_min":4096,
-					"texture_count":6,
-					"node_count":15,
-					"total_megapixels":96,
-					"is_procedural":0,
-					"shaders":"principled, ",
+					"is_generating_thumbnail":0,
+					"texture_resolution_max":0,
+					"texture_resolution_min":0,
+					"texture_count":0,
+					"node_count":0,
+					"total_megapixels":0,
+					"is_procedural":1,
+					"shaders":"",
 					"report":"",
-					"asset_base_id":"ecfe6794-4e72-4382-a52c-1520e91ef3db",
-					"id":"d2b32c1d-4c29-4da8-985c-ab8163d20e08",
-					"upload_state":"100% - Asset successfully uploaded.",
+					"asset_base_id":"bbc0451c-f775-402b-8a29-d4d1dd1d0ee2",
+					"id":"f52e2790-398a-4a47-aec5-1fdfce55d563",
 					"uploading":0,
 					"is_private":1,
 					"verification_status":2
 				},
 				"asset_data":{
-					"thumbnail":"thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.512x512_q85_crop-%2C.png.webp",
-					"thumbnail_small":"thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.256x256_q85_crop-%2C.png.webp",
-					"downloaded":100,
-					"texture_size_meters":4,
 					"access":"free",
 					"accessLabel":"Free",
-					"addonVersion":"3.10.0",
-					"assetBaseId":"ecfe6794-4e72-4382-a52c-1520e91ef3db",
+					"addonVersion":"3.18.1",
+					"assetBaseId":"bbc0451c-f775-402b-8a29-d4d1dd1d0ee2",
 					"assetType":"material",
 					"author":{
-						"aboutMe":"3D Artist who likes 3d modeling and procedural Stuff.",
-						"aboutMeUrl":"https://www.artstation.com/abdlrhmanmohamed",
-						"avatar128":"/avatar-redirect/6bb894a9-dd91-4721-91b6-02a84a0aae24/128/",
-						"firstName":"Abdelrahman",
-						"fullName":"Abdelrahman Mohamed",
-						"gravatarHash":"cdb26029dfa4bbe44428e86a2e1c52a2",
-						"id":"43881",
-						"lastName":"Mohamed"
+						"aboutMe":"3d models for architectural visualization.",
+						"aboutMeUrl":"https://www.felipedemelo.com.br/",
+						"avatar128":"/avatar-redirect/39977263-b880-4061-a68b-5f02b6934827/128/",
+						"firstName":"Felipe",
+						"fullName":"Felipe de Melo",
+						"gravatarHash":"a2a4b0567825ec80bdc594fafa35b555",
+						"id":"84806",
+						"lastName":"de Melo"
 					},
+					"available_resolutions":[
+						512,
+						1024
+					],
 					"basePrice":"",
 					"canDownload":true,
 					"canDownloadError":true,
-					"category":"tech",
-					"created":"2024-01-31T07:51:04.795334+01:00",
-					"description":"Sci-Fi Panel Material made in Substance Designer / Rendered in Blender using Cycles / Quality : 4K",
+					"category":"concrete",
+					"created":"2026-01-28T23:07:33.734932+01:00",
+					"description":"Detailed concrete wall panels with industrial texture, suitable for architectural and urban scenes.",
 					"dictParameters":{
 						"addons":true,
-						"condition":"new",
+						"animated":false,
 						"engine":"cycles",
-						"imageAltTextGen4v":"High-quality 4K sci-fi panel texture for 3D models, suitable for Blender and PBR workflows, created with Substance Designer.",
 						"joinBlenderkitDiscounts":true,
 						"materialStyle":"realistic",
-						"megapixels":96,
-						"nodeCount":15,
-						"pbrType":"metallic",
+						"megapixels":0,
+						"nodeCount":0,
 						"platforms":[
 							"windows-x64",
 							"macos-arm64",
@@ -37033,203 +37520,166 @@
 							"macos-x64",
 							"windows-arm64"
 						],
-						"procedural":false,
-						"purePbr":true,
+						"procedural":true,
+						"purePbr":false,
 						"sexualizedContent":false,
 						"shaders":[
-							"principled"
+							"[]"
 						],
-						"textureCount":6,
-						"textureResolutionMax":4096,
-						"textureResolutionMin":4096,
-						"textureSizeMeters":4,
-						"uv":true
+						"textureCount":0,
+						"textureSizeMeters":1,
+						"uv":false,
+						"validatedManufacturer":true,
+						"validatedManufacturerDate":"2026-02-09T00:00:00Z"
 					},
-					"displayName":"Sci-Fi Panel 18",
+					"displayName":"Concrete Wall Panels",
+					"downloaded":0,
 					"files":[
 						{
-							"created":"2024-01-31T07:58:56.762432+01:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/317590/",
+							"created":"2026-01-28T23:07:43.998574+01:00",
+							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/956688/",
 							"fileThumbnail":"",
 							"fileThumbnailLarge":"",
 							"fileType":"blend",
-							"modified":"2024-02-19T18:22:03.409976+01:00",
+							"fileUploadSize":810333,
+							"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/blend_d5aaaac2-f6cb-4f2b-a152-41bf81d8d87e.blend",
+							"modified":"2026-01-28T23:07:43.998619+01:00",
 							"resolution":0,
-							"fileUploadSize":151323992,
-							"url":"",
-							"filename":"assets/d2b32c1d4c294da8985cab8163d20e08/files/blend_5eb0d1f9-acc9-4811-9b6c-573357f4fcad.blend",
+							"thumbnailMiddleUrl":"",
 							"thumbnailSmallUrl":"",
-							"thumbnailMiddleUrl":""
+							"url":""
 						},
 						{
-							"created":"2024-02-01T08:45:29.389856+01:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/318182/",
+							"created":"2026-01-29T12:47:40.399971+01:00",
+							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/957604/",
 							"fileThumbnail":"",
 							"fileThumbnailLarge":"",
 							"fileType":"resolution_0_5K",
-							"modified":"2024-02-19T18:22:03.445162+01:00",
+							"fileUploadSize":212307,
+							"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/resolution_0_5K_5f654c41-d05e-4248-a8c0-0cff9c23d2db.blend",
+							"modified":"2026-01-29T12:47:40.399988+01:00",
 							"resolution":0,
-							"fileUploadSize":623601,
-							"url":"",
-							"filename":"assets/d2b32c1d4c294da8985cab8163d20e08/files/resolution_0_5K_6611a885-42be-4337-9d19-525a738c795d.blend",
+							"thumbnailMiddleUrl":"",
 							"thumbnailSmallUrl":"",
-							"thumbnailMiddleUrl":""
+							"url":""
 						},
 						{
-							"created":"2024-02-01T08:45:28.790232+01:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/318181/",
+							"created":"2026-01-29T12:47:39.478645+01:00",
+							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/957603/",
 							"fileThumbnail":"",
 							"fileThumbnailLarge":"",
 							"fileType":"resolution_1K",
-							"modified":"2024-02-19T18:22:03.468137+01:00",
+							"fileUploadSize":518648,
+							"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/resolution_1K_1eb6876f-1d55-44a3-b852-2e24e92e85a6.blend",
+							"modified":"2026-01-29T12:47:39.478657+01:00",
 							"resolution":0,
-							"fileUploadSize":1935927,
-							"url":"",
-							"filename":"assets/d2b32c1d4c294da8985cab8163d20e08/files/resolution_1K_49f410e9-358b-4763-99b9-9239b4f97c24.blend",
-							"thumbnailSmallUrl":"",
-							"thumbnailMiddleUrl":""
-						},
-						{
-							"created":"2024-02-01T08:45:28.066248+01:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/318180/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_2K",
-							"modified":"2024-02-19T18:22:03.494208+01:00",
-							"resolution":0,
-							"fileUploadSize":5977148,
-							"url":"https://assets.blenderkit.com/assets/d2b32c1d4c294da8985cab8163d20e08/files/resolution_2K_c36cdbbb-88f6-4967-abc7-af7a26e71d03.blend?verify=1781626199-2qTeNpoKi7%2B%2F4PahaMoOktA4D51YE0qJOfG4rPxiP9U%3D",
-							"filename":"assets/d2b32c1d4c294da8985cab8163d20e08/files/resolution_2K_c36cdbbb-88f6-4967-abc7-af7a26e71d03.blend",
-							"thumbnailSmallUrl":"",
 							"thumbnailMiddleUrl":"",
-							"file_name":"/Users/gaspar_d/assets/materials/sci-fi-panel-18_d2b32c1d-4c29-4da8-985c-ab8163d20e08/sci-fi-panel-18_2K_c36cdbbb-88f6-4967-abc7-af7a26e71d03.blend"
-						},
-						{
-							"created":"2024-02-01T08:45:27.361139+01:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/318179/",
-							"fileThumbnail":"",
-							"fileThumbnailLarge":"",
-							"fileType":"resolution_4K",
-							"modified":"2024-02-19T18:22:03.519476+01:00",
-							"resolution":0,
-							"fileUploadSize":18250535,
-							"url":"",
-							"filename":"assets/d2b32c1d4c294da8985cab8163d20e08/files/resolution_4K_65cec154-4235-441b-a046-d3b54a58d7ba.blend",
 							"thumbnailSmallUrl":"",
-							"thumbnailMiddleUrl":""
+							"url":"https://assets.blenderkit.com/assets/f52e2790398a4a47aec51fdfce55d563/files/resolution_1K_1eb6876f-1d55-44a3-b852-2e24e92e85a6.blend?verify=1781688339-S%2BoBWLW9xF0Vaop2jw64jA%2BTdLormqS9Hj2tSmbzKWg%3D",
+							"file_name":"/Users/gaspar_d/assets/materials/concrete-wall-pa_f52e2790-398a-4a47-aec5-1fdfce55d563/concrete-wall-panels_1K_1eb6876f-1d55-44a3-b852-2e24e92e85a6.blend"
 						},
 						{
-							"created":"2024-01-31T07:51:31.735327+01:00",
-							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/317589/",
-							"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.96x96_q85_crop-%2C.png",
-							"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.1024x1024_q85_crop-%2C.png",
+							"created":"2026-01-28T23:07:41.523676+01:00",
+							"downloadUrl":"https://www.blenderkit.com/api/v1/downloads/956687/",
+							"fileThumbnail":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.96x96_q85_crop-%2C.png",
+							"fileThumbnailLarge":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85_crop-%2C.png",
 							"fileType":"thumbnail",
-							"modified":"2025-12-22T21:34:57.169723+01:00",
+							"fileUploadSize":769387,
+							"filename":"assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png",
+							"modified":"2026-01-28T23:07:41.523688+01:00",
 							"resolution":0,
-							"fileUploadSize":6447586,
-							"url":"",
-							"filename":"assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png",
-							"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.256x256_q85_crop-%2C.png",
-							"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.512x512_q85_crop-%2C.png"
+							"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png",
+							"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png",
+							"url":""
 						}
 					],
-					"filesSize":180233,
-					"id":"d2b32c1d-4c29-4da8-985c-ab8163d20e08",
-					"isFree":true,
+					"filesSize":2256,
+					"id":"f52e2790-398a-4a47-aec5-1fdfce55d563",
 					"isForSale":false,
+					"isFree":true,
 					"isPrivate":false,
 					"lastAnimatedThumbnailUpload":null,
-					"lastBlendUpload":"2024-01-31T06:58:56.762432+00:00",
+					"lastBlendUpload":"2026-01-28T22:07:43.998574+00:00",
 					"lastGltfGodotUpload":null,
 					"lastGltfUpload":null,
 					"lastPhotoThumbnailUpload":null,
-					"lastResolutionUpload":"2024-02-01T07:45:29.389856+00:00",
-					"lastThumbnailUpload":"2024-01-31T06:51:31.735327+00:00",
-					"lastUserInteraction":"2024-01-31T07:58:57.273512+01:00",
+					"lastResolutionUpload":"2026-01-29T11:47:40.399971+00:00",
+					"lastThumbnailUpload":"2026-01-28T22:07:41.523676+00:00",
+					"lastUserInteraction":"2026-01-28T23:07:44.449214+01:00",
 					"lastVideoUpload":null,
 					"lastZipFileUpload":"",
 					"license":"royalty_free",
-					"name":"Sci-Fi Panel 18",
-					"pk":78826,
+					"max_resolution":1024,
+					"name":"Concrete Wall Panels",
+					"pk":202391,
 					"ratingsAverage":{
-						"bookmarks":0.9938650306748467,
-						"quality":9.5,
+						"bookmarks":1,
+						"quality":8,
 						"virtualPrice":null,
-						"workingHours":5
+						"workingHours":2
 					},
 					"ratingsCount":{
-						"bookmarks":163,
-						"quality":2,
+						"bookmarks":18,
+						"quality":1,
 						"virtualPrice":0,
-						"workingHours":3
+						"workingHours":1
 					},
 					"ratingsMedian":{
 						"bookmarks":1,
-						"quality":9.5,
+						"quality":8,
 						"virtualPrice":null,
-						"workingHours":5
+						"workingHours":2
 					},
 					"ratingsSum":{
-						"bookmarks":162,
-						"quality":19,
-						"score":475,
+						"bookmarks":18,
+						"quality":8,
+						"score":160,
 						"virtualPrice":null,
-						"workingHours":15
+						"workingHours":2
 					},
-					"score":475,
+					"score":160,
 					"showMarketingLabels":true,
 					"sourceAppName":"blender",
-					"sourceAppVersion":"4.0.2",
+					"sourceAppVersion":"4.5.4",
 					"tags":[
-						"Scifi",
-						"Metal",
-						"Panel",
-						"Hardsurface",
-						"Tech",
-						"Sci-fi",
-						"hexagon",
-						"cells",
-						"spaceship"
+						"concrete",
+						"wall",
+						"architecture",
+						"industrial",
+						"brutalist",
+						"cement",
+						"facade",
+						"modern",
+						"texture",
+						"building"
 					],
-					"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.1024x1024_q85_crop-%2C.png",
-					"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.1024x1024_q85.png",
-					"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.1024x1024_q85.png.webp?webp_generated=1766514863",
-					"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1766514863",
-					"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.512x512_q85_crop-%2C.png",
-					"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.512x512_q85.png",
-					"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.512x512_q85.png.webp?webp_generated=1766514863",
-					"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.512x512_q85_crop-%2C.png.webp?webp_generated=1766514863",
-					"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.256x256_q85_crop-%2C.png",
-					"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.256x256_q85.png",
-					"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.256x256_q85.png.webp?webp_generated=1766514863",
-					"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.256x256_q85_crop-%2C.png.webp?webp_generated=1766514863",
-					"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.2048x2048_q85_crop-%2C.png",
-					"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.2048x2048_q85.png",
-					"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.2048x2048_q85.png.webp?webp_generated=1766514863",
-					"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/d2b32c1d4c294da8985cab8163d20e08/files/thumbnail_fdaea21f-67b5-4000-8bf3-798cf378f906.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1766514863",
-					"url":"https://www.blenderkit.com/api/v1/assets/d2b32c1d-4c29-4da8-985c-ab8163d20e08/",
-					"verificationStatus":"validated",
-					"versionNumber":1,
-					"videoLink":"",
-					"webpGeneratedTimestamp":1766514863,
-					"available_resolutions":[
-						512,
-						1024,
-						2048,
-						4096
-					],
-					"max_resolution":4096,
+					"texture_size_meters":1,
+					"thumbnail":"thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png.webp",
+					"thumbnailLargeUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85_crop-%2C.png",
+					"thumbnailLargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85.png",
+					"thumbnailLargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85.png.webp?webp_generated=1769687462",
+					"thumbnailLargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1769687462",
+					"thumbnailMiddleUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png",
+					"thumbnailMiddleUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85.png",
+					"thumbnailMiddleUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85.png.webp?webp_generated=1769687462",
+					"thumbnailMiddleUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.512x512_q85_crop-%2C.png.webp?webp_generated=1769687462",
+					"thumbnailSmallUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png",
+					"thumbnailSmallUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85.png",
+					"thumbnailSmallUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85.png.webp?webp_generated=1769687462",
+					"thumbnailSmallUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png.webp?webp_generated=1769687462",
+					"thumbnailXlargeUrl":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85_crop-%2C.png",
+					"thumbnailXlargeUrlNonsquared":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85.png",
+					"thumbnailXlargeUrlNonsquaredWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85.png.webp?webp_generated=1769687462",
+					"thumbnailXlargeUrlWebp":"https://public.blenderkit.com/thumbnails/assets/f52e2790398a4a47aec51fdfce55d563/files/thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1769687462",
+					"thumbnail_small":"thumbnail_87fb37d7-50ae-4b11-b9fa-417c710a1372.png.256x256_q85_crop-%2C.png.webp",
 					"tooltip_data":{
-						"aname":"Sci-Fi Panel 18",
-						"author_text":"by Abdelrahman Mohamed",
-						"quality":"10",
-						"user_price_text":"",
-						"base_price_text":"",
-						"user_price_color":[
-							1.0,
-							1.0,
-							1.0,
-							0.9
+						"aname":"Concrete Wall Panels",
+						"author_text":"by Felipe de Melo",
+						"base_price_bg_color":[
+							0.7,
+							0.7,
+							0.7,
+							0.6
 						],
 						"base_price_color":[
 							1.0,
@@ -37237,34 +37687,43 @@
 							1.0,
 							0.9
 						],
+						"base_price_text":"",
+						"quality":"8",
 						"user_price_bg_color":[
 							0.7,
 							0.7,
 							0.7,
 							0.6
 						],
-						"base_price_bg_color":[
-							0.7,
-							0.7,
-							0.7,
-							0.6
-						]
+						"user_price_color":[
+							1.0,
+							1.0,
+							1.0,
+							0.9
+						],
+						"user_price_text":""
 					},
+					"url":"https://www.blenderkit.com/api/v1/assets/f52e2790-398a-4a47-aec5-1fdfce55d563/",
+					"verificationStatus":"validated",
+					"versionNumber":1,
+					"videoLink":"",
+					"webpGeneratedTimestamp":1769687462,
 					"resolution":"resolution_2K"
 				}
 			},
-			"name":"Sci-Fi Panel 18",
+			"name":"Concrete Wall Panels",
 			"normalTexture":{
-				"index":114,
+				"index":113,
 				"texCoord":1
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":115,
+					"index":114,
 					"texCoord":1
 				},
+				"metallicFactor":0,
 				"metallicRoughnessTexture":{
-					"index":116,
+					"index":115,
 					"texCoord":1
 				}
 			}
@@ -37554,17 +38013,17 @@
 			},
 			"name":"Sci-Fi Panel.002",
 			"normalTexture":{
-				"index":117,
+				"index":116,
 				"texCoord":1
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
+					"index":117,
+					"texCoord":1
+				},
+				"metallicRoughnessTexture":{
 					"index":118,
 					"texCoord":1
-				},
-				"metallicRoughnessTexture":{
-					"index":119,
-					"texCoord":1
 				}
 			}
 		},
@@ -37576,7 +38035,7 @@
 				1
 			],
 			"emissiveTexture":{
-				"index":120,
+				"index":119,
 				"texCoord":1
 			},
 			"extensions":{
@@ -37813,16 +38272,16 @@
 			},
 			"name":"Sci fi Wall",
 			"normalTexture":{
-				"index":121,
+				"index":120,
 				"texCoord":1
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":122,
+					"index":121,
 					"texCoord":1
 				},
 				"metallicRoughnessTexture":{
-					"index":123,
+					"index":122,
 					"texCoord":1
 				}
 			}
@@ -37835,7 +38294,7 @@
 				1
 			],
 			"emissiveTexture":{
-				"index":120,
+				"index":119,
 				"texCoord":2
 			},
 			"extensions":{
@@ -38072,16 +38531,16 @@
 			},
 			"name":"Sci fi Wall",
 			"normalTexture":{
-				"index":121,
+				"index":120,
 				"texCoord":2
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":122,
+					"index":121,
 					"texCoord":2
 				},
 				"metallicRoughnessTexture":{
-					"index":123,
+					"index":122,
 					"texCoord":2
 				}
 			}
@@ -38375,16 +38834,16 @@
 			},
 			"name":"Wood",
 			"normalTexture":{
-				"index":124,
+				"index":123,
 				"texCoord":1
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":125,
+					"index":124,
 					"texCoord":1
 				},
 				"metallicRoughnessTexture":{
-					"index":126,
+					"index":125,
 					"texCoord":1
 				}
 			}
@@ -38397,14 +38856,14 @@
 			},
 			"name":"cannon_01",
 			"normalTexture":{
-				"index":127
+				"index":126
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":128
+					"index":127
 				},
 				"metallicRoughnessTexture":{
-					"index":129
+					"index":128
 				}
 			}
 		},
@@ -38710,349 +39169,6 @@
 				}
 			},
 			"name":"Sci-Fi Emission"
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_transmission":{
-					"transmissionFactor":0.009999999776482582
-				},
-				"KHR_materials_specular":{
-					"specularFactor":0.699999988079071
-				}
-			},
-			"extras":{
-				"blenderkit":{
-					"has_thumbnail":0
-				}
-			},
-			"name":"Buttons",
-			"normalTexture":{
-				"extensions":{
-					"KHR_texture_transform":{
-						"offset":[
-							0,
-							-14
-						],
-						"scale":[
-							15,
-							15
-						]
-					}
-				},
-				"index":130
-			},
-			"pbrMetallicRoughness":{
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"extensions":{
-						"KHR_texture_transform":{
-							"offset":[
-								0,
-								-14
-							],
-							"scale":[
-								15,
-								15
-							]
-						}
-					},
-					"index":131
-				}
-			}
-		},
-		{
-			"doubleSided":true,
-			"name":"Handles",
-			"normalTexture":{
-				"extensions":{
-					"KHR_texture_transform":{
-						"offset":[
-							0,
-							-4
-						],
-						"scale":[
-							5,
-							5
-						]
-					}
-				},
-				"index":132
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"extensions":{
-						"KHR_texture_transform":{
-							"offset":[
-								0,
-								-4
-							],
-							"scale":[
-								5,
-								5
-							]
-						}
-					},
-					"index":133
-				},
-				"metallicRoughnessTexture":{
-					"extensions":{
-						"KHR_texture_transform":{
-							"offset":[
-								0,
-								-4
-							],
-							"scale":[
-								5,
-								5
-							]
-						}
-					},
-					"index":134
-				}
-			}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_transmission":{
-					"transmissionFactor":1
-				},
-				"KHR_materials_ior":{
-					"ior":1.899999976158142
-				}
-			},
-			"name":"Material.007",
-			"normalTexture":{
-				"index":135
-			},
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.05087566375732422,
-					0.05087566375732422,
-					0.05087566375732422,
-					1
-				],
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":136
-				}
-			}
-		},
-		{
-			"doubleSided":true,
-			"emissiveFactor":[
-				0.020450863987207413,
-				1,
-				0.0354558564722538
-			],
-			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":10
-				}
-			},
-			"name":"light emission",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_clearcoat":{
-					"clearcoatFactor":0.10000000149011612
-				},
-				"KHR_materials_specular":{
-					"specularFactor":0.699999988079071,
-					"specularColorFactor":[
-						0.3968990445137024,
-						0.936279296875,
-						1.0
-					]
-				}
-			},
-			"extras":{
-				"blenderkit":{
-					"has_thumbnail":0
-				}
-			},
-			"name":"Material.005",
-			"normalTexture":{
-				"extensions":{
-					"KHR_texture_transform":{
-						"offset":[
-							0,
-							-49
-						],
-						"scale":[
-							50,
-							50
-						]
-					}
-				},
-				"index":137
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"extensions":{
-						"KHR_texture_transform":{
-							"offset":[
-								0,
-								-49
-							],
-							"scale":[
-								50,
-								50
-							]
-						}
-					},
-					"index":138
-				},
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"extensions":{
-						"KHR_texture_transform":{
-							"offset":[
-								0,
-								-1
-							],
-							"scale":[
-								2,
-								2
-							]
-						}
-					},
-					"index":139
-				}
-			}
-		},
-		{
-			"doubleSided":true,
-			"name":"Orange.002",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.5824454426765442,
-					0.31571701169013977,
-					0.005215962417423725,
-					1
-				],
-				"metallicFactor":0
-			}
-		},
-		{
-			"doubleSided":true,
-			"emissiveFactor":[
-				1,
-				0.5165819525718689,
-				0.0049250200390815735
-			],
-			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":50
-				}
-			},
-			"name":"Material.004",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0.699999988079071
-				}
-			},
-			"extras":{
-				"blenderkit":{
-					"has_thumbnail":0
-				}
-			},
-			"name":"rubber strip",
-			"normalTexture":{
-				"extensions":{
-					"KHR_texture_transform":{
-						"offset":[
-							0,
-							-1
-						],
-						"scale":[
-							2,
-							2
-						]
-					}
-				},
-				"index":140
-			},
-			"pbrMetallicRoughness":{
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"extensions":{
-						"KHR_texture_transform":{
-							"offset":[
-								0,
-								-1
-							],
-							"scale":[
-								2,
-								2
-							]
-						}
-					},
-					"index":141
-				}
-			}
-		},
-		{
-			"doubleSided":true,
-			"emissiveFactor":[
-				1,
-				1,
-				1
-			],
-			"emissiveTexture":{
-				"index":142
-			},
-			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":5
-				}
-			},
-			"name":"Screen",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":143
-				},
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
-		},
-		{
-			"doubleSided":true,
-			"name":"Material",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.8000229597091675,
-					0.449422687292099,
-					0.09654895961284637,
-					1
-				],
-				"roughnessFactor":0.20000000298023224
-			}
 		}
 	],
 	"meshes":[
@@ -40995,388 +41111,6 @@
 					"material":66
 				}
 			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":526,
-						"NORMAL":527,
-						"TEXCOORD_0":528
-					},
-					"indices":529,
-					"material":67
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":530,
-						"NORMAL":531,
-						"TEXCOORD_0":532
-					},
-					"indices":533,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":534,
-						"NORMAL":535,
-						"TEXCOORD_0":536
-					},
-					"indices":537,
-					"material":67
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":538,
-						"NORMAL":539,
-						"TEXCOORD_0":540
-					},
-					"indices":541,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":542,
-						"NORMAL":543,
-						"TEXCOORD_0":544
-					},
-					"indices":545,
-					"material":67
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":546,
-						"NORMAL":547,
-						"TEXCOORD_0":548
-					},
-					"indices":549,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":550,
-						"NORMAL":551,
-						"TEXCOORD_0":552
-					},
-					"indices":553,
-					"material":67
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":554,
-						"NORMAL":555,
-						"TEXCOORD_0":556
-					},
-					"indices":557,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":558,
-						"NORMAL":559,
-						"TEXCOORD_0":560
-					},
-					"indices":561,
-					"material":67
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":562,
-						"NORMAL":563,
-						"TEXCOORD_0":564
-					},
-					"indices":565,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":566,
-						"NORMAL":567,
-						"TEXCOORD_0":568
-					},
-					"indices":569,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":570,
-						"NORMAL":571,
-						"TEXCOORD_0":572
-					},
-					"indices":573,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":574,
-						"NORMAL":575,
-						"TEXCOORD_0":576
-					},
-					"indices":529,
-					"material":69
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":577,
-						"NORMAL":578,
-						"TEXCOORD_0":579
-					},
-					"indices":580,
-					"material":68
-				},
-				{
-					"attributes":{
-						"POSITION":581,
-						"NORMAL":582,
-						"TEXCOORD_0":583
-					},
-					"indices":584,
-					"material":70
-				}
-			]
-		},
-		{
-			"name":"Circle.014",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":585,
-						"NORMAL":586,
-						"TEXCOORD_0":587
-					},
-					"indices":588,
-					"material":71
-				}
-			]
-		},
-		{
-			"name":"Circle.015",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":589,
-						"NORMAL":590,
-						"TEXCOORD_0":591
-					},
-					"indices":592,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":593,
-						"NORMAL":594,
-						"TEXCOORD_0":595
-					},
-					"indices":596,
-					"material":72
-				}
-			]
-		},
-		{
-			"name":"Cube.022",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":597,
-						"NORMAL":598,
-						"TEXCOORD_0":599
-					},
-					"indices":600,
-					"material":73
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":601,
-						"NORMAL":602,
-						"TEXCOORD_0":603
-					},
-					"indices":604,
-					"material":74
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":605,
-						"NORMAL":606,
-						"TEXCOORD_0":607
-					},
-					"indices":608,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":609,
-						"NORMAL":610,
-						"TEXCOORD_0":611
-					},
-					"indices":612,
-					"material":68
-				}
-			]
-		},
-		{
-			"name":"Cube.028",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":613,
-						"NORMAL":614,
-						"TEXCOORD_0":615
-					},
-					"indices":616,
-					"material":75
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":617,
-						"NORMAL":618,
-						"TEXCOORD_0":619
-					},
-					"indices":620,
-					"material":71
-				},
-				{
-					"attributes":{
-						"POSITION":621,
-						"NORMAL":622,
-						"TEXCOORD_0":623
-					},
-					"indices":624,
-					"material":72
-				}
-			]
-		},
-		{
-			"name":"Mesh",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":625,
-						"NORMAL":626,
-						"TEXCOORD_0":627
-					},
-					"indices":628,
-					"material":69
-				}
-			]
-		},
-		{
-			"name":"Cylinder",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":629,
-						"NORMAL":630,
-						"TEXCOORD_0":631
-					},
-					"indices":632,
-					"material":76
-				}
-			]
-		},
-		{
-			"name":"Cylinder.014",
-			"primitives":[
-				{
-					"attributes":{
-						"POSITION":633,
-						"NORMAL":634,
-						"TEXCOORD_0":635
-					},
-					"indices":636,
-					"material":76
-				}
-			]
 		}
 	],
 	"textures":[
@@ -41895,66 +41629,6 @@
 		{
 			"sampler":0,
 			"source":66
-		},
-		{
-			"sampler":0,
-			"source":67
-		},
-		{
-			"sampler":0,
-			"source":68
-		},
-		{
-			"sampler":0,
-			"source":69
-		},
-		{
-			"sampler":0,
-			"source":70
-		},
-		{
-			"sampler":0,
-			"source":71
-		},
-		{
-			"sampler":0,
-			"source":72
-		},
-		{
-			"sampler":0,
-			"source":73
-		},
-		{
-			"sampler":0,
-			"source":74
-		},
-		{
-			"sampler":0,
-			"source":75
-		},
-		{
-			"sampler":0,
-			"source":76
-		},
-		{
-			"sampler":0,
-			"source":69
-		},
-		{
-			"sampler":0,
-			"source":68
-		},
-		{
-			"sampler":0,
-			"source":69
-		},
-		{
-			"sampler":0,
-			"source":77
-		},
-		{
-			"sampler":0,
-			"source":77
 		}
 	],
 	"images":[
@@ -42215,23 +41889,18 @@
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"Sci_Fi_Panel_18_emissive",
-			"uri":"Sci_Fi_Panel_18_emissive.jpg"
+			"name":"Concrete Wall Panels456474_Normal",
+			"uri":"Concrete%20Wall%20Panels456474_Normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"Sci_Fi_Panel_18_normal",
-			"uri":"Sci_Fi_Panel_18_normal.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"Sci_Fi_Panel_18_basecolor",
-			"uri":"Sci_Fi_Panel_18_basecolor.jpg"
+			"name":"Concrete Wall Panels456474_BaseColor",
+			"uri":"Concrete%20Wall%20Panels456474_BaseColor.jpg"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"Sci_Fi_Panel_18_metallic-Sci_Fi_Panel_18_roughness",
-			"uri":"Sci_Fi_Panel_18_metallic-Sci_Fi_Panel_18_roughness.png"
+			"name":"Concrete Wall Panels456474_Roughness",
+			"uri":"Concrete%20Wall%20Panels456474_Roughness.png"
 		},
 		{
 			"mimeType":"image/jpeg",
@@ -42297,56 +41966,6 @@
 			"mimeType":"image/png",
 			"name":"cannon_01_metal-cannon_01_rough",
 			"uri":"cannon_01_metal-cannon_01_rough.png"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"PaintedPlaster017_4K_Roughness",
-			"uri":"PaintedPlaster017_4K_Roughness.jpg"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"PaintedPlaster017_4K_Roughness",
-			"uri":"PaintedPlaster017_4K_Roughness.png"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"Metal001_2K_NormalGL",
-			"uri":"Metal001_2K_NormalGL.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"Metal001_2K_Color",
-			"uri":"Metal001_2K_Color.jpg"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"Metal001_2K_Metalness-Metal001_2K_Roughness",
-			"uri":"Metal001_2K_Metalness-Metal001_2K_Roughness.png"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"PaintedPlaster017_4K_Roughness000",
-			"uri":"PaintedPlaster017_4K_Roughness000.jpg"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"PaintedPlaster017_4K_Roughness000",
-			"uri":"PaintedPlaster017_4K_Roughness000.png"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"common_carbon05_norm",
-			"uri":"common_carbon05_norm.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"common_carbon05_black_diff",
-			"uri":"common_carbon05_black_diff.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"Screenshot (549)",
-			"uri":"Screenshot%20%28549%29.jpg"
 		}
 	],
 	"accessors":[
@@ -45801,50 +45420,10 @@
 		{
 			"bufferView":384,
 			"componentType":5126,
-			"count":34,
+			"count":84,
 			"max":[
 				1,
 				0.4548987150192261,
-				0.9913314580917358
-			],
-			"min":[
-				-1.1657238006591797,
-				-1.842781662940979,
-				-0.992077112197876
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":385,
-			"componentType":5126,
-			"count":34,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":386,
-			"componentType":5126,
-			"count":34,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":387,
-			"componentType":5126,
-			"count":34,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":388,
-			"componentType":5123,
-			"count":66,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":389,
-			"componentType":5126,
-			"count":446,
-			"max":[
-				10.395869255065918,
-				0.5370367765426636,
 				1
 			],
 			"min":[
@@ -45855,67 +45434,107 @@
 			"type":"VEC3"
 		},
 		{
+			"bufferView":385,
+			"componentType":5126,
+			"count":84,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":386,
+			"componentType":5126,
+			"count":84,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":387,
+			"componentType":5126,
+			"count":84,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":388,
+			"componentType":5123,
+			"count":144,
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":389,
+			"componentType":5126,
+			"count":296,
+			"max":[
+				10.395869255065918,
+				0.5370367765426636,
+				0.9235254526138306
+			],
+			"min":[
+				-1.1657238006591797,
+				-1.5448745489120483,
+				0.2669375538825989
+			],
+			"type":"VEC3"
+		},
+		{
 			"bufferView":390,
 			"componentType":5126,
-			"count":446,
+			"count":296,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":391,
 			"componentType":5126,
-			"count":446,
+			"count":296,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":392,
 			"componentType":5126,
-			"count":446,
+			"count":296,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":393,
 			"componentType":5123,
-			"count":858,
+			"count":630,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":394,
 			"componentType":5126,
-			"count":12,
+			"count":4,
 			"max":[
 				9.72353458404541,
 				0.44625991582870483,
-				0.9913314580917358
+				0.9214271903038025
 			],
 			"min":[
-				-0.4761245846748352,
-				-1.545101284980774,
-				-0.992077112197876
+				0.6891329288482666,
+				0.4462597966194153,
+				0.7760530710220337
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":395,
 			"componentType":5126,
-			"count":12,
+			"count":4,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":396,
 			"componentType":5126,
-			"count":12,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":397,
 			"componentType":5126,
-			"count":12,
+			"count":4,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":398,
 			"componentType":5123,
-			"count":18,
+			"count":6,
 			"type":"SCALAR"
 		},
 		{
@@ -47038,952 +46657,6 @@
 			"bufferView":525,
 			"componentType":5123,
 			"count":6,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":526,
-			"componentType":5126,
-			"count":1066,
-			"max":[
-				-0.044480469077825546,
-				-0.06698101758956909,
-				0.10109417885541916
-			],
-			"min":[
-				-0.06619203835725784,
-				-0.07860485464334488,
-				0.0981542319059372
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":527,
-			"componentType":5126,
-			"count":1066,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":528,
-			"componentType":5126,
-			"count":1066,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":529,
-			"componentType":5123,
-			"count":5568,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":530,
-			"componentType":5126,
-			"count":1312,
-			"max":[
-				-0.043922338634729385,
-				-0.06661222875118256,
-				0.09977667033672333
-			],
-			"min":[
-				-0.06675019860267639,
-				-0.07897363603115082,
-				0.09744694083929062
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":531,
-			"componentType":5126,
-			"count":1312,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":532,
-			"componentType":5126,
-			"count":1312,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":533,
-			"componentType":5123,
-			"count":6048,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":534,
-			"componentType":5126,
-			"count":1088,
-			"max":[
-				-0.015574014745652676,
-				-0.06698101758956909,
-				0.10109417885541916
-			],
-			"min":[
-				-0.03728558123111725,
-				-0.07860485464334488,
-				0.0981542319059372
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":535,
-			"componentType":5126,
-			"count":1088,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":536,
-			"componentType":5126,
-			"count":1088,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":537,
-			"componentType":5123,
-			"count":5568,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":538,
-			"componentType":5126,
-			"count":1252,
-			"max":[
-				-0.015015892684459686,
-				-0.06661222875118256,
-				0.09977667033672333
-			],
-			"min":[
-				-0.0378437414765358,
-				-0.07897363603115082,
-				0.09744694083929062
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":539,
-			"componentType":5126,
-			"count":1252,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":540,
-			"componentType":5126,
-			"count":1252,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":541,
-			"componentType":5123,
-			"count":6048,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":542,
-			"componentType":5126,
-			"count":1064,
-			"max":[
-				0.008241504430770874,
-				-0.06698101758956909,
-				0.10109417885541916
-			],
-			"min":[
-				-0.013470063917338848,
-				-0.07860485464334488,
-				0.0981542319059372
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":543,
-			"componentType":5126,
-			"count":1064,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":544,
-			"componentType":5126,
-			"count":1064,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":545,
-			"componentType":5123,
-			"count":5568,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":546,
-			"componentType":5126,
-			"count":1315,
-			"max":[
-				0.008799626491963863,
-				-0.06661222875118256,
-				0.09977667033672333
-			],
-			"min":[
-				-0.014028220437467098,
-				-0.07897363603115082,
-				0.09744694083929062
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":547,
-			"componentType":5126,
-			"count":1315,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":548,
-			"componentType":5126,
-			"count":1315,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":549,
-			"componentType":5123,
-			"count":6048,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":550,
-			"componentType":5126,
-			"count":1086,
-			"max":[
-				0.03888349607586861,
-				-0.06698101758956909,
-				0.10109417885541916
-			],
-			"min":[
-				0.01717192679643631,
-				-0.07860485464334488,
-				0.0981542319059372
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":551,
-			"componentType":5126,
-			"count":1086,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":552,
-			"componentType":5126,
-			"count":1086,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":553,
-			"componentType":5123,
-			"count":5568,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":554,
-			"componentType":5126,
-			"count":1305,
-			"max":[
-				0.03944162279367447,
-				-0.06661222875118256,
-				0.09977667033672333
-			],
-			"min":[
-				0.01661377027630806,
-				-0.07897363603115082,
-				0.09744694083929062
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":555,
-			"componentType":5126,
-			"count":1305,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":556,
-			"componentType":5126,
-			"count":1305,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":557,
-			"componentType":5123,
-			"count":6048,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":558,
-			"componentType":5126,
-			"count":1055,
-			"max":[
-				0.010855785571038723,
-				0.005811920389533043,
-				0.0014692108379676938
-			],
-			"min":[
-				-0.010855785571038723,
-				-0.005811920389533043,
-				-0.001470782095566392
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":559,
-			"componentType":5126,
-			"count":1055,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":560,
-			"componentType":5126,
-			"count":1055,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":561,
-			"componentType":5123,
-			"count":5568,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":562,
-			"componentType":5126,
-			"count":1256,
-			"max":[
-				0.06408634036779404,
-				-0.06661222875118256,
-				0.09977667033672333
-			],
-			"min":[
-				0.041258491575717926,
-				-0.07897363603115082,
-				0.09744694083929062
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":563,
-			"componentType":5126,
-			"count":1256,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":564,
-			"componentType":5126,
-			"count":1256,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":565,
-			"componentType":5123,
-			"count":6048,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":566,
-			"componentType":5126,
-			"count":3404,
-			"max":[
-				0.051915232092142105,
-				-0.06932371854782104,
-				-0.051059797406196594
-			],
-			"min":[
-				0.037022095173597336,
-				-0.08421686291694641,
-				-0.05386440455913544
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":567,
-			"componentType":5126,
-			"count":3404,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":568,
-			"componentType":5126,
-			"count":3404,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":569,
-			"componentType":5123,
-			"count":18624,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":570,
-			"componentType":5126,
-			"count":5070,
-			"max":[
-				0.03446575254201889,
-				-0.07017918676137924,
-				-0.051059797406196594
-			],
-			"min":[
-				0.012955554760992527,
-				-0.08336138725280762,
-				-0.05386440455913544
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":571,
-			"componentType":5126,
-			"count":5070,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":572,
-			"componentType":5126,
-			"count":5070,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":573,
-			"componentType":5123,
-			"count":26880,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":574,
-			"componentType":5126,
-			"count":1066,
-			"max":[
-				0.010855785571038723,
-				0.005811920389533043,
-				0.0014692108379676938
-			],
-			"min":[
-				-0.010855782777071,
-				-0.005811920389533043,
-				-0.001470782095566392
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":575,
-			"componentType":5126,
-			"count":1066,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":576,
-			"componentType":5126,
-			"count":1066,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":577,
-			"componentType":5126,
-			"count":1453,
-			"max":[
-				0.011413924396038055,
-				0.006180703639984131,
-				0.0011639754520729184
-			],
-			"min":[
-				-0.011413926258683205,
-				-0.006180703639984131,
-				-0.0011657503200694919
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":578,
-			"componentType":5126,
-			"count":1453,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":579,
-			"componentType":5126,
-			"count":1453,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":580,
-			"componentType":5123,
-			"count":6912,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":581,
-			"componentType":5126,
-			"count":771,
-			"max":[
-				0.010757695883512497,
-				0.005711137317121029,
-				-0.0007081773946993053
-			],
-			"min":[
-				-0.01075803767889738,
-				-0.005711137782782316,
-				-0.0007453879807144403
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":582,
-			"componentType":5126,
-			"count":771,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":583,
-			"componentType":5126,
-			"count":771,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":584,
-			"componentType":5123,
-			"count":3672,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":585,
-			"componentType":5126,
-			"count":4868,
-			"max":[
-				0.06352847814559937,
-				0.00011164389434270561,
-				0.0468406081199646
-			],
-			"min":[
-				-0.06352847814559937,
-				-0.00710426177829504,
-				-0.0619710236787796
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":586,
-			"componentType":5126,
-			"count":4868,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":587,
-			"componentType":5126,
-			"count":4868,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":588,
-			"componentType":5123,
-			"count":28416,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":589,
-			"componentType":5126,
-			"count":5068,
-			"max":[
-				0.06472944468259811,
-				0.00045350095024332404,
-				0.048041585832834244
-			],
-			"min":[
-				-0.06472944468259811,
-				-0.0010881416965276003,
-				-0.06317199766635895
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":590,
-			"componentType":5126,
-			"count":5068,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":591,
-			"componentType":5126,
-			"count":5068,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":592,
-			"componentType":5123,
-			"count":21504,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":593,
-			"componentType":5126,
-			"count":17747,
-			"max":[
-				0.09671411663293839,
-				0.09981522709131241,
-				0.10000001639127731
-			],
-			"min":[
-				-0.09671410918235779,
-				-0.09995749592781067,
-				-0.05299887806177139
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":594,
-			"componentType":5126,
-			"count":17747,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":595,
-			"componentType":5126,
-			"count":17747,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":596,
-			"componentType":5123,
-			"count":78840,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":597,
-			"componentType":5126,
-			"count":120,
-			"max":[
-				0.05709363892674446,
-				0.036659207195043564,
-				0.07828414440155029
-			],
-			"min":[
-				-0.059900254011154175,
-				0.03328914940357208,
-				0.07602303475141525
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":598,
-			"componentType":5126,
-			"count":120,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":599,
-			"componentType":5126,
-			"count":120,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":600,
-			"componentType":5123,
-			"count":180,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":601,
-			"componentType":5126,
-			"count":1920,
-			"max":[
-				0.07645026594400406,
-				0.07582385838031769,
-				0.0995137095451355
-			],
-			"min":[
-				-0.07703322172164917,
-				-0.06521978974342346,
-				0.09746342897415161
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":602,
-			"componentType":5126,
-			"count":1920,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":603,
-			"componentType":5126,
-			"count":1920,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":604,
-			"componentType":5123,
-			"count":11520,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":605,
-			"componentType":5126,
-			"count":4134,
-			"max":[
-				0.10850710421800613,
-				0.05160249397158623,
-				0.02464030310511589
-			],
-			"min":[
-				-0.09479745477437973,
-				-0.05160249397158623,
-				0.009983014315366745
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":606,
-			"componentType":5126,
-			"count":4134,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":607,
-			"componentType":5126,
-			"count":4134,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":608,
-			"componentType":5123,
-			"count":18336,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":609,
-			"componentType":5126,
-			"count":4189,
-			"max":[
-				0.0722121000289917,
-				0.10810869932174683,
-				0.07075148820877075
-			],
-			"min":[
-				-0.0722121000289917,
-				0.08355402946472168,
-				-0.0434827096760273
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":610,
-			"componentType":5126,
-			"count":4189,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":611,
-			"componentType":5126,
-			"count":4189,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":612,
-			"componentType":5123,
-			"count":18336,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":613,
-			"componentType":5126,
-			"count":68,
-			"max":[
-				0.07698263227939606,
-				0.0759410485625267,
-				0.09574467688798904
-			],
-			"min":[
-				-0.07756918668746948,
-				-0.06576447933912277,
-				0.09574376046657562
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":614,
-			"componentType":5126,
-			"count":68,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":615,
-			"componentType":5126,
-			"count":68,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":616,
-			"componentType":5123,
-			"count":228,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":617,
-			"componentType":5126,
-			"count":8174,
-			"max":[
-				0.08591728657484055,
-				0.09566442668437958,
-				0.0983034074306488
-			],
-			"min":[
-				-0.08590926229953766,
-				-0.09917046129703522,
-				-0.051311396062374115
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":618,
-			"componentType":5126,
-			"count":8174,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":619,
-			"componentType":5126,
-			"count":8174,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":620,
-			"componentType":5123,
-			"count":35748,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":621,
-			"componentType":5126,
-			"count":3853,
-			"max":[
-				0.05806993320584297,
-				0.051589809358119965,
-				-0.05067286267876625
-			],
-			"min":[
-				-0.05808952450752258,
-				-0.06857988238334656,
-				-0.0526517890393734
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":622,
-			"componentType":5126,
-			"count":3853,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":623,
-			"componentType":5126,
-			"count":3853,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":624,
-			"componentType":5123,
-			"count":16644,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":625,
-			"componentType":5126,
-			"count":1665,
-			"max":[
-				0.07681773602962494,
-				0.07623092830181122,
-				0.10017794370651245
-			],
-			"min":[
-				-0.07739853113889694,
-				-0.06605437397956848,
-				0.09577882289886475
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":626,
-			"componentType":5126,
-			"count":1665,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":627,
-			"componentType":5126,
-			"count":1665,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":628,
-			"componentType":5123,
-			"count":7632,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":629,
-			"componentType":5126,
-			"count":14094,
-			"max":[
-				0.04865781590342522,
-				-0.07337676733732224,
-				-0.048720017075538635
-			],
-			"min":[
-				0.039799727499485016,
-				-0.08033622801303864,
-				-0.053499408066272736
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":630,
-			"componentType":5126,
-			"count":14094,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":631,
-			"componentType":5126,
-			"count":14094,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":632,
-			"componentType":5123,
-			"count":72252,
-			"type":"SCALAR"
-		},
-		{
-			"bufferView":633,
-			"componentType":5126,
-			"count":12006,
-			"max":[
-				0.030227648094296455,
-				-0.07479769736528397,
-				-0.048720017075538635
-			],
-			"min":[
-				0.0169238094240427,
-				-0.07909934967756271,
-				-0.053499408066272736
-			],
-			"type":"VEC3"
-		},
-		{
-			"bufferView":634,
-			"componentType":5126,
-			"count":12006,
-			"type":"VEC3"
-		},
-		{
-			"bufferView":635,
-			"componentType":5126,
-			"count":12006,
-			"type":"VEC2"
-		},
-		{
-			"bufferView":636,
-			"componentType":5123,
-			"count":61548,
 			"type":"SCALAR"
 		}
 	],
@@ -50294,1520 +48967,854 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":408,
+			"byteLength":1008,
 			"byteOffset":20989948,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":408,
-			"byteOffset":20990356,
+			"byteLength":1008,
+			"byteOffset":20990956,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":272,
-			"byteOffset":20990764,
+			"byteLength":672,
+			"byteOffset":20991964,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":272,
-			"byteOffset":20991036,
+			"byteLength":672,
+			"byteOffset":20992636,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":132,
-			"byteOffset":20991308,
+			"byteLength":288,
+			"byteOffset":20993308,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":5352,
-			"byteOffset":20991440,
+			"byteLength":3552,
+			"byteOffset":20993596,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":5352,
-			"byteOffset":20996792,
+			"byteLength":3552,
+			"byteOffset":20997148,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3568,
-			"byteOffset":21002144,
+			"byteLength":2368,
+			"byteOffset":21000700,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3568,
-			"byteOffset":21005712,
+			"byteLength":2368,
+			"byteOffset":21003068,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1716,
-			"byteOffset":21009280,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":144,
-			"byteOffset":21010996,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":144,
-			"byteOffset":21011140,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":96,
-			"byteOffset":21011284,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":96,
-			"byteOffset":21011380,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":36,
-			"byteOffset":21011476,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":2016,
-			"byteOffset":21011512,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":2016,
-			"byteOffset":21013528,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1344,
-			"byteOffset":21015544,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1344,
-			"byteOffset":21016888,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1344,
-			"byteOffset":21018232,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1200,
-			"byteOffset":21019576,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":71100,
-			"byteOffset":21020776,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":71100,
-			"byteOffset":21091876,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":47400,
-			"byteOffset":21162976,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":47400,
-			"byteOffset":21210376,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":17958,
-			"byteOffset":21257776,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":21275736,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":21281568,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":21287400,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4608,
-			"byteOffset":21291288,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":21295896,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":21301728,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":21307560,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4608,
-			"byteOffset":21311448,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":21316056,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":21321888,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":21327720,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4608,
-			"byteOffset":21331608,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":40764,
-			"byteOffset":21336216,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":40764,
-			"byteOffset":21376980,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":27176,
-			"byteOffset":21417744,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":31620,
-			"byteOffset":21444920,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":246012,
-			"byteOffset":21476540,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":246012,
-			"byteOffset":21722552,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":164008,
-			"byteOffset":21968564,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":182844,
-			"byteOffset":22132572,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":22315416,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":22319928,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3008,
-			"byteOffset":22324440,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3096,
-			"byteOffset":22327448,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22330544,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22337264,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":22343984,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4320,
-			"byteOffset":22348464,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22352784,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22359504,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":22366224,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4320,
-			"byteOffset":22370704,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22375024,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22381744,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":22388464,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4320,
-			"byteOffset":22392944,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22397264,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":22403984,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":22410704,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4320,
-			"byteOffset":22415184,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":22419504,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":22425336,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":22431168,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":22435056,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":22440888,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":22446720,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":22450608,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":22456440,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":22462272,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":40764,
-			"byteOffset":22466160,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":40764,
-			"byteOffset":22506924,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":27176,
-			"byteOffset":22547688,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":246012,
-			"byteOffset":22574864,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":246012,
-			"byteOffset":22820876,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":164008,
-			"byteOffset":23066888,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":23230896,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":23235408,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3008,
-			"byteOffset":23239920,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23242928,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23249648,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":23256368,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23260848,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23267568,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":23274288,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23278768,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23285488,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":23292208,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23296688,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":23303408,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":23310128,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":23314608,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":23320440,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":23326272,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":23330160,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":23335992,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":23341824,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":23345712,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":5832,
-			"byteOffset":23351544,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3888,
-			"byteOffset":23357376,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":40764,
-			"byteOffset":23361264,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":40764,
-			"byteOffset":23402028,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":27176,
-			"byteOffset":23442792,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":246012,
-			"byteOffset":23469968,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":246012,
-			"byteOffset":23715980,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":164008,
-			"byteOffset":23961992,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":24126000,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4512,
-			"byteOffset":24130512,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":3008,
-			"byteOffset":24135024,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24138032,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24144752,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":24151472,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24155952,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24162672,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":24169392,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24173872,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24180592,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":24187312,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24191792,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":6720,
-			"byteOffset":24198512,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":4480,
-			"byteOffset":24205232,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":129804,
-			"byteOffset":24209712,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":129804,
-			"byteOffset":24339516,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":86536,
-			"byteOffset":24469320,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":122880,
-			"byteOffset":24555856,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":73464,
-			"byteOffset":24678736,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":73464,
-			"byteOffset":24752200,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":48976,
-			"byteOffset":24825664,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":70560,
-			"byteOffset":24874640,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":12180,
-			"byteOffset":24945200,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":12180,
-			"byteOffset":24957380,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":8120,
-			"byteOffset":24969560,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":9408,
-			"byteOffset":24977680,
+			"byteLength":1260,
+			"byteOffset":21005436,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":48,
-			"byteOffset":24987088,
+			"byteOffset":21006696,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":48,
-			"byteOffset":24987136,
+			"byteOffset":21006744,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":32,
-			"byteOffset":24987184,
+			"byteOffset":21006792,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":21006824,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":12,
-			"byteOffset":24987216,
+			"byteOffset":21006856,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":12792,
-			"byteOffset":24987228,
+			"byteLength":2016,
+			"byteOffset":21006868,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12792,
-			"byteOffset":25000020,
+			"byteLength":2016,
+			"byteOffset":21008884,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8528,
-			"byteOffset":25012812,
+			"byteLength":1344,
+			"byteOffset":21010900,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11136,
-			"byteOffset":25021340,
+			"byteLength":1344,
+			"byteOffset":21012244,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1344,
+			"byteOffset":21013588,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1200,
+			"byteOffset":21014932,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":15744,
-			"byteOffset":25032476,
+			"byteLength":71100,
+			"byteOffset":21016132,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":15744,
-			"byteOffset":25048220,
+			"byteLength":71100,
+			"byteOffset":21087232,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10496,
-			"byteOffset":25063964,
+			"byteLength":47400,
+			"byteOffset":21158332,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12096,
-			"byteOffset":25074460,
+			"byteLength":47400,
+			"byteOffset":21205732,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":17958,
+			"byteOffset":21253132,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":13056,
-			"byteOffset":25086556,
+			"byteLength":5832,
+			"byteOffset":21271092,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13056,
-			"byteOffset":25099612,
+			"byteLength":5832,
+			"byteOffset":21276924,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8704,
-			"byteOffset":25112668,
+			"byteLength":3888,
+			"byteOffset":21282756,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11136,
-			"byteOffset":25121372,
+			"byteLength":4608,
+			"byteOffset":21286644,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":15024,
-			"byteOffset":25132508,
+			"byteLength":5832,
+			"byteOffset":21291252,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":15024,
-			"byteOffset":25147532,
+			"byteLength":5832,
+			"byteOffset":21297084,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10016,
-			"byteOffset":25162556,
+			"byteLength":3888,
+			"byteOffset":21302916,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12096,
-			"byteOffset":25172572,
+			"byteLength":4608,
+			"byteOffset":21306804,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":12768,
-			"byteOffset":25184668,
+			"byteLength":5832,
+			"byteOffset":21311412,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12768,
-			"byteOffset":25197436,
+			"byteLength":5832,
+			"byteOffset":21317244,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8512,
-			"byteOffset":25210204,
+			"byteLength":3888,
+			"byteOffset":21323076,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11136,
-			"byteOffset":25218716,
+			"byteLength":4608,
+			"byteOffset":21326964,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":15780,
-			"byteOffset":25229852,
+			"byteLength":40764,
+			"byteOffset":21331572,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":15780,
-			"byteOffset":25245632,
+			"byteLength":40764,
+			"byteOffset":21372336,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10520,
-			"byteOffset":25261412,
+			"byteLength":27176,
+			"byteOffset":21413100,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12096,
-			"byteOffset":25271932,
+			"byteLength":31620,
+			"byteOffset":21440276,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":13032,
-			"byteOffset":25284028,
+			"byteLength":246012,
+			"byteOffset":21471896,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13032,
-			"byteOffset":25297060,
+			"byteLength":246012,
+			"byteOffset":21717908,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8688,
-			"byteOffset":25310092,
+			"byteLength":164008,
+			"byteOffset":21963920,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11136,
-			"byteOffset":25318780,
+			"byteLength":182844,
+			"byteOffset":22127928,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":15660,
-			"byteOffset":25329916,
+			"byteLength":4512,
+			"byteOffset":22310772,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":15660,
-			"byteOffset":25345576,
+			"byteLength":4512,
+			"byteOffset":22315284,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10440,
-			"byteOffset":25361236,
+			"byteLength":3008,
+			"byteOffset":22319796,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12096,
-			"byteOffset":25371676,
+			"byteLength":3096,
+			"byteOffset":22322804,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":12660,
-			"byteOffset":25383772,
+			"byteLength":6720,
+			"byteOffset":22325900,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12660,
-			"byteOffset":25396432,
+			"byteLength":6720,
+			"byteOffset":22332620,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8440,
-			"byteOffset":25409092,
+			"byteLength":4480,
+			"byteOffset":22339340,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11136,
-			"byteOffset":25417532,
+			"byteLength":4320,
+			"byteOffset":22343820,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":15072,
-			"byteOffset":25428668,
+			"byteLength":6720,
+			"byteOffset":22348140,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":15072,
-			"byteOffset":25443740,
+			"byteLength":6720,
+			"byteOffset":22354860,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10048,
-			"byteOffset":25458812,
+			"byteLength":4480,
+			"byteOffset":22361580,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12096,
-			"byteOffset":25468860,
+			"byteLength":4320,
+			"byteOffset":22366060,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":40848,
-			"byteOffset":25480956,
+			"byteLength":6720,
+			"byteOffset":22370380,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":40848,
-			"byteOffset":25521804,
+			"byteLength":6720,
+			"byteOffset":22377100,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":27232,
-			"byteOffset":25562652,
+			"byteLength":4480,
+			"byteOffset":22383820,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":37248,
-			"byteOffset":25589884,
+			"byteLength":4320,
+			"byteOffset":22388300,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":60840,
-			"byteOffset":25627132,
+			"byteLength":6720,
+			"byteOffset":22392620,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":60840,
-			"byteOffset":25687972,
+			"byteLength":6720,
+			"byteOffset":22399340,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":40560,
-			"byteOffset":25748812,
+			"byteLength":4480,
+			"byteOffset":22406060,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":53760,
-			"byteOffset":25789372,
+			"byteLength":4320,
+			"byteOffset":22410540,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":12792,
-			"byteOffset":25843132,
+			"byteLength":5832,
+			"byteOffset":22414860,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":12792,
-			"byteOffset":25855924,
+			"byteLength":5832,
+			"byteOffset":22420692,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":8528,
-			"byteOffset":25868716,
+			"byteLength":3888,
+			"byteOffset":22426524,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":17436,
-			"byteOffset":25877244,
+			"byteLength":5832,
+			"byteOffset":22430412,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":17436,
-			"byteOffset":25894680,
+			"byteLength":5832,
+			"byteOffset":22436244,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":11624,
-			"byteOffset":25912116,
+			"byteLength":3888,
+			"byteOffset":22442076,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13824,
-			"byteOffset":25923740,
+			"byteLength":5832,
+			"byteOffset":22445964,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":22451796,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3888,
+			"byteOffset":22457628,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":40764,
+			"byteOffset":22461516,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":40764,
+			"byteOffset":22502280,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":27176,
+			"byteOffset":22543044,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":246012,
+			"byteOffset":22570220,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":246012,
+			"byteOffset":22816232,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":164008,
+			"byteOffset":23062244,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4512,
+			"byteOffset":23226252,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4512,
+			"byteOffset":23230764,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3008,
+			"byteOffset":23235276,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23238284,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23245004,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":23251724,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23256204,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23262924,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":23269644,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23274124,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23280844,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":23287564,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23292044,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":23298764,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":23305484,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":23309964,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":23315796,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3888,
+			"byteOffset":23321628,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":23325516,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":23331348,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3888,
+			"byteOffset":23337180,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":23341068,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":5832,
+			"byteOffset":23346900,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3888,
+			"byteOffset":23352732,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":40764,
+			"byteOffset":23356620,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":40764,
+			"byteOffset":23397384,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":27176,
+			"byteOffset":23438148,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":246012,
+			"byteOffset":23465324,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":246012,
+			"byteOffset":23711336,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":164008,
+			"byteOffset":23957348,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4512,
+			"byteOffset":24121356,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4512,
+			"byteOffset":24125868,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":3008,
+			"byteOffset":24130380,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24133388,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24140108,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":24146828,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24151308,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24158028,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":24164748,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24169228,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24175948,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":24182668,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24187148,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":6720,
+			"byteOffset":24193868,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":4480,
+			"byteOffset":24200588,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":129804,
+			"byteOffset":24205068,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":129804,
+			"byteOffset":24334872,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":86536,
+			"byteOffset":24464676,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":122880,
+			"byteOffset":24551212,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":9252,
-			"byteOffset":25937564,
+			"byteLength":73464,
+			"byteOffset":24674092,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":9252,
-			"byteOffset":25946816,
+			"byteLength":73464,
+			"byteOffset":24747556,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6168,
-			"byteOffset":25956068,
+			"byteLength":48976,
+			"byteOffset":24821020,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7344,
-			"byteOffset":25962236,
+			"byteLength":70560,
+			"byteOffset":24869996,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":58416,
-			"byteOffset":25969580,
+			"byteLength":12180,
+			"byteOffset":24940556,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":58416,
-			"byteOffset":26027996,
+			"byteLength":12180,
+			"byteOffset":24952736,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":38944,
-			"byteOffset":26086412,
+			"byteLength":8120,
+			"byteOffset":24964916,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":56832,
-			"byteOffset":26125356,
+			"byteLength":9408,
+			"byteOffset":24973036,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":60816,
-			"byteOffset":26182188,
+			"byteLength":48,
+			"byteOffset":24982444,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":60816,
-			"byteOffset":26243004,
+			"byteLength":48,
+			"byteOffset":24982492,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":40544,
-			"byteOffset":26303820,
+			"byteLength":32,
+			"byteOffset":24982540,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":43008,
-			"byteOffset":26344364,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":212964,
-			"byteOffset":26387372,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":212964,
-			"byteOffset":26600336,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":141976,
-			"byteOffset":26813300,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":157680,
-			"byteOffset":26955276,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":1440,
-			"byteOffset":27112956,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":1440,
-			"byteOffset":27114396,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":960,
-			"byteOffset":27115836,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":360,
-			"byteOffset":27116796,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":23040,
-			"byteOffset":27117156,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":23040,
-			"byteOffset":27140196,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":15360,
-			"byteOffset":27163236,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":23040,
-			"byteOffset":27178596,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":49608,
-			"byteOffset":27201636,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":49608,
-			"byteOffset":27251244,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":33072,
-			"byteOffset":27300852,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":36672,
-			"byteOffset":27333924,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":50268,
-			"byteOffset":27370596,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":50268,
-			"byteOffset":27420864,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":33512,
-			"byteOffset":27471132,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":36672,
-			"byteOffset":27504644,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":816,
-			"byteOffset":27541316,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":816,
-			"byteOffset":27542132,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":544,
-			"byteOffset":27542948,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":456,
-			"byteOffset":27543492,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":98088,
-			"byteOffset":27543948,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":98088,
-			"byteOffset":27642036,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":65392,
-			"byteOffset":27740124,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":71496,
-			"byteOffset":27805516,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":46236,
-			"byteOffset":27877012,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":46236,
-			"byteOffset":27923248,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":30824,
-			"byteOffset":27969484,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":33288,
-			"byteOffset":28000308,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":19980,
-			"byteOffset":28033596,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":19980,
-			"byteOffset":28053576,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":13320,
-			"byteOffset":28073556,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":15264,
-			"byteOffset":28086876,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":169128,
-			"byteOffset":28102140,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":169128,
-			"byteOffset":28271268,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":112752,
-			"byteOffset":28440396,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":144504,
-			"byteOffset":28553148,
-			"target":34963
-		},
-		{
-			"buffer":0,
-			"byteLength":144072,
-			"byteOffset":28697652,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":144072,
-			"byteOffset":28841724,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":96048,
-			"byteOffset":28985796,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":123096,
-			"byteOffset":29081844,
+			"byteLength":12,
+			"byteOffset":24982572,
 			"target":34963
 		}
 	],
@@ -51819,7 +49826,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":29204940,
+			"byteLength":24982584,
 			"uri":"level.bin"
 		}
 	]
